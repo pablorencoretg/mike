@@ -281,6 +281,10 @@ const ES: Record<string, string> = {
     "Real Estate": "Inmobiliario",
     Tax: "Tributario",
     "Technology and Telecommunications": "Tecnología y telecomunicaciones",
+    // Professional settings
+    "Private practice": "Ejercicio libre de la profesión",
+    "In-house": "Abogado de empresa",
+    "Not a practising attorney": "No ejerzo como abogado",
     // Professional titles
     Partner: "Socio",
     "Senior Associate": "Asociado senior",

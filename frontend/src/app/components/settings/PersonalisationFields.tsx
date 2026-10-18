@@ -240,7 +240,10 @@ export function PersonalisationFields({
         status={statusFor?.("practiceSetting")}
         value={form.practiceSetting}
         placeholder={tr("settings.personalisationFields.selectProfessionalSetting")}
-        options={PRACTICE_SETTING_OPTIONS}
+        options={PRACTICE_SETTING_OPTIONS.map((option) => ({
+          ...option,
+          label: valueLabel(option.label),
+        }))}
         onChange={(value) =>
           form.setPracticeSetting(value ? (value as PracticeSetting) : null)
         }
