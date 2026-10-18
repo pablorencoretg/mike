@@ -35,13 +35,17 @@ describe("dictionaries", () => {
         expect(leafPaths(es).sort()).toEqual(leafPaths(en).sort());
     });
 
-    it("keeps every placeholder of the English string", () => {
-        const t = createTranslator("es");
+    it("uses only placeholders that the English string provides", () => {
+        // A translation may drop a value English grammar needs (an article,
+        // a verb form), but must not invent one the caller never passes.
+        const english = createTranslator("en");
+        const spanish = createTranslator("es");
         for (const path of leafPaths(en)) {
-            const english = createTranslator("en")(path as never);
-            const placeholders = english.match(/\{\w+\}/g) ?? [];
-            for (const placeholder of placeholders) {
-                expect(t(path as never), path).toContain(placeholder);
+            const provided = new Set(
+                english(path as never).match(/\{\w+\}/g) ?? [],
+            );
+            for (const placeholder of spanish(path as never).match(/\{\w+\}/g) ?? []) {
+                expect(provided.has(placeholder), `${path}: ${placeholder}`).toBe(true);
             }
         }
     });
