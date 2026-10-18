@@ -22,11 +22,11 @@ import { RESPONSE_GLASS_SURFACE, withoutMarkdownNode } from "./messageStyles";
 import { tr } from "@/shared/i18n/runtime";
 
 const THINKING_PHRASES = [
-    "Thinking...",
-    "Pondering...",
-    "Analyzing...",
-    "Reviewing...",
-    "Reasoning...",
+    tr("thinking.thinking"),
+    tr("thinking.pondering"),
+    tr("thinking.analyzing"),
+    tr("thinking.reviewing"),
+    tr("thinking.reasoning"),
 ];
 
 // ---------------------------------------------------------------------------

@@ -2247,7 +2247,7 @@ export function TRChatPanel({
                                         icon: Pencil,
                                         onSelect: () =>
                                             setTitleDraft(
-                                                currentChatTitle ?? "New Chat",
+                                                currentChatTitle ?? tr("tabular.tRChatPanel.newChat"),
                                             ),
                                         disabled:
                                             !canSend ||

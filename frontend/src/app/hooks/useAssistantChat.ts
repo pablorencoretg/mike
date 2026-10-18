@@ -659,7 +659,7 @@ export function useAssistantChat({
           replaceChatId(
             sendChatId,
             finalChatId,
-            message.content.trim().slice(0, 120) || "New Chat",
+            message.content.trim().slice(0, 120) || tr("app.hooks.useAssistantChat.newChat"),
           );
         }
         setCurrentChatId(finalChatId);

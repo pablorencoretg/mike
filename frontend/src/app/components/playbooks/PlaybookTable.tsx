@@ -250,9 +250,9 @@ export function PlaybookTable({
       creator: [...creators]
         .map(([value, label]) => ({ value, label }))
         .sort((a, b) =>
-          a.label === "Me"
+          a.label === tr("playbooks.playbookTable.me")
             ? -1
-            : b.label === "Me"
+            : b.label === tr("playbooks.playbookTable.me")
               ? 1
               : a.label.localeCompare(b.label),
         ),

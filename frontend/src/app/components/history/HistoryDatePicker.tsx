@@ -95,7 +95,7 @@ export function HistoryDatePicker({
             <PopoverTrigger asChild>
               <TextButtonUI
                 size="icon-xs"
-                aria-label={`${label} calendar`}
+                aria-label={tr("audit.calendar", { label })}
                 disabled={disabled}
                 className="absolute right-1 top-1/2 h-6 w-6 -translate-y-1/2"
               >
@@ -109,7 +109,7 @@ export function HistoryDatePicker({
           align="start"
           className="rounded-2xl"
           collisionPadding={16}
-          aria-label={`${label} calendar`}
+          aria-label={tr("audit.calendar", { label })}
           onOpenAutoFocus={(event) => event.preventDefault()}
           onEscapeKeyDown={(event) => event.stopPropagation()}
         >

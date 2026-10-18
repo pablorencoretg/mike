@@ -155,7 +155,7 @@ export default function ByokPage() {
                 enabledToggle={
                     selected &&
                     profile?.apiKeys[selected.provider]?.source === "user"
-                        ? renderToggle(selected, `Use ${selected.name}`)
+                        ? renderToggle(selected, tr("pages.settings.byok.page.use", { name: selected.name }))
                         : undefined
                 }
                 onClose={() => setSelectedProvider(null)}

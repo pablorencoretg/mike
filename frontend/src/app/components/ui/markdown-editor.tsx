@@ -135,7 +135,7 @@ export function MarkdownEditor({
   onChange,
   readOnly = false,
   suspended = false,
-  ariaLabel = "Markdown editor",
+  ariaLabel = tr("ui.markdownEditor.markdownEditor"),
   className,
   allowTables = true,
 }: MarkdownEditorProps) {

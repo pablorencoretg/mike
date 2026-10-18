@@ -303,7 +303,7 @@ function UseWorkflowModalForWorkspace({ workflow, onClose, skipSelect = false }:
 
     const breadcrumbs =
         screen === "select"
-            ? ["Workflows", "Select workflow"]
+            ? [tr("nav.workflows"), tr("workflowsExtra.selectWorkflow")]
             : [
                   <button
                       key="workflows"

@@ -91,7 +91,7 @@ function AuthCallbackContent() {
                     await refreshSession();
                 } catch (caught) {
                     setError(
-                        describeCallbackError(caught, "confirm your request"),
+                        describeCallbackError(caught, tr("app.auth.callback.page.confirmRequest")),
                     );
                     return;
                 }
@@ -101,7 +101,7 @@ function AuthCallbackContent() {
                     session = await getAuthSession();
                 } catch (caught) {
                     setError(
-                        describeCallbackError(caught, "confirm your request"),
+                        describeCallbackError(caught, tr("app.auth.callback.page.confirmRequest")),
                     );
                     return;
                 }

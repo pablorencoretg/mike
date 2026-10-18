@@ -342,7 +342,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, "save your name", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveName"), () => {
                     void retryRef.current?.updateDisplayName(displayName);
                 });
                 return false;
@@ -364,7 +364,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 // An MFA challenge is a step in the flow, not a failure: the
                 // caller opens the verification popup and re-runs the save.
                 if (isMfaRequiredError(error)) throw error;
-                reportFailure(error, "save your organisation", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveOrganisation"), () => {
                     void retryRef.current?.updateOrganisation(organisation);
                 });
                 return false;
@@ -381,7 +381,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 setProfile(toProfile(updated));
                 return true;
             } catch (error) {
-                reportFailure(error, "save your practice details", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.savePracticeDetails"), () => {
                     void retryRef.current?.completeOnboarding(details);
                 });
                 return false;
@@ -400,7 +400,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
             } catch (error) {
                 reportFailure(
                     error,
-                    "save your personalisation settings",
+                    tr("app.contexts.userProfileContext.savePersonalisationSettings"),
                     () => {
                         void retryRef.current?.updatePersonalisation(details);
                     },
@@ -418,7 +418,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
             setProfile(toProfile(updated));
             return true;
         } catch (error) {
-            reportFailure(error, "refresh your password status", () => {
+            reportFailure(error, tr("app.contexts.userProfileContext.refreshPasswordStatus"), () => {
                 void retryRef.current?.syncPasswordSet();
             });
             return false;
@@ -440,7 +440,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, "save your model preference", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveModelPreference"), () => {
                     void retryRef.current?.updateModelPreference(field, value);
                 });
                 return false;
@@ -481,7 +481,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, "save your model selection", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveModelSelection"), () => {
                     void retryRef.current?.persistChatModelSelection(
                         model,
                         chatId,
@@ -531,7 +531,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, "save your reasoning level", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveReasoningLevel"), () => {
                     void retryRef.current?.persistChatReasoningSelection(
                         reasoningLevel,
                         chatId,
@@ -557,7 +557,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 if (isMfaRequiredError(error)) throw error;
                 reportFailure(
                     error,
-                    "update your login verification setting",
+                    tr("app.contexts.userProfileContext.updateLoginVerificationSetting"),
                     () => {
                         void retryRef.current?.updateMfaOnLogin(enabled);
                     },
@@ -582,7 +582,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
             } catch (error) {
                 reportFailure(
                     error,
-                    "update your case law research setting",
+                    tr("app.contexts.userProfileContext.updateCaseLawResearchSetting"),
                     () => {
                         void retryRef.current?.updateLegalResearchUs(enabled);
                     },
@@ -605,7 +605,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, "update your quick actions setting", () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.updateQuickActionsSetting"), () => {
                     void retryRef.current?.updateQuickActionsVisible(visible);
                 });
                 return false;
@@ -626,7 +626,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
                 );
                 return true;
             } catch (error) {
-                reportFailure(error, `save your ${router} models`, () => {
+                reportFailure(error, tr("app.contexts.userProfileContext.saveModels", { router }), () => {
                     void retryRef.current?.updateRouterModels(router, models);
                 });
                 return false;

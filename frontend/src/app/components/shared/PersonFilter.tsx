@@ -88,7 +88,7 @@ export function PersonFilter({
   value,
   onChange,
   loadPeople,
-  label = "Filter by person",
+  label = tr("shared.personFilter.filterByPerson"),
   selectedTitle = (name) => tr("shared.personFilter.performedBy", { name }),
 }: {
   value: PersonOption | null;

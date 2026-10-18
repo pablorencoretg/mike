@@ -708,7 +708,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
         if (!canEditContent) {
             // Only accuse somebody of lacking a role once we know they do.
             if (projectRole) {
-                setEditorGateAction("upload documents to this project");
+                setEditorGateAction(tr("pages.projects.id.assistant.chat.chatId.page.uploadDocumentsProject"));
             }
             return;
         }
@@ -1663,7 +1663,9 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             <ConfirmPopup
                 open={!!deleteTarget}
                 title={tr("pages.projects.id.assistant.chat.chatId.page.deleteFile")}
-                message={`Delete “${deleteTarget?.filename ?? "this file"}” and its versions, including any unsaved edits? This cannot be undone.`}
+                message={tr("x.deleteFileWithEdits", {
+                    name: deleteTarget?.filename ?? tr("x.thisFile"),
+                })}
                 confirmLabel={tr("pages.projects.id.assistant.chat.chatId.page.deleteFile2")}
                 confirmVariant="danger"
                 confirmStatus={deletingDocument ? "loading" : "idle"}

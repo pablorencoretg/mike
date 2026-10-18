@@ -23,6 +23,7 @@ import {
 } from "@/app/components/ui/liquid-surface";
 import { LIQUID_GLASS_SUBTLE_CLASS } from "@/shared/ui/LiquidGlassUI";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 type WorkflowPreviewMode = "auto" | "prompt" | "columns";
 type MobilePickerPane = "list" | "details";
@@ -191,7 +192,7 @@ export function WorkflowPickerContent({
                                         ) : !selected &&
                                           workflow.metadata.practice ? (
                                             <span className="shrink-0 text-xs text-gray-400">
-                                                {workflow.metadata.practice}
+                                                {valueLabel(workflow.metadata.practice)}
                                             </span>
                                         ) : null}
                                     </button>
@@ -270,7 +271,8 @@ function WorkflowPreview({
                     ) : (
                         <WorkflowPromptPreview
                             content={
-                                workflow.skill_md ?? "_No prompt defined._"
+                                workflow.skill_md ??
+                                tr("workflowsExtra.noPromptDefined")
                             }
                         />
                     )}
@@ -459,7 +461,7 @@ function WorkflowColumnPreview({ columns }: { columns: ColumnConfig[] }) {
                                         <WorkflowPromptMarkdown
                                             content={
                                                 column.prompt ||
-                                                "_No prompt defined._"
+                                                tr("workflowsExtra.noPromptDefined")
                                             }
                                         />
                                     </div>

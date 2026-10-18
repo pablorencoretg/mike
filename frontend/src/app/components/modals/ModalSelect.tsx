@@ -15,6 +15,8 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     LIQUID_GLASS_SELECTED_CLASS,
 } from "@/shared/ui/LiquidGlassUI";
+import { valueLabel } from "@/shared/i18n/values";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ModalSelectOption =
     | string
@@ -45,7 +47,7 @@ interface ModalSelectProps {
 
 function normalizeOption(option: ModalSelectOption) {
     return typeof option === "string"
-        ? { value: option, label: option }
+        ? { value: option, label: valueLabel(option) }
         : option;
 }
 
@@ -55,7 +57,7 @@ export function ModalSelect({
     value,
     options,
     onChange,
-    placeholder = "Select...",
+    placeholder = tr("modals.modalSelect.select"),
     disabled = false,
     open,
     onOpenChange,

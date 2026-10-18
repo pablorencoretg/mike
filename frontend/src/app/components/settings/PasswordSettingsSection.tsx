@@ -65,7 +65,7 @@ export function PasswordSettingsSection() {
       return;
     }
     if (password !== confirmPassword) {
-      setPasswordSetError(localPasswordError("The two passwords don't match."));
+      setPasswordSetError(localPasswordError(tr("settings.passwordSettingsSection.twoPasswordsDonTMatch")));
       return;
     }
 

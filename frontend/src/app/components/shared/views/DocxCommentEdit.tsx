@@ -46,7 +46,7 @@ export function DocxCommentEdit({
     const submit = () => {
         if (disabled || !author) return;
         const failure =
-            "Your edit could not be saved. Your draft is kept; please try again.";
+            tr("messages.commentEditFailed");
         try {
             if (docxEditComment(editor, comment, draft.trim(), author))
                 onClose();

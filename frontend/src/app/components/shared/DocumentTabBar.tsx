@@ -54,13 +54,13 @@ export function DocumentTabBar({
     activeTabId,
     label,
     idPrefix,
-    emptyLabel = "Document Viewer",
+    emptyLabel = tr("shared.documentTabBar.documentViewer"),
     className,
     onActivate,
     onClose,
     onClosePanel,
     onAdd,
-    addLabel = "Add",
+    addLabel = tr("shared.documentTabBar.add"),
     onReorder,
 }: Props) {
     const dragType = `application/mike-${idPrefix}-tab`;

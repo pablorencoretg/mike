@@ -7,18 +7,16 @@ import { tr } from "@/shared/i18n/runtime";
 // here once instead of drifting apart in each.
 
 /** A turn the server failed; re-sending it is honest. */
-export const TURN_FAILED_MESSAGE = "Mike couldn't finish this answer. Try again.";
+export const TURN_FAILED_MESSAGE = tr("messages.turnFailed");
 
 /** The bubble line for an answer whose stream broke part-way. */
-export const TURN_INTERRUPTED_MESSAGE = "The answer stopped before it finished.";
+export const TURN_INTERRUPTED_MESSAGE = tr("messages.turnInterrupted");
 
 /** The request may have reached the server; re-sending could ask twice. */
-export const TURN_MAY_BE_RUNNING_MESSAGE =
-    "The answer may still be running. Check chat history before sending the question again.";
+export const TURN_MAY_BE_RUNNING_MESSAGE = tr("messages.turnMayBeRunning");
 
 /** A Retry raised for one thread fired after the view moved to another. */
-export const CHAT_CHANGED_MESSAGE =
-    "This chat has changed. Send the message again from the chat it belongs to.";
+export const CHAT_CHANGED_MESSAGE = tr("messages.chatChanged");
 
 /**
  * The failure a server `error` frame stands for. `safe_to_display` marks text

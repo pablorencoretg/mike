@@ -41,11 +41,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AUTH_SYNC_CHANNEL = "mike-auth-state";
 const AUTH_SYNC_STORAGE_KEY = "mike-auth-state-change";
-const SESSION_ERROR_MESSAGE =
-    "We could not check your session. Please try again.";
+const SESSION_ERROR_MESSAGE = tr("messages.sessionCheckFailed");
 /** One toast for the session, however many background checks fail. */
 const SESSION_TOAST_KEY = "auth-session";
-const EXPIRED_SESSION_MESSAGE = "Your session expired. Please log in again.";
+const EXPIRED_SESSION_MESSAGE = tr("messages.sessionExpired");
 
 type AuthSyncMessage = {
     state: "signed-in" | "signed-out";

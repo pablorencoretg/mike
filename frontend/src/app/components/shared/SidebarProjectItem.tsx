@@ -328,8 +328,8 @@ export function SidebarProjectItem({
                         // request failed and the other came back empty.
                         retryRow(
                             loadError && data !== null
-                                ? "Could not refresh items."
-                                : "Could not load items.",
+                                ? tr("shared.sidebarProjectItem.couldNotRefreshItems")
+                                : tr("shared.sidebarProjectItem.couldNotLoadItems"),
                         )
                     ) : items && items.length === 0 ? (
                         <li className="flex min-h-7 items-center pl-2 pr-2 text-xs text-gray-500">
@@ -379,9 +379,9 @@ export function SidebarProjectItem({
                             {/* A refresh that failed keeps the items it
                                 had; a partial load shows what did load. */}
                             {loadError
-                                ? retryRow("Could not refresh items.")
+                                ? retryRow(tr("shared.sidebarProjectItem.couldNotRefreshItems"))
                                 : data?.incomplete &&
-                                  retryRow("Some items could not be loaded.")}
+                                  retryRow(tr("shared.sidebarProjectItem.someItemsCouldNotLoaded"))}
                             {canSeeMore && (
                                 <li>
                                     <button

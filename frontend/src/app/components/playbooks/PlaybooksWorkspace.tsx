@@ -132,8 +132,7 @@ async function extractReviewText(file: File): Promise<string> {
 const LIST_TABS = ["all", "mine", "shared", "runs"] as const;
 type ListTab = (typeof LIST_TABS)[number];
 
-const DEFAULT_REVIEW_INSTRUCTIONS =
-  "Run a complete playbook review. Prioritize unacceptable and missing-required terms, quote exact contract language, and provide complete replacement language for issues that need revision.";
+const DEFAULT_REVIEW_INSTRUCTIONS = tr("messages.defaultReviewInstructions");
 
 /**
  * Rendered by the playbooks layout, so moving between the list and a
@@ -1382,22 +1381,27 @@ function PlaybooksWorkspace() {
               aria-label={tr("playbooks.playbooksWorkspace.suggestedReviewPrompts")}
             >
               {[
-                "Run a complete playbook review. Prioritize unacceptable and missing-required terms, quote exact contract language, and provide complete replacement language for issues that need revision.",
-                "Show only unacceptable and missing-required terms.",
-                "Explain the highest-risk deviations and propose redlines.",
-              ].map((suggestion) => (
+                {
+                  prompt: DEFAULT_REVIEW_INSTRUCTIONS,
+                  label: tr("playbooks.playbooksWorkspace.completeReview"),
+                },
+                {
+                  prompt: tr("messages.reviewPromptOnlyUnacceptable"),
+                  label: tr("playbooks.playbooksWorkspace.unacceptableMissingTerms"),
+                },
+                {
+                  prompt: tr("messages.reviewPromptHighestRisk"),
+                  label: tr("playbooks.playbooksWorkspace.highestRiskDeviations"),
+                },
+              ].map(({ prompt, label }) => (
                 <PillButton
-                  key={suggestion}
+                  key={prompt}
                   tone="white"
                   size="xs"
                   disabled={!!busy}
-                  onClick={() => setReviewInstructions(suggestion)}
+                  onClick={() => setReviewInstructions(prompt)}
                 >
-                  {suggestion.startsWith("Run a complete")
-                    ? tr("playbooks.playbooksWorkspace.completeReview")
-                    : suggestion.startsWith("Show only")
-                      ? tr("playbooks.playbooksWorkspace.unacceptableMissingTerms")
-                      : tr("playbooks.playbooksWorkspace.highestRiskDeviations")}
+                  {label}
                 </PillButton>
               ))}
             </div>

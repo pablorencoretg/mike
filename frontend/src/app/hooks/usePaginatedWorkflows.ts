@@ -14,6 +14,7 @@ import {
 } from "@/app/lib/mikeApi";
 import { appendUniqueRows, paginationError, splitOverfetchedPage } from "@/app/lib/paginatedRows";
 import { useWorkspaceParam } from "@/app/contexts/WorkspaceContext";
+import { tr } from "@/shared/i18n/runtime";
 
 export type WorkflowSortKey = "name" | "type" | "created";
 export type WorkflowSortDirection = "asc" | "desc";
@@ -201,7 +202,7 @@ export function usePaginatedWorkflows(options: {
                 )
                     return;
                 console.error("[workflows] failed to load", error);
-        setError(paginationError(error, "Unable to load workflows"));
+        setError(paginationError(error, tr("app.hooks.usePaginatedWorkflows.unableLoadWorkflows")));
                 setHasMore(false);
             })
             .finally(() => {
@@ -267,7 +268,7 @@ export function usePaginatedWorkflows(options: {
                 requestVersion === requestVersionRef.current
             ) {
                 console.error("[workflows] failed to load more", error);
-        setLoadMoreError(paginationError(error, "Unable to load workflows"));
+        setLoadMoreError(paginationError(error, tr("app.hooks.usePaginatedWorkflows.unableLoadWorkflows")));
             }
         } finally {
             if (
@@ -375,7 +376,7 @@ export function usePaginatedWorkflows(options: {
                     error,
                 );
                 setLoadMoreError(
-                    paginationError(error, "Unable to select all workflows"),
+                    paginationError(error, tr("app.hooks.usePaginatedWorkflows.unableSelectAllWorkflows")),
                 );
             }
         } finally {

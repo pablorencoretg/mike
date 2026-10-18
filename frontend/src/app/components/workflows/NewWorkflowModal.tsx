@@ -41,7 +41,7 @@ import {
     type PendingDirectGrant,
     type PendingOrgOverride,
 } from "../modals/CreateAccessStep";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 const DEFAULT_LANGUAGE = "English";
 const DEFAULT_PRACTICE = "";
@@ -531,17 +531,19 @@ export function NewWorkflowModal({
                     // workflow, so pressing Create again retries only the
                     // grants against the same workflow.
                     setError(
-                        `Workflow created, but access was not granted to ${grantFailures
-                            .map((failure) => failure.email)
-                            .join(", ")}: ${grantFailures[0]!.detail}${
-                            pendingAssetIds.length > 0
-                                ? ` The ${pendingAssetIds.length} selected ${
-                                      pendingAssetIds.length === 1
-                                          ? "file is"
-                                          : "files are"
-                                  } still pending and will be copied when you try again.`
-                                : ""
-                        }`,
+                        tr("workflowsExtra.createdGrantFailed", {
+                            emails: grantFailures
+                                .map((failure) => failure.email)
+                                .join(", "),
+                            detail: grantFailures[0]!.detail,
+                        }) +
+                            (pendingAssetIds.length > 0
+                                ? trn(
+                                      pendingAssetIds.length,
+                                      "workflowsExtra.pendingFilesOne",
+                                      "workflowsExtra.pendingFilesOther",
+                                  )
+                                : ""),
                     );
                     return;
                 }
@@ -568,11 +570,11 @@ export function NewWorkflowModal({
                     }
                     if (copyFailures > 0) {
                         setError(
-                            `Workflow created, but ${copyFailures} ${
-                                copyFailures === 1 ? "asset" : "assets"
-                            } could not be copied. Press Create again to retry the ${
-                                copyFailures === 1 ? "copy" : "copies"
-                            }.`,
+                            trn(
+                                copyFailures,
+                                "workflowsExtra.assetCopyFailedOne",
+                                "workflowsExtra.assetCopyFailedOther",
+                            ),
                         );
                         return;
                     }
@@ -602,7 +604,9 @@ export function NewWorkflowModal({
             setError(
                 userFacingApiError(
                     err,
-                    `Failed to ${isEditing ? "update" : "create"} workflow`,
+                    isEditing
+                        ? tr("workflowsExtra.updateFailed")
+                        : tr("workflowsExtra.createFailed"),
                 ),
             );
         } finally {

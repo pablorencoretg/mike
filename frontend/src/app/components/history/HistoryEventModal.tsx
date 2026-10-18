@@ -37,6 +37,7 @@ import {
   SURFACE_LABELS,
 } from "./auditPresentation";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 const DocumentContent = lazy(() =>
   import("@/app/components/shared/DocumentContent").then((module) => ({
@@ -112,7 +113,7 @@ export function HistoryEventModal({
               : knownErrorCodeMessage(
                   cause,
                   {},
-                  "This document could not be opened. Please try again.",
+                  tr("history.historyEventModal.documentCouldNotOpenedPlease"),
                 ),
         );
       });
@@ -140,7 +141,7 @@ export function HistoryEventModal({
       if (mounted.current) await action();
     } catch (cause) {
       if (mounted.current)
-        setActionError(privateAccessError(cause, "Could not open this item."));
+        setActionError(privateAccessError(cause, tr("history.historyEventModal.couldNotOpenItem")));
     } finally {
       pending.current = false;
       if (mounted.current) setBusy(false);
@@ -169,7 +170,7 @@ export function HistoryEventModal({
       onAccessChange?.(false);
     } catch (cause) {
       if (mounted.current)
-        setActionError(privateAccessError(cause, "Could not end access."));
+        setActionError(privateAccessError(cause, tr("history.historyEventModal.couldNotEndAccess")));
     } finally {
       pending.current = false;
       if (mounted.current) setBusy(false);
@@ -198,7 +199,7 @@ export function HistoryEventModal({
                   />
                 )}
                 <span className="min-w-0 [overflow-wrap:anywhere]">
-                  {`${auditActor(event)}${event.user_email && event.user_display_name ? ` (${event.user_email})` : ""}`}
+                  {`${valueLabel(auditActor(event))}${event.user_email && event.user_display_name ? ` (${event.user_email})` : ""}`}
                 </span>
               </span>
             ),
@@ -206,7 +207,7 @@ export function HistoryEventModal({
         ]
       : []),
     {
-      label: subject.type,
+      label: valueLabel(subject.type),
       value:
         ["Member", "Recipient"].includes(subject.type) &&
         subject.name !== "-" ? (
@@ -221,7 +222,8 @@ export function HistoryEventModal({
         ),
     },
     ...auditDetailFields(event).filter(
-      (field) => !privateAccess || field.label !== "Access",
+      (field) =>
+        !privateAccess || field.label !== tr("history.auditPresentation.access"),
     ),
     ...(subject.context &&
     subject.context !== (SURFACE_LABELS[event.surface ?? ""] ?? event.surface)

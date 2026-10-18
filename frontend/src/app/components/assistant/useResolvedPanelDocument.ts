@@ -12,7 +12,7 @@ function mergePanelDocuments(
     return {
         ...loaded,
         title:
-            summary.title && summary.title !== "Case"
+            summary.title && summary.title !== tr("shared.types.case")
                 ? summary.title
                 : loaded.title,
         metadata: summary.metadata.length ? summary.metadata : loaded.metadata,

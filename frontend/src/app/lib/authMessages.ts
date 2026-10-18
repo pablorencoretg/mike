@@ -21,25 +21,27 @@ import {
     MAX_PASSWORD_LENGTH,
     MIN_PASSWORD_LENGTH,
 } from "@/app/components/auth/passwordPolicy";
+import { tr } from "@/shared/i18n/runtime";
 
-export const TOO_MANY_ATTEMPTS_MESSAGE =
-    "Too many attempts. Wait a moment and try again.";
+export const TOO_MANY_ATTEMPTS_MESSAGE = tr("messages.tooManyAttempts");
 
-const SESSION_EXPIRED_MESSAGE = "Your session has expired. Log in again.";
+const SESSION_EXPIRED_MESSAGE = tr("messages.sessionExpiredLogIn");
 
-export const WEAK_PASSWORD_MESSAGE = `Choose a stronger password: at least ${MIN_PASSWORD_LENGTH} characters, mixing letters, numbers, and symbols.`;
+export const WEAK_PASSWORD_MESSAGE = tr("messages.weakPassword", {
+    count: MIN_PASSWORD_LENGTH,
+});
 
-export const PASSWORD_LENGTH_MESSAGE = `Password must have at least ${MIN_PASSWORD_LENGTH} characters and use at most ${MAX_PASSWORD_LENGTH} UTF-8 bytes.`;
+export const PASSWORD_LENGTH_MESSAGE = tr("messages.passwordLength", {
+    min: MIN_PASSWORD_LENGTH,
+    max: MAX_PASSWORD_LENGTH,
+});
 
 /** Wording for a link that has been used, tampered with, or has expired. */
-export const LINK_SPENT_MESSAGE =
-    "This confirmation link is invalid or has expired. Request a new one.";
+export const LINK_SPENT_MESSAGE = tr("messages.linkSpent");
 
 /** Wording for a six-digit authenticator code, shared by every MFA screen. */
-export const MFA_CODE_INCORRECT_MESSAGE =
-    "That code is incorrect. Enter the current six-digit code from your authenticator app.";
-const MFA_CODE_EXPIRED_MESSAGE =
-    "That code expired. Enter the current six-digit code from your authenticator app.";
+export const MFA_CODE_INCORRECT_MESSAGE = tr("messages.mfaCodeIncorrect");
+const MFA_CODE_EXPIRED_MESSAGE = tr("messages.mfaCodeExpired");
 
 export const AUTH_ERROR_MESSAGES = {
     // Credentials

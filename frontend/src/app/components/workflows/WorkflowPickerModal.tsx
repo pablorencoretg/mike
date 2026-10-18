@@ -8,6 +8,7 @@ import { listWorkflows } from "@/app/lib/mikeApi";
 import { Modal } from "../modals/Modal";
 import type { Workflow } from "../shared/types";
 import { WorkflowPickerContent } from "./WorkflowPickerContent";
+import { tr } from "@/shared/i18n/runtime";
 
 const isDev = process.env.NODE_ENV !== "production";
 const devLog = (...args: Parameters<typeof console.log>) => {
@@ -34,7 +35,7 @@ function WorkflowPickerModalForWorkspace({
     onSelect,
     workflowType,
     breadcrumbs,
-    primaryLabel = "Use",
+    primaryLabel = tr("workflows.workflowPickerModal.use"),
     selectingLabel,
     selecting = false,
     closeOnSelect = true,

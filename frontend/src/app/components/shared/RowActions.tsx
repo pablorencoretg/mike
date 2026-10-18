@@ -87,7 +87,7 @@ export function RowActionMenuItems({
     onDeselect,
     onView,
     onAdd,
-    addLabel = "Add",
+    addLabel = tr("shared.rowActions.add"),
     addStatus,
     addDisabled = false,
     onDelete,
@@ -106,12 +106,12 @@ export function RowActionMenuItems({
     onEditDetails,
     onRename,
     onUpdateCmNumber,
-    viewLabel = "View",
-    editDetailsLabel = "Edit details",
-    newSubfolderLabel = "New subfolder",
-    renameLabel = "Rename",
-    uploadNewVersionLabel = "Upload new version",
-    deleteLabel = "Delete",
+    viewLabel = tr("shared.rowActions.view"),
+    editDetailsLabel = tr("shared.rowActions.editDetails"),
+    newSubfolderLabel = tr("shared.rowActions.newSubfolder"),
+    renameLabel = tr("shared.rowActions.rename"),
+    uploadNewVersionLabel = tr("shared.rowActions.uploadNewVersion"),
+    deleteLabel = tr("shared.rowActions.delete"),
     onClose,
 }: RowActionMenuItemsProps) {
     const run = (action: () => void) => () => {
@@ -273,7 +273,7 @@ function CustomRowActionItems({
 
 export function RowActions({
     renderItems,
-    ariaLabel = "Open row actions",
+    ariaLabel = tr("shared.rowActions.openRowActions"),
     ...props
 }: Props & {
     /** Reuse these items in selection and right-click menus as well. */

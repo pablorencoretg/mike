@@ -17,6 +17,7 @@ import { SpreadsheetView } from "../shared/views/SpreadsheetView";
 import { workflowAddonAssetDisplayUrl } from "@/app/lib/mikeApi";
 import { resolveDocumentViewType } from "@/app/lib/documentViewType";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 type DetailView = "columns" | "skill" | "assets";
 type AddonAsset = NonNullable<WorkflowAddon["assets"]>[number];
@@ -359,7 +360,11 @@ function WorkflowAddonPreviewDialog({
               <MetadataItem label={tr("workflows.workflowAddonPreviewModal.version")} value={addon.version || "—"} />
               <MetadataItem
                 label={tr("workflows.workflowAddonPreviewModal.practice")}
-                value={addon.practice || "General"}
+                value={
+                  addon.practice
+                    ? valueLabel(addon.practice)
+                    : tr("workflowsExtra.generalPractice")
+                }
               />
               <MetadataItem
                 label={tr("workflows.workflowAddonPreviewModal.jurisdiction")}

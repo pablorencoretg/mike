@@ -466,7 +466,7 @@ export function OrganizationAccessEditor({
     members,
     assignments,
     organizationName,
-    ownerLabel = "Project owners",
+    ownerLabel = tr("modals.accessEditor.projectOwners"),
     resourceNoun: resourceNounProp,
     loading = false,
     disabled = false,

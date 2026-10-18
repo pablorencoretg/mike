@@ -43,7 +43,9 @@ export function AssistantDocumentPanelHost({
             <ConfirmPopup
                 open={!!deleteTarget}
                 title={tr("assistant.assistantDocumentPanelHost.deleteFile")}
-                message={`Delete “${deleteTarget?.title ?? "this file"}” and its versions? This cannot be undone.`}
+                message={tr("x.deleteFileVersions", {
+                    name: deleteTarget?.title ?? tr("x.thisFile"),
+                })}
                 confirmLabel={tr("assistant.assistantDocumentPanelHost.deleteFile2")}
                 confirmVariant="danger"
                 confirmStatus={deletingDocument ? "loading" : "idle"}

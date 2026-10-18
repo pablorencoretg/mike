@@ -14,7 +14,7 @@ import { viewRoundingClass, type ViewRounding } from "./viewRounding";
 import { tr } from "@/shared/i18n/runtime";
 
 const DocxRenderer = lazy(() => import("./EigenpalDocxRenderer"));
-const RENDER_ERROR = "This document could not be displayed. Please download it to view it.";
+const RENDER_ERROR = tr("messages.docxRenderError");
 const bufferIds = new WeakMap<ArrayBuffer, number>();
 let nextBufferId = 0;
 

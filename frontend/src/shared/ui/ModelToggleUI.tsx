@@ -186,7 +186,7 @@ export function ModelToggleUI({
   modalInput = false,
   toolbar = false,
   triggerClassName,
-  emptyLabel = "No Models",
+  emptyLabel = tr("shared.ui.modelToggleUI.noModels"),
   onEmptyClick,
   reasoningLevel,
   onReasoningChange,

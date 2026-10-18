@@ -247,7 +247,7 @@ export default function SecurityPage() {
       traceMfa("[security/mfa] state load failed", {
         error: error instanceof Error ? error.message : String(error),
       });
-      failStatus(error, "load your security settings");
+      failStatus(error, tr("pages.settings.security.page.loadSecuritySettings"));
       setFactors([]);
       setCurrentLevel(null);
       setNextLevel(null);
@@ -311,7 +311,7 @@ export default function SecurityPage() {
       traceMfa("[security/mfa] setup failed", {
         errorType: error instanceof Error ? error.name : typeof error,
       });
-      failStatus(error, "start authenticator setup");
+      failStatus(error, tr("pages.settings.security.page.startAuthenticatorSetup"));
     } finally {
       setBusy(false);
     }
@@ -360,7 +360,7 @@ export default function SecurityPage() {
       setStatus(tr("pages.settings.security.page.mfaEnabled"));
       await refreshMfaState();
     } catch (error) {
-      failStatus(error, "verify that code");
+      failStatus(error, tr("pages.settings.security.page.verifyCode"));
     } finally {
       setBusy(false);
     }
@@ -394,7 +394,7 @@ export default function SecurityPage() {
       traceMfa("[security/mfa] state verification failed", {
         errorType: error instanceof Error ? error.name : typeof error,
       });
-      failStatus(error, "check your security settings");
+      failStatus(error, tr("pages.settings.security.page.checkSecuritySettings"));
       return;
     }
 
@@ -421,7 +421,7 @@ export default function SecurityPage() {
       traceMfa("[security/mfa] disable failed", {
         errorType: error instanceof Error ? error.name : typeof error,
       });
-      failStatus(error, "turn off two-factor authentication");
+      failStatus(error, tr("pages.settings.security.page.turnOffTwoFactorAuthentication"));
       return;
     }
     setBusy(false);
@@ -446,7 +446,7 @@ export default function SecurityPage() {
       }
       await saveLoginPreference(enabled);
     } catch (error) {
-      failStatus(error, "update your login verification setting");
+      failStatus(error, tr("pages.settings.security.page.updateLoginVerificationSetting"));
     } finally {
       setSavingLoginPreference(false);
     }
@@ -467,7 +467,7 @@ export default function SecurityPage() {
       if (isMfaRequiredError(error)) {
         setPendingLoginPreference(enabled);
       } else {
-        failStatus(error, "update your login verification setting");
+        failStatus(error, tr("pages.settings.security.page.updateLoginVerificationSetting"));
       }
     } finally {
       setSavingLoginPreference(false);

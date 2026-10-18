@@ -21,7 +21,7 @@ export interface EditCardsSectionUIProps {
 export function EditCardsSectionUI({
     summary,
     actions,
-    actionsLabel = "Tracked change actions",
+    actionsLabel = tr("shared.ui.editCardsSectionUI.trackedChangeActions"),
     children,
     className = "",
     defaultOpen = true,

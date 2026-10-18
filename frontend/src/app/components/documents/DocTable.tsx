@@ -521,7 +521,7 @@ export function DocTable({
         // Same capability the header Add button is gated on — this also
         // covers the empty-state click, which calls openAddDocuments
         // directly.
-        if (!requireCapability("content.edit", "add documents", "editor"))
+        if (!requireCapability("content.edit", tr("documents.docTable.addDocuments"), "editor"))
             return;
         if (renderAddDocumentsModalRef.current) {
             setAddDocsOpen(true);
@@ -704,7 +704,7 @@ export function DocTable({
 
     async function submitNewVersion(doc: Document, file: File, filename: string) {
         // Same tier as the server's POST /versions guard (content.edit).
-        if (!requireCapability("content.edit", "upload a new version", "editor"))
+        if (!requireCapability("content.edit", tr("documents.docTable.uploadNewVersion2"), "editor"))
             return;
         try {
             await uploadDocumentVersion(doc.id, file, filename);
@@ -741,7 +741,7 @@ export function DocTable({
 
     async function replaceVersionFile(docId: string, versionId: string, file: File, filename: string) {
         if (
-            !requireDocOwnerForVersions(docId, "replace this version's file")
+            !requireDocOwnerForVersions(docId, tr("documents.docTable.replaceVersionSFile"))
         )
             return;
         await replaceDocumentVersionFile(docId, versionId, file, filename);
@@ -777,7 +777,7 @@ export function DocTable({
      */
     async function handleRenameVersion(docId: string, versionId: string, filename: string | null) {
         // Server PATCH /versions/:id guard is content.edit.
-        if (!requireCapability("content.edit", "rename versions", "editor"))
+        if (!requireCapability("content.edit", tr("documents.docTable.renameVersions"), "editor"))
             return;
         const previousFilename = versionsByDocId
             .get(docId)
@@ -811,7 +811,7 @@ export function DocTable({
     }
 
     async function handleDeleteVersion(docId: string, versionId: string) {
-        if (!requireDocOwnerForVersions(docId, "delete document versions"))
+        if (!requireDocOwnerForVersions(docId, tr("documents.docTable.deleteDocumentVersions")))
             return;
         try {
             await deleteDocumentVersion(docId, versionId);
@@ -1139,7 +1139,7 @@ export function DocTable({
             setCreatingFolderIn(undefined);
             return;
         }
-        if (!requireCapability("docs.organize", "create folders", "editor")) {
+        if (!requireCapability("docs.organize", tr("documents.docTable.createFolders"), "editor")) {
             setCreatingFolderIn(undefined);
             return;
         }
@@ -1180,7 +1180,7 @@ export function DocTable({
         if (!name) return;
         // Folder operations are member-level: organizing the shelf is part
         // of collaborating on what sits on it, not an administrative act.
-        if (!requireCapability("docs.organize", "rename folders", "editor"))
+        if (!requireCapability("docs.organize", tr("documents.docTable.renameFolders"), "editor"))
             return;
         const updatedAt = new Date().toISOString();
         setFolders((prev) =>
@@ -1225,7 +1225,7 @@ export function DocTable({
         if (
             !requireCapability(
                 "docs.organize",
-                "delete folders and their documents",
+                tr("documents.docTable.deleteFoldersTheirDocuments"),
                 "editor",
             )
         )
@@ -1403,7 +1403,7 @@ export function DocTable({
 
     async function handleRemoveDocFromFolder(docId: string) {
         if (
-            !requireCapability("docs.organize", "move documents", "editor")
+            !requireCapability("docs.organize", tr("documents.docTable.moveDocuments"), "editor")
         )
             return;
         setDocuments((prev) =>
@@ -1446,7 +1446,7 @@ export function DocTable({
             return;
         }
         if (
-            !requireCapability("docs.organize", "rename documents", "editor")
+            !requireCapability("docs.organize", tr("documents.docTable.renameDocuments"), "editor")
         ) {
             setRenamingDocumentId(null);
             return;
@@ -1504,7 +1504,7 @@ export function DocTable({
         // permission (it required `doc`, `user.id` AND `doc.user_id` to be
         // present before it would refuse anything).
         if (!canDeleteDocument(doc)) {
-            refuseDocumentDelete("delete it");
+            refuseDocumentDelete(tr("documents.docTable.delete2"));
             return;
         }
         setDeletingDocIds((prev) => new Set([...prev, docId]));
@@ -1528,7 +1528,7 @@ export function DocTable({
 
     function requestRemoveDoc(doc: Document) {
         if (doc && user?.id && doc.user_id && doc.user_id !== user.id) {
-            setOwnerOnlyAction("delete this document");
+            setOwnerOnlyAction(tr("documents.docTable.deleteDocument3"));
             return;
         }
         const versionCount = versionsByDocId.get(doc.id)?.versions.length ?? currentVersionNumber(doc) ?? 1;
@@ -1681,7 +1681,7 @@ export function DocTable({
         // (capability-gated) Add button, so they need the same
         // content.edit check: viewers get the role popup instead of a
         // doomed upload that the backend would 403 anyway.
-        if (!requireCapability("content.edit", "add documents", "editor"))
+        if (!requireCapability("content.edit", tr("documents.docTable.addDocuments"), "editor"))
             return;
         const { supported, unsupported } = partitionSupportedDocumentFiles(
             entries.map((entry) => entry.file),
@@ -2056,7 +2056,7 @@ export function DocTable({
         if (files.length === 0) return;
         // Same tier as the server's POST /versions guard (content.edit) —
         // without it an org viewer's drop fails into console.error only.
-        if (!requireCapability("content.edit", "upload a new version", "editor"))
+        if (!requireCapability("content.edit", tr("documents.docTable.uploadNewVersion2"), "editor"))
             return;
         const { supported, unsupported } = partitionSupportedDocumentFiles(files);
         setDocumentUploadWarning(formatUnsupportedDocumentWarning(unsupported));
@@ -2200,13 +2200,13 @@ export function DocTable({
             });
             if (movingIds.length === 0) return;
             if (
-                !requireCapability("docs.organize", "move documents", "editor")
+                !requireCapability("docs.organize", tr("documents.docTable.moveDocuments"), "editor")
             )
                 return;
             await moveDocsToFolder(movingIds, targetFolderId);
         } else if (subFolderId && subFolderId !== targetFolderId) {
             if (
-                !requireCapability("docs.organize", "move folders", "editor")
+                !requireCapability("docs.organize", tr("documents.docTable.moveFolders"), "editor")
             )
                 return;
             if (targetFolderId !== null && wouldCreateCycle(subFolderId, targetFolderId)) return;
@@ -3489,7 +3489,7 @@ export function DocTable({
     );
 
     const handleRemoveSelectedFromFolder = useCallback(async () => {
-        if (!requireCapability("docs.organize", "move documents", "editor"))
+        if (!requireCapability("docs.organize", tr("documents.docTable.moveDocuments"), "editor"))
             return;
         await removeDocsFromFolder(
             selectedStandaloneDocIds.filter(
@@ -3590,7 +3590,7 @@ export function DocTable({
         }
         if (blocked > 0) {
             setOwnerOnlyAction(
-                `delete ${blocked} of the selected documents — only the document creator can delete a document`,
+                tr("documents.docTable.deleteSelectedDocumentsOnlyDocument", { blocked }),
             );
         }
         if (deletedIds.length > 0 && operations.bulkDeleteDocuments) {
@@ -4248,7 +4248,7 @@ export function DocTable({
                 newSubfolderDisabled={!allowed("docs.organize")}
                 onNewSubfolder={() => {
                     // Gate the prompt as well as submission in handleCreateFolder.
-                    if (!requireCapability("docs.organize", "create folders", "editor")) return;
+                    if (!requireCapability("docs.organize", tr("documents.docTable.createFolders"), "editor")) return;
                     setCreatingFolderIn(folderId ?? null);
                     setNewFolderName("");
                     if (folderId) {

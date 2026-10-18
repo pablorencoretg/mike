@@ -13,7 +13,7 @@ import {
     LIQUID_GLASS_SUBTLE_CLASS,
     LIQUID_GLASS_TRANSLUCENT_CLASS,
 } from "@/app/components/ui/liquid-surface";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 type AskInputsEvent = Extract<AssistantEvent, { type: "ask_inputs" }>;
 type AskInputItem = AskInputsEvent["items"][number];
@@ -349,8 +349,13 @@ export function AskInputPopup({
                 const action =
                     asked?.kind === "approval"
                         ? `${asked.title} (${asked.connector_name})`
-                        : "Connector action";
-                return `${index + 1}. ${item.decision === "approve" ? "Approved" : "Rejected"}: ${action}`;
+                        : tr("x.connectorAction");
+                return tr(
+                    item.decision === "approve"
+                        ? "x.approvedAction"
+                        : "x.rejectedAction",
+                    { index: index + 1, action },
+                );
             }
             if (item.kind === "multi_choice") {
                 if (item.skipped)
@@ -368,7 +373,7 @@ export function AskInputPopup({
         const onlyApprovals = response.responses.every(
             (item) => item.kind === "approval",
         );
-        return `${onlyApprovals ? "Decisions on Mike's requested actions" : "Responses to Mike's questions"}:\n${lines.join("\n\n")}`;
+        return `${onlyApprovals ? tr("x.decisionsHeading") : tr("x.responsesHeading")}:\n${lines.join("\n\n")}`;
     };
 
     // Called straight from the handler that resolves the last outstanding
@@ -944,7 +949,8 @@ function DocumentInput({
     onRemoveDoc: (typeIndex: number, docId: string) => void;
 }) {
     const documentTypes = item.document_types ?? [];
-    const rows = documentTypes.length > 0 ? documentTypes : ["Documents"];
+    const rows =
+        documentTypes.length > 0 ? documentTypes : [tr("x.documents")];
     return (
         <div className="mt-2 grid gap-1.5">
             {rows.map((documentType, idx) => {
@@ -1022,7 +1028,11 @@ function DocumentInput({
                             </span>
                             <span className="mt-0.5 shrink-0 whitespace-nowrap font-sans text-[10px] text-gray-500">
                                 {docs.length > 0
-                                    ? `${docs.length} file${docs.length === 1 ? "" : "s"} added`
+                                    ? trn(
+                                          docs.length,
+                                          "x.filesAddedOne",
+                                          "x.filesAddedOther",
+                                      )
                                     : tr("assistant.askInputPopup.add")}
                             </span>
                         </span>

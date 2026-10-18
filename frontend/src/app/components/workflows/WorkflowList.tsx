@@ -71,6 +71,7 @@ import {
 } from "../shared/TablePrimitive";
 import { AccessScopeLabel } from "../shared/AccessScopeLabel";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 type WorkflowListTab = "all" | "assistant" | "tabular" | "addons";
 
@@ -104,7 +105,7 @@ const ACCESS_FILTER_OPTIONS: TableFilterOption<AccessFilter>[] = [
 
 function workflowFilterOptions(
   values: (string | null | undefined)[],
-  labelForValue: (value: string) => string = (value) => value,
+  labelForValue: (value: string) => string = valueLabel,
 ): TableFilterOption<string>[] {
   return Array.from(
     new Set(
@@ -485,7 +486,11 @@ export function WorkflowList({
         <Plus className="h-3.5 w-3.5" />
         {bulkImportingAddons
           ? tr("workflows.workflowList.importing")
-          : `Import${selectedAddonIds.length > 1 ? ` (${selectedAddonIds.length})` : ""}`}
+          : selectedAddonIds.length > 1
+            ? tr("workflowsExtra.importCount", {
+                count: selectedAddonIds.length,
+              })
+            : tr("workflowsExtra.import")}
       </TabPillButtonUI>
     ) : undefined;
   const pendingDefaultDeleteCount = pendingDeleteWorkflows.filter(
@@ -1062,13 +1067,17 @@ function WorkflowTable({
                     </span>
                   </TableCell>
                   <TableCell className="w-52 text-xs text-gray-600">
-                    {workflow.metadata.practice || "—"}
+                    {(workflow.metadata.practice &&
+                      valueLabel(workflow.metadata.practice)) ||
+                      "—"}
                   </TableCell>
                   <TableCell className="w-40 truncate text-xs text-gray-600">
                     {workflow.metadata.jurisdictions?.join(", ") || "—"}
                   </TableCell>
                   <TableCell className="w-28 text-xs text-gray-600">
-                    {workflow.metadata.language || "—"}
+                    {(workflow.metadata.language &&
+                      valueLabel(workflow.metadata.language)) ||
+                      "—"}
                   </TableCell>
                   <div
                     className="flex w-8 shrink-0 justify-end"

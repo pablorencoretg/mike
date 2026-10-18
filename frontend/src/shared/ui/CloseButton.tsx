@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { PillButtonUI } from "./PillButtonUI";
+import { tr } from "../i18n/runtime";
 
 export type CloseButtonSize = "sm" | "md";
 
@@ -13,7 +14,7 @@ const sizeClasses: Record<CloseButtonSize, { button: string; icon: string }> = {
 /** The small white ✕ that dismisses a side panel, modal or other surface. */
 export function CloseButton({
     onClick,
-    label = "Close",
+    label = tr("shared.ui.closeButton.close"),
     size = "sm",
     className,
 }: {

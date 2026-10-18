@@ -351,7 +351,7 @@ export function OrganizationDepartedMembers({
       setSelectedIds([]);
       if (result.unresolved > 0)
         setFailure(
-          `${count(result.unresolved, "item")} could not be reassigned: the recovery period has ended, or the member is no longer in the organization.`,
+          tr("organizations.organizationDepartedMembers.couldNotReassignedRecoveryPeriod", { count: count(result.unresolved, "item") }),
         );
       else
         notifySuccess(
@@ -373,7 +373,7 @@ export function OrganizationDepartedMembers({
       setSelectedIds([]);
       if (result.unresolved > 0)
         setFailure(
-          `${count(result.unresolved, "item")} could not be deleted. Try again.`,
+          tr("organizations.organizationDepartedMembers.couldNotDeletedTryAgain", { count: count(result.unresolved, "item") }),
         );
       else notifySuccess(tr("organizations.organizationDepartedMembers.archivedWorkDeleted"));
       await load();
@@ -476,7 +476,7 @@ export function OrganizationDepartedMembers({
               {loading ? (
                 <SkeletonCheckbox />
               ) : (
-                checkbox(visibleIds, "Select all archived work")
+                checkbox(visibleIds, tr("organizations.organizationDepartedMembers.selectAllArchivedWork"))
               )}
               <span className="mr-1">
                 {tr("organizations.organizationDepartedMembers.name")}
@@ -592,7 +592,7 @@ export function OrganizationDepartedMembers({
                     onSelectionChange={() => toggle(ids)}
                     selectionIndicator={checkbox(
                       ids,
-                      `Select everything ${name} left`,
+                      tr("organizations.organizationDepartedMembers.selectEverythingLeft", { name }),
                     )}
                     label={
                       <span className="flex min-w-0 items-center">
@@ -639,7 +639,7 @@ export function OrganizationDepartedMembers({
                     {due.text}
                   </TableCell>
                   <TableCell className="flex w-10 justify-end overflow-visible">
-                    {rowMenu(target, `Actions for ${name}`)}
+                    {rowMenu(target, tr("organizations.organizationDepartedMembers.actions", { name }))}
                   </TableCell>
                 </TableRow>,
                 ...(open
@@ -677,7 +677,7 @@ export function OrganizationDepartedMembers({
                             onSelectionChange={() => toggle(groupIds)}
                             selectionIndicator={checkbox(
                               groupIds,
-                              `Select ${groupName}`,
+                              tr("organizations.organizationDepartedMembers.select2", { groupName }),
                             )}
                             label={
                               <span
@@ -719,7 +719,7 @@ export function OrganizationDepartedMembers({
                           <TableCell className="w-32" />
                           <TableCell className="w-48" />
                           <TableCell className="flex w-10 justify-end overflow-visible">
-                            {rowMenu(groupTarget, `Actions for ${groupName}`)}
+                            {rowMenu(groupTarget, tr("organizations.organizationDepartedMembers.actions2", { groupName }))}
                           </TableCell>
                         </TableRow>,
                         ...(groupOpen
@@ -773,7 +773,7 @@ export function OrganizationDepartedMembers({
                                   <TableCell className="flex w-10 justify-end overflow-visible">
                                     {rowMenu(
                                       itemTarget,
-                                      `Actions for ${item.title}`,
+                                      tr("organizations.organizationDepartedMembers.actions3", { title: item.title }),
                                     )}
                                   </TableCell>
                                 </TableRow>

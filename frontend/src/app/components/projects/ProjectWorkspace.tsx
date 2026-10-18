@@ -499,7 +499,7 @@ export function ProjectWorkspaceProvider({
 
     function requestProjectDelete() {
         if (!canDo("container.delete")) {
-            denyUnlessLoading("delete this project");
+            denyUnlessLoading(tr("projects.projectWorkspace.deleteProject"));
             return;
         }
         setDeleteProjectStatus("idle");

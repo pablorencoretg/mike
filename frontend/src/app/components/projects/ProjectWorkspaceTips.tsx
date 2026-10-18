@@ -5,11 +5,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { tr } from "@/shared/i18n/runtime";
 
 const PROJECT_WORKSPACE_TIPS = [
-    "You can drag and drop a document from the Explorer to the Chat.",
-    "Ask the Chat to explain a difficult passage or summarise a project document.",
-    "Ask the Chat to edit a project document and save the changes as a new version.",
-    "The Chat can create a new project document using your instructions and project context.",
-    "Ask the Chat to replicate an existing document when you want a new draft based on it.",
+    tr("tips.dragToChat"),
+    tr("tips.explainPassage"),
+    tr("tips.editDocument"),
+    tr("tips.createDocument"),
+    tr("tips.replicateDocument"),
 ];
 
 export function ProjectWorkspaceTips() {

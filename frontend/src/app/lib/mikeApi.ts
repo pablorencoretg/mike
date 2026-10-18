@@ -80,6 +80,7 @@ import type {
     TabularReview,
     TabularReviewDetailOut,
 } from "@/app/components/shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 export { UploadBatchError };
 export { failedUploadMessage };
@@ -172,9 +173,8 @@ export class MikeApiError extends Error {
     }
 }
 
-export const INTERNAL_ERROR_MESSAGE = "Something went wrong. Please try again.";
-export const MALFORMED_ERROR_RESPONSE_MESSAGE =
-    "The request could not be completed. Please try again.";
+export const INTERNAL_ERROR_MESSAGE = tr("messages.internalError");
+export const MALFORMED_ERROR_RESPONSE_MESSAGE = tr("messages.malformedResponse");
 /**
  * The backend's answer when its database is missing a migration (PGRST202/
  * 204/205, 42P01). Unlike other 5xx it tells the user something actionable
@@ -182,16 +182,14 @@ export const MALFORMED_ERROR_RESPONSE_MESSAGE =
  * fallback (see userFacingApiError).
  */
 export const SCHEMA_OUT_OF_DATE_CODE = "schema_out_of_date";
-export const SCHEMA_OUT_OF_DATE_MESSAGE =
-    "The server's database needs an update before this can load. Please contact your administrator.";
+export const SCHEMA_OUT_OF_DATE_MESSAGE = tr("messages.schemaOutOfDate");
 /**
  * The Next gateway's answer (503, Retry-After) when it cannot reach the
  * backend at all (ECONNREFUSED and friends). The gateway reports it once
  * per outage; the user can only wait and retry.
  */
 export const UPSTREAM_UNAVAILABLE_CODE = "upstream_unavailable";
-export const UPSTREAM_UNAVAILABLE_MESSAGE =
-    "The server is temporarily unreachable. Please try again shortly.";
+export const UPSTREAM_UNAVAILABLE_MESSAGE = tr("messages.upstreamUnavailable");
 /**
  * 5xx codes that the server side (backend or gateway) has already reported
  * to Sentry, and that carry a message worth showing instead of the generic

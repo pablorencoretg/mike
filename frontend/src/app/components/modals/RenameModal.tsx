@@ -26,7 +26,7 @@ function RenameModalForm({
     open,
     breadcrumbs,
     initialValue,
-    label = "Name",
+    label = tr("modals.renameModal.name"),
     saving = false,
     onClose,
     onSave,

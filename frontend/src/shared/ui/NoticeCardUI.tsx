@@ -25,6 +25,7 @@ import { pillButtonUIClassName } from "./PillButtonUI.styles";
 import { textButtonUIClassName } from "./TextButtonUI.styles";
 import { CloseButton } from "./CloseButton";
 import type { ToastTone } from "../lib/toastStore";
+import { tr } from "../i18n/runtime";
 
 /** Same three tones as the toast store, so a toast's tone is a card's tone. */
 export type NoticeTone = ToastTone;
@@ -109,7 +110,7 @@ export function NoticeCardUI({
     icon,
     actions,
     onDismiss,
-    dismissLabel = "Dismiss notification",
+    dismissLabel = tr("shared.ui.noticeCardUI.dismissNotification"),
     className,
     ref,
     ...rest

@@ -2,6 +2,7 @@
 
 import { createPortal } from "react-dom";
 import { WarningPopup } from "../popups/WarningPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     open: boolean;
@@ -12,7 +13,7 @@ interface Props {
 
 export function UploadOverlay({
     open,
-    label = "Drop files here to add to chat",
+    label = tr("assistant.uploadOverlay.dropFilesHereAddChat"),
     warning,
     onWarningClose,
 }: Props) {

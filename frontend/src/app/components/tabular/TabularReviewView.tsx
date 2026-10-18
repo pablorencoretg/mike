@@ -488,7 +488,7 @@ export function TRView({ reviewId, projectId }: Props) {
      * in.
      */
     function openAddColumns() {
-        if (!requireStructure("add columns")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.addColumns2"))) return;
         setAddColOpen(true);
     }
 
@@ -548,7 +548,7 @@ export function TRView({ reviewId, projectId }: Props) {
     async function handleAddDocuments(newDocs: Document[]) {
         // Changing the review's document set is a structure edit server-side
         // (PATCH document_ids 403s below member) — same gate as columns.
-        if (!requireStructure("edit the document set")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.editDocumentSet"))) return;
         const toAdd = newDocs.filter(
             (d) => !documents.some((existing) => existing.id === d.id),
         );
@@ -579,7 +579,7 @@ export function TRView({ reviewId, projectId }: Props) {
         // a viewer's upload succeeds and the attach PATCH 403s, leaving an
         // orphaned document. Mirror the DocTable drop gate, at the tier the
         // attach actually requires.
-        if (!requireStructure("add documents to this review")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.addDocumentsReview"))) return;
         setUploadingDroppedFilenames(files.map((file) => file.name));
         const uploaded: Document[] = [];
         let failedNames: string[] = [];
@@ -645,7 +645,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleRegenerateCell(rowId: string, colIndex: number) {
-        if (!requireContent("regenerate cells")) return;
+        if (!requireContent(tr("tabular.tabularReviewView.regenerateCells"))) return;
         if (cellMutationsBlocked) {
             setGenerationGuard("running");
             return;
@@ -883,7 +883,7 @@ export function TRView({ reviewId, projectId }: Props) {
         // run failed runs a closure created while the run was still in
         // flight, and the captured `true` made that retry a silent no-op.
         if (!review || generatingRef.current) return;
-        if (!requireContent("run generation")) return;
+        if (!requireContent(tr("tabular.tabularReviewView.runGeneration"))) return;
 
         if (review.is_running) {
             setGenerationGuard("running");
@@ -1052,7 +1052,7 @@ export function TRView({ reviewId, projectId }: Props) {
         // `is_owner === false` check was the file's last leftover of the
         // ownership model: it refused org admins and members a change the
         // server accepts, and mislabelled the refusal admin-tier.
-        if (!requireContent("change the tabular review model")) return;
+        if (!requireContent(tr("tabular.tabularReviewView.changeTabularReviewModel"))) return;
         const previousModel = review.model;
         try {
             const updated = await updateTabularReview(reviewId, { model });
@@ -1141,7 +1141,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleAddColumn(newColumns: ColumnConfig[]) {
-        if (!requireStructure("add columns")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.addColumns2"))) return;
         const startIndex = getNextColumnIndex();
         const normalizedColumns = newColumns.map((column, index) => ({
             ...column,
@@ -1218,7 +1218,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleUpdateColumn(nextColumn: ColumnConfig) {
-        if (!requireStructure("edit columns")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.editColumns"))) return;
         // The server takes the whole config, so this edit is merged onto the
         // config as it is now. Restoring the whole array on failure — or
         // resending the array a frozen Retry captured — would undo every
@@ -1253,7 +1253,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleDeleteColumn(columnIndex: number) {
-        if (!requireStructure("delete columns")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.deleteColumns"))) return;
         const removedAt = columnsRef.current.findIndex(
             (column) => column.index === columnIndex,
         );
@@ -1312,7 +1312,7 @@ export function TRView({ reviewId, projectId }: Props) {
     async function handleDeleteDocuments(targetIds: string[] = selectedRowIds) {
         // Removing documents deletes their cells — member tier, like every
         // other reshaping of the review.
-        if (!requireStructure("remove documents from this review")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.removeDocumentsFromReview"))) return;
         const rowIdsToDelete = [...targetIds];
         if (rowIdsToDelete.length === 0) return;
         const documentIdsToDelete = new Set(
@@ -1444,7 +1444,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleClearResults(targetIds: string[] = selectedRowIds) {
-        if (!requireStructure("clear results")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.clearResults3"))) return;
         await clearResultsForRows([...targetIds]);
     }
 
@@ -1460,7 +1460,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     async function handleClearAllResults() {
-        if (!requireStructure("clear results")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.clearResults3"))) return;
         await clearResultsForRows(rows.map((row) => row.id));
     }
 
@@ -1510,7 +1510,7 @@ export function TRView({ reviewId, projectId }: Props) {
         title: string;
         projectId?: string | null;
     }) {
-        if (!review || !requireStructure("edit tabular review details"))
+        if (!review || !requireStructure(tr("tabular.tabularReviewView.editTabularReviewDetails")))
             return;
         // Only send project_id when it actually changes: moving a review
         // between projects is creator-only server-side, and sending an
@@ -1549,7 +1549,7 @@ export function TRView({ reviewId, projectId }: Props) {
 
     function requestReviewDelete() {
         if (!can(reviewRole, "container.delete")) {
-            if (roleKnown) setOwnerOnlyAction("delete this tabular review");
+            if (roleKnown) setOwnerOnlyAction(tr("tabular.tabularReviewView.deleteTabularReview2"));
             return;
         }
         setDeleteReviewStatus("idle");
@@ -1579,7 +1579,7 @@ export function TRView({ reviewId, projectId }: Props) {
     }
 
     function requestWorkflow() {
-        if (!requireStructure("apply a workflow")) return;
+        if (!requireStructure(tr("tabular.tabularReviewView.applyWorkflow3"))) return;
         setWorkflowModalOpen(true);
     }
 
@@ -1917,7 +1917,7 @@ export function TRView({ reviewId, projectId }: Props) {
                                                 // a doomed submit.
                                                 if (
                                                     !requireStructure(
-                                                        "edit the document set",
+                                                        tr("tabular.tabularReviewView.editDocumentSet"),
                                                     )
                                                 )
                                                     return;
@@ -1926,7 +1926,7 @@ export function TRView({ reviewId, projectId }: Props) {
                                             onUploadFiles={() => {
                                                 if (
                                                     !requireStructure(
-                                                        "edit the document set",
+                                                        tr("tabular.tabularReviewView.editDocumentSet"),
                                                     )
                                                 )
                                                     return;
@@ -1935,7 +1935,7 @@ export function TRView({ reviewId, projectId }: Props) {
                                             onUploadFolder={() => {
                                                 if (
                                                     !requireStructure(
-                                                        "edit the document set",
+                                                        tr("tabular.tabularReviewView.editDocumentSet"),
                                                     )
                                                 )
                                                     return;
@@ -2049,7 +2049,7 @@ export function TRView({ reviewId, projectId }: Props) {
                                 onAddDocuments={() => {
                                     if (
                                         !requireStructure(
-                                            "edit the document set",
+                                            tr("tabular.tabularReviewView.editDocumentSet"),
                                         )
                                     )
                                         return;

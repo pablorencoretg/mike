@@ -84,6 +84,7 @@ import { AccessScopeLabel } from "@/app/components/shared/AccessScopeLabel";
 import { useT } from "@/shared/i18n/I18nContext";
 import type { MessageKey, Translate } from "@/shared/i18n/translate";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString(undefined, {
@@ -354,7 +355,7 @@ export function ProjectsOverview() {
             allLabel={t("projects.filters.allPractices")}
             options={practices.map((practice) => ({
                 value: practice,
-                label: practice,
+                label: valueLabel(practice),
             }))}
             onChange={handlePracticeFilterChange}
         />
@@ -471,7 +472,7 @@ export function ProjectsOverview() {
               })`
             : "";
         notifyPartialFailure(
-            `${failedIds.length} of ${ids.length} projects couldn't be deleted${named}. They are back in the list and still selected.`,
+            tr("projects.projectsOverview.projectsCouldnTDeletedThey", { failedIdsCount: failedIds.length, idsCount: ids.length, named }),
             {
                 action: `delete ${failedIds.length} project${
                     failedIds.length === 1 ? "" : "s"
@@ -910,7 +911,9 @@ export function ProjectsOverview() {
                                         )}
                                     </TableCell>
                                     <TableCell className="w-36">
-                                        {project.practice ?? (
+                                        {(project.practice == null
+                                            ? null
+                                            : valueLabel(project.practice)) ?? (
                                             <span className="text-gray-300">
                                                 —
                                             </span>

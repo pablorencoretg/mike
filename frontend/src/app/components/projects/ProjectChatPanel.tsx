@@ -569,7 +569,7 @@ export function ProjectChatPanel({
 
     function handleNewChat() {
         if (!canEditContent) {
-            if (project) onEditorGate("create a chat");
+            if (project) onEditorGate(tr("projects.projectChatPanel.createChat"));
             return;
         }
         resetChat();
@@ -583,7 +583,7 @@ export function ProjectChatPanel({
             // Only accuse somebody of lacking a role once we know they do:
             // `projectRole` is null for the whole load window, and a refusal
             // popup raised then is a guess.
-            if (projectRole) onOwnerGate("delete this chat");
+            if (projectRole) onOwnerGate(tr("projects.projectChatPanel.deleteChat"));
             return;
         }
         setDeletingChat(true);
@@ -618,7 +618,7 @@ export function ProjectChatPanel({
     async function handleRenameChat(nextTitle?: string) {
         if (!activeChatId) return;
         if (!canRenameChat) {
-            if (projectRole) onOwnerGate("rename this chat");
+            if (projectRole) onOwnerGate(tr("projects.projectChatPanel.renameChat"));
             return;
         }
         if (nextTitle === undefined) {
@@ -814,10 +814,18 @@ export function ProjectChatPanel({
                                         variant: "danger" as const,
                                     },
                                 ].filter((item) => {
-                                    if (item.label === "Rename") return !!activeChatId && canRenameChat;
-                                    if (item.label === "Delete" || item.label === "Deleting...") return !!activeChatId && canDeleteChat;
-                                    return !!activeChatId || item.label === "Memory" ||
-                                        item.label === "Open side chat" || item.label === "Close side chat";
+                                    if (item.label === tr("projects.projectChatPanel.rename")) return !!activeChatId && canRenameChat;
+                                    if (
+                                        item.label === tr("projects.projectChatPanel.delete") ||
+                                        item.label === tr("projects.projectChatPanel.deleting")
+                                    )
+                                        return !!activeChatId && canDeleteChat;
+                                    return (
+                                        !!activeChatId ||
+                                        item.label === tr("projects.projectChatPanel.memory") ||
+                                        item.label === tr("projects.projectChatPanel.openSideChat") ||
+                                        item.label === tr("projects.projectChatPanel.closeSideChat")
+                                    );
                                 })}
                             />
                         }

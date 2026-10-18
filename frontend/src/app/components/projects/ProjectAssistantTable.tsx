@@ -116,7 +116,7 @@ export function ProjectAssistantTable({
      */
     function requestDeleteChat(chat: Chat) {
         if (!can(roleFrom(chat), "container.delete")) {
-            onOwnerOnlyAction("delete this chat");
+            onOwnerOnlyAction(tr("projects.projectAssistantTable.deleteChat2"));
             return;
         }
         setChatPendingDelete(chat);
@@ -132,7 +132,7 @@ export function ProjectAssistantTable({
             onOwnerOnlyAction({ action: tr("projects.projectAssistantTable.renameChat"), requiredRole: "owner" });
             return;
         }
-        setRenameChatValue(chat.title ?? "Untitled Chat");
+        setRenameChatValue(chat.title ?? tr("projects.projectAssistantTable.untitledChat"));
         setRenamingChatId(chat.id);
     }
 

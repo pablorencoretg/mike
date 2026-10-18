@@ -111,7 +111,7 @@ export function DocumentSidePanel({
     onOwnerOnlyAction,
     onDelete,
     onAdd,
-    addLabel = "Add",
+    addLabel = tr("shared.documentSidePanel.add"),
 }: DocumentSidePanelProps) {
     const [mounted, setMounted] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -366,7 +366,7 @@ export function DocumentSidePanel({
 
     async function handleDeleteVersion(versionIdToDelete: string) {
         if (!canDelete) {
-            onOwnerOnlyAction?.("delete this document version");
+            onOwnerOnlyAction?.(tr("shared.documentSidePanel.deleteDocumentVersion"));
             return;
         }
         setDeletingVersionId(versionIdToDelete);
@@ -453,7 +453,7 @@ export function DocumentSidePanel({
 
     function requestDeleteDocument() {
         if (!canDelete) {
-            onOwnerOnlyAction?.("delete this document");
+            onOwnerOnlyAction?.(tr("shared.documentSidePanel.deleteDocument"));
             return;
         }
         if (versions.length > 1) {

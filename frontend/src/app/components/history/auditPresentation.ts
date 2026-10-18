@@ -1,5 +1,6 @@
 import type { AuditEvent, OrgPrivateContentKind } from "@/app/lib/mikeApi";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 export interface AuditPrivateAccess {
   kind: OrgPrivateContentKind;
@@ -26,62 +27,61 @@ export function auditPrivateAccess(
   return access as unknown as AuditPrivateAccess;
 }
 
+// Labels are built while the module loads; the active language is already
+// known then (see shared/i18n/runtime.ts), and a language change reloads.
 export const ACTION_LABELS: Record<string, string> = {
-  "org.private_content.permission_changed":
-    "Private content permission changed",
-  "org.private_content.opened": "Private content accessed",
-  "org.private_content.closed": "Private content access ended",
-  "org.api_key.saved": "Provider key saved",
-  "org.api_key.removed": "Provider key removed",
-  "org.api_key.enabled": "Provider key enabled",
-  "org.api_key.disabled": "Provider key disabled",
-  "org.personal_api_keys.allowed": "Personal keys allowed",
-  "org.personal_api_keys.blocked": "Personal keys blocked",
-  "org.created": "Organization created",
-  "org.deleted": "Organization deleted",
-  "org.restored": "Organization restored",
-  "org.purged": "Organization permanently deleted",
-  "org.invite.created": "Invitation sent",
-  "org.invite.accepted": "Invitation accepted",
-  "org.invite.declined": "Invitation declined",
-  "org.invite.cancelled": "Invitation cancelled",
-  "org.invite.resent": "Invitation resent",
-  "org.member.role_changed": "Member role changed",
-  "org.logo.updated": "Logo updated",
-  "org.logo.removed": "Logo removed",
-  "org.router_models.updated": "Models updated",
-  "org.departure.item.transferred": "Departed work transferred",
-  "org.departure.item.archived": "Departed work archived",
-  "org.departure.item.recovered": "Departed work recovered",
-  "org.departure.item.deleted": "Departed work deleted",
-  "org.departure.item.expired": "Departed work expired",
-  "org.departure.member.departed": "Member departed",
-  "org.member.removed": "Member removed",
-  "org.member.left": "Member left",
-  "org.data.deleted": "Organization data deleted",
-  get "chat.message"() {
-        return tr("history.auditPresentation.chatMessageSent");
-    },
-  "document.uploaded": "Document uploaded",
-  "document.generated": "Document generated",
-  "document.edited": "Document edited",
-  "workflow.applied": "Workflow applied",
-  "tabular.created": "Review created",
-  "tabular.generated": "Review run completed",
-  "export.chats": "Chats exported",
-  "export.account": "Account data exported",
-  "export.tabular": "Review exported",
-  "export.memory": "Memory exported",
+  "org.private_content.permission_changed": tr("audit.actions.privatePermissionChanged"),
+  "org.private_content.opened": tr("audit.actions.privateOpened"),
+  "org.private_content.closed": tr("audit.actions.privateClosed"),
+  "org.api_key.saved": tr("audit.actions.keySaved"),
+  "org.api_key.removed": tr("audit.actions.keyRemoved"),
+  "org.api_key.enabled": tr("audit.actions.keyEnabled"),
+  "org.api_key.disabled": tr("audit.actions.keyDisabled"),
+  "org.personal_api_keys.allowed": tr("audit.actions.personalKeysAllowed"),
+  "org.personal_api_keys.blocked": tr("audit.actions.personalKeysBlocked"),
+  "org.created": tr("audit.actions.orgCreated"),
+  "org.deleted": tr("audit.actions.orgDeleted"),
+  "org.restored": tr("audit.actions.orgRestored"),
+  "org.purged": tr("audit.actions.orgPurged"),
+  "org.invite.created": tr("audit.actions.inviteCreated"),
+  "org.invite.accepted": tr("audit.actions.inviteAccepted"),
+  "org.invite.declined": tr("audit.actions.inviteDeclined"),
+  "org.invite.cancelled": tr("audit.actions.inviteCancelled"),
+  "org.invite.resent": tr("audit.actions.inviteResent"),
+  "org.member.role_changed": tr("audit.actions.memberRoleChanged"),
+  "org.logo.updated": tr("audit.actions.logoUpdated"),
+  "org.logo.removed": tr("audit.actions.logoRemoved"),
+  "org.router_models.updated": tr("audit.actions.modelsUpdated"),
+  "org.departure.item.transferred": tr("audit.actions.departedTransferred"),
+  "org.departure.item.archived": tr("audit.actions.departedArchived"),
+  "org.departure.item.recovered": tr("audit.actions.departedRecovered"),
+  "org.departure.item.deleted": tr("audit.actions.departedDeleted"),
+  "org.departure.item.expired": tr("audit.actions.departedExpired"),
+  "org.departure.member.departed": tr("audit.actions.memberDeparted"),
+  "org.member.removed": tr("audit.actions.memberRemoved"),
+  "org.member.left": tr("audit.actions.memberLeft"),
+  "org.data.deleted": tr("audit.actions.orgDataDeleted"),
+  "chat.message": tr("history.auditPresentation.chatMessageSent"),
+  "document.uploaded": tr("audit.actions.documentUploaded"),
+  "document.generated": tr("audit.actions.documentGenerated"),
+  "document.edited": tr("audit.actions.documentEdited"),
+  "workflow.applied": tr("audit.actions.workflowApplied"),
+  "tabular.created": tr("audit.actions.reviewCreated"),
+  "tabular.generated": tr("audit.actions.reviewRunCompleted"),
+  "export.chats": tr("audit.actions.chatsExported"),
+  "export.account": tr("audit.actions.accountExported"),
+  "export.tabular": tr("audit.actions.reviewExported"),
+  "export.memory": tr("audit.actions.memoryExported"),
 };
 
 export const SURFACE_LABELS: Record<string, string> = {
-  assistant: "Assistant",
-  project: "Project",
+  assistant: tr("audit.surfaces.assistant"),
+  project: tr("audit.surfaces.project"),
   word: "Word",
-  tabular: "Tabular",
-  workflows: "Workflows",
-  account: "Account",
-  organization: "Organization",
+  tabular: tr("audit.surfaces.tabular"),
+  workflows: tr("audit.surfaces.workflows"),
+  account: tr("audit.surfaces.account"),
+  organization: tr("audit.surfaces.organization"),
 };
 
 export function auditLabel(value: string): string {
@@ -96,16 +96,16 @@ export function auditAction(event: AuditEvent): string {
   if (event.status === "completed") return label;
   const operations: Record<string, string> = {
     "chat.message": tr("history.auditPresentation.chatMessage"),
-    "document.uploaded": "Document upload",
-    "document.generated": "Document generation",
-    "document.edited": "Document edit",
-    "workflow.applied": "Workflow application",
-    "tabular.created": "Review creation",
-    "tabular.generated": "Review run",
-    "export.chats": "Chat export",
-    "export.account": "Account export",
-    "export.tabular": "Review export",
-    "export.memory": "Memory export",
+    "document.uploaded": tr("audit.operations.documentUpload"),
+    "document.generated": tr("audit.operations.documentGeneration"),
+    "document.edited": tr("audit.operations.documentEdit"),
+    "workflow.applied": tr("audit.operations.workflowApplication"),
+    "tabular.created": tr("audit.operations.reviewCreation"),
+    "tabular.generated": tr("audit.operations.reviewRun"),
+    "export.chats": tr("audit.operations.chatExport"),
+    "export.account": tr("audit.operations.accountExport"),
+    "export.tabular": tr("audit.operations.reviewExport"),
+    "export.memory": tr("audit.operations.memoryExport"),
   };
   return operations[event.action] ?? label;
 }
@@ -190,7 +190,7 @@ export function auditSubjectEmail(event: AuditEvent): string | null {
 
 export function auditTimestamp(value: string, exact = false): string {
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Date unavailable";
+  if (Number.isNaN(date.getTime())) return tr("audit.dateUnavailable");
   return date.toLocaleString(undefined, {
     day: "numeric",
     month: "short",
@@ -212,66 +212,99 @@ export function auditDetailFields(event: AuditEvent): AuditDetailField[] {
     else if (typeof value === "number" && Number.isFinite(value))
       fields.push({ label, value: String(value) });
     else if (typeof value === "boolean")
-      fields.push({ label, value: value ? "Yes" : "No" });
+      fields.push({ label, value: value ? tr("audit.yes") : tr("audit.no") });
   };
   const role = detailText(event, "role");
   const previous = detailText(event, "previous_role");
   if (event.action === "org.member.role_changed") {
     if (previous && role)
       add(
-        event.status === "completed" ? "Role" : "Requested role change",
-        `${auditLabel(previous)} → ${auditLabel(role)}`,
+        event.status === "completed" ? tr("history.auditPresentation.role") : tr("history.auditPresentation.requestedRoleChange"),
+        `${valueLabel(auditLabel(previous))} → ${valueLabel(auditLabel(role))}`,
       );
-    else if (role) add("Role", auditLabel(role));
-    else if (previous) add("Previous role", auditLabel(previous));
+    else if (role)
+      add(tr("history.auditPresentation.role"), valueLabel(auditLabel(role)));
+    else if (previous)
+      add(
+        tr("history.auditPresentation.previousRole"),
+        valueLabel(auditLabel(previous)),
+      );
   } else if (event.action.startsWith("org.invite.") && role)
-    add("Invited role", auditLabel(role));
-  else if (previous) add("Previous role", auditLabel(previous));
+    add(tr("history.auditPresentation.invitedRole"), valueLabel(auditLabel(role)));
+  else if (previous)
+    add(
+      tr("history.auditPresentation.previousRole"),
+      valueLabel(auditLabel(previous)),
+    );
   if (
     event.action.startsWith("org.departure.") ||
     event.action.startsWith("org.member.")
   ) {
-    add("Items transferred", detail.transferred);
-    add("Items archived", detail.archived);
+    add(tr("history.auditPresentation.itemsTransferred"), detail.transferred);
+    add(tr("history.auditPresentation.itemsArchived"), detail.archived);
   }
   if (event.action === "org.router_models.updated")
-    add("Models available", detail.model_count);
+    add(tr("history.auditPresentation.modelsAvailable"), detail.model_count);
   if (
     event.action.startsWith("org.api_key.") ||
     event.action === "org.private_content.permission_changed"
   )
-    add("Enabled", detail.enabled);
-  if (event.action === "org.private_content.opened") add("Access", "Read-only");
+    add(tr("history.auditPresentation.enabled"), detail.enabled);
+  if (event.action === "org.private_content.opened") add(tr("history.auditPresentation.access"), tr("history.auditPresentation.readOnly"));
   const purgeAfter = detailText(event, "purge_after");
   if (purgeAfter && !Number.isNaN(new Date(purgeAfter).getTime()))
-    add("Scheduled deletion", auditTimestamp(purgeAfter, true));
+    add(tr("history.auditPresentation.scheduledDeletion"), auditTimestamp(purgeAfter, true));
   if (event.action.startsWith("export.")) {
-    add("Format", detail.format);
-    add("Documents exported", detail.document_count);
-    add("Chats exported", detail.chat_count);
+    add(tr("history.auditPresentation.format"), detail.format);
+    add(tr("history.auditPresentation.documentsExported"), detail.document_count);
+    add(tr("history.auditPresentation.chatsExported"), detail.chat_count);
   }
   return fields;
 }
 
 export function auditSummary(event: AuditEvent, personal: boolean): string {
-  const actor = personal ? "You" : auditActor(event);
+  const actor = valueLabel(auditActor(event));
   const subject = auditSubject(event);
+  const action = auditAction(event);
   if (event.status !== "completed")
-    return `${auditAction(event)} ${event.status === "failed" ? "failed" : event.status === "cancelled" ? "was cancelled" : `is ${event.status}`}.`;
+    return event.status === "failed"
+      ? tr("audit.summary.failed", { action })
+      : event.status === "cancelled"
+        ? tr("audit.summary.cancelled", { action })
+        : tr("audit.summary.otherStatus", { action, status: event.status });
   const name =
-    subject.name === "-" ? `the ${subject.type.toLowerCase()}` : subject.name;
+    subject.name === "-"
+      ? tr("audit.summary.unnamed", {
+          type: valueLabel(subject.type).toLowerCase(),
+        })
+      : subject.name;
   if (event.action === "org.member.role_changed")
-    return tr("history.auditPresentation.changedOrganizationRole", { actor, name });
-  if (
-    event.action === "org.invite.created" ||
-    event.action === "org.invite.resent"
-  )
-    return `${actor} ${event.action.endsWith("resent") ? "resent an invitation to" : "invited"} ${name}.`;
-  if (event.action === "document.uploaded") return tr("history.auditPresentation.uploaded", { actor, name });
-  if (event.action === "document.edited") return tr("history.auditPresentation.edited", { actor, name });
+    return personal
+      ? tr("audit.summary.roleChangedYou", { name })
+      : tr("history.auditPresentation.changedOrganizationRole", { actor, name });
+  if (event.action === "org.invite.created")
+    return personal
+      ? tr("audit.summary.invitedYou", { name })
+      : tr("audit.summary.invited", { actor, name });
+  if (event.action === "org.invite.resent")
+    return personal
+      ? tr("audit.summary.resentYou", { name })
+      : tr("audit.summary.resent", { actor, name });
+  if (event.action === "document.uploaded")
+    return personal
+      ? tr("audit.summary.uploadedYou", { name })
+      : tr("history.auditPresentation.uploaded", { actor, name });
+  if (event.action === "document.edited")
+    return personal
+      ? tr("audit.summary.editedYou", { name })
+      : tr("history.auditPresentation.edited", { actor, name });
   if (event.action === "document.generated")
-    return tr("history.auditPresentation.generated", { actor, name });
-  return `${auditAction(event)} by ${personal ? "you" : actor}`;
+    return personal
+      ? tr("audit.summary.generatedYou", { name })
+      : tr("history.auditPresentation.generated", { actor, name });
+  return personal
+    ? tr("audit.summary.byYou", { action })
+    : tr("audit.summary.byActor", { action, actor });
 }
 
 export function auditDestination(

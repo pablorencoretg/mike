@@ -488,7 +488,7 @@ function PositionGroup({
     }
     onUndoableChange(
       next,
-      `Removed ${positionLabel(kind, index)}.`,
+      tr("playbooks.playbookRuleForm.removed", { positionLabel: positionLabel(kind, index) }),
       (latest) => {
         const current = positionsOf(latest, kind);
         if (kind === "standard" && current.length) return latest;
@@ -526,7 +526,7 @@ function PositionGroup({
     }
     onUndoableChange(
       next,
-      `Removed clause ${clauseIndex + 1} from ${positionLabel(kind, positionIndex)}.`,
+      tr("playbooks.playbookRuleForm.removedClauseFrom", { value: clauseIndex + 1, positionLabel: positionLabel(kind, positionIndex) }),
       (latest) => {
         const current = positionsOf(latest, kind);
         if (!current[positionIndex]) return latest;

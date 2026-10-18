@@ -44,8 +44,8 @@ export function MfaVerificationPopup({
     open,
     onCancel,
     onVerified,
-    title = "Two-factor verification required",
-    message = "Enter a code from your authenticator app to continue.",
+    title = tr("popups.mfaVerificationPopup.twoFactorVerificationRequired"),
+    message = tr("popups.mfaVerificationPopup.enterCodeFromAuthenticatorApp"),
 }: MfaVerificationPopupProps) {
     const [factors, setFactors] = useState<MfaFactor[]>([]);
     const [selectedFactorId, setSelectedFactorId] = useState("");

@@ -47,7 +47,7 @@ export function CreateAccessStep({
     onOrgOverridesChange,
     inheritedFromProject = false,
     inheritedProjectId = null,
-    ownerLabel = "Project owners",
+    ownerLabel = tr("modals.createAccessStep.projectOwners"),
     resourceNoun,
     visibility = "private",
 }: {

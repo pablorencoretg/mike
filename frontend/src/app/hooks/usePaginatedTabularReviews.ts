@@ -10,6 +10,7 @@ import type { TabularReview } from "@/app/components/shared/types";
 import { listTabularReviewIds, listTabularReviews } from "@/app/lib/mikeApi";
 import { appendUniqueRows, paginationError, splitOverfetchedPage } from "@/app/lib/paginatedRows";
 import { useWorkspaceParam } from "@/app/contexts/WorkspaceContext";
+import { tr } from "@/shared/i18n/runtime";
 
 export type TabularReviewSortKey = "name" | "columns" | "documents" | "created" | "updated";
 export type TabularReviewSortDirection = "asc" | "desc";
@@ -170,7 +171,7 @@ export function usePaginatedTabularReviews(options: {
                 )
                     return;
                 console.error("[tabular reviews] failed to load", error);
-        setError(paginationError(error, "Unable to load tabular reviews"));
+        setError(paginationError(error, tr("app.hooks.usePaginatedTabularReviews.unableLoadTabularReviews")));
                 if (!retainRows) setHasMore(false);
             })
             .finally(() => {
@@ -237,7 +238,7 @@ export function usePaginatedTabularReviews(options: {
             ) {
                 console.error("[tabular reviews] failed to load more", error);
         setLoadMoreError(
-          paginationError(error, "Unable to load tabular reviews"),
+          paginationError(error, tr("app.hooks.usePaginatedTabularReviews.unableLoadTabularReviews")),
         );
             }
         } finally {
@@ -308,7 +309,7 @@ export function usePaginatedTabularReviews(options: {
                 setLoadMoreError(
                     paginationError(
                         error,
-                        "Unable to select all tabular reviews",
+                        tr("app.hooks.usePaginatedTabularReviews.unableSelectAllTabularReviews"),
                     ),
                 );
             }

@@ -151,7 +151,7 @@ export default function ProjectTabularReviewsPage({ params }: Props) {
 
     async function handleDeleteReviewRow(review: TabularReview) {
         if (!can(roleFrom(review), "container.delete")) {
-            setOwnerOnlyAction("delete this tabular review");
+            setOwnerOnlyAction(tr("pages.projects.id.tabularReviews.page.deleteTabularReview"));
             return;
         }
         const snapshot = reviews;

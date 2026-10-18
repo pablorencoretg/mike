@@ -80,8 +80,7 @@ export class UserVisibleError extends Error {
     }
 }
 
-export const GENERIC_FAILURE_MESSAGE =
-    "Something went wrong. Try again, and contact support if it keeps happening.";
+export const GENERIC_FAILURE_MESSAGE = tr("messages.genericFailure");
 
 const KIND_TITLES: Record<UserErrorKind, string> = {
     offline: "You're offline",
@@ -121,8 +120,7 @@ export function networkMessage(origin?: string): string {
  * What a server failure says. Exported so the add-in's API client, which
  * replaces every 5xx body with it, says the same sentence.
  */
-export const SERVER_FAILURE_MESSAGE =
-    "Something went wrong on our side. Try again.";
+export const SERVER_FAILURE_MESSAGE = tr("messages.serverFailure");
 
 const KIND_MESSAGES: Record<UserErrorKind, string> = {
     offline: "Your device is offline. Check your connection and try again.",

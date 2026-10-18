@@ -50,9 +50,9 @@ type PendingMfa =
   | { kind: "policy"; allowed: boolean }
   | { kind: "models"; provider: RouterSlug; models: string[] };
 
-const LOAD_ERROR = "The organization's model providers could not be loaded.";
-const UPDATE_ERROR = "The provider could not be updated. Please try again.";
-const POLICY_ERROR = "The setting could not be updated. Please try again.";
+const LOAD_ERROR = tr("messages.orgProvidersLoadError");
+const UPDATE_ERROR = tr("messages.orgProviderUpdateError");
+const POLICY_ERROR = tr("messages.orgPolicyUpdateError");
 
 export function OrganizationProviderKeys({
   orgId,
@@ -345,7 +345,7 @@ export function OrganizationProviderKeys({
           }}
           enabledToggle={
             selected && hasOrgKey(selected.provider)
-              ? renderToggle(selected, `Use ${selected.name}`)
+              ? renderToggle(selected, tr("organizations.organizationProviderKeys.use", { name: selected.name }))
               : undefined
           }
           onClose={() => setSelectedProvider(null)}

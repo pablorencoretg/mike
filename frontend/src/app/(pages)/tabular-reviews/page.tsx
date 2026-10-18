@@ -251,9 +251,12 @@ function TabularReviewsWorkspacePage({ workspace }: { workspace?: string }) {
                 // The review exists, so say so — and stay on the dialog rather
                 // than navigating away from the only place that knows the
                 // sharing did not happen. Same wording as NewProjectModal.
-                return `Review created, but access was not granted to ${grantFailures
-                    .map((failure) => failure.email)
-                    .join(", ")}: ${grantFailures[0].detail}`;
+                return tr("x.reviewCreatedGrantFailed", {
+                    emails: grantFailures
+                        .map((failure) => failure.email)
+                        .join(", "),
+                    detail: grantFailures[0].detail,
+                });
             }
 
             // Handed over: the navigation below shows the review, so the
@@ -301,7 +304,7 @@ function TabularReviewsWorkspacePage({ workspace }: { workspace?: string }) {
     }) {
         if (!detailsReview) return;
         if (!can(roleFrom(detailsReview), "content.edit")) {
-            refuse(detailsReview.id, "edit tabular review details", "editor");
+            refuse(detailsReview.id, tr("pages.tabularReviews.page.editTabularReviewDetails"), "editor");
             return;
         }
         const updated = await updateTabularReview(detailsReview.id, {
@@ -380,7 +383,7 @@ function TabularReviewsWorkspacePage({ workspace }: { workspace?: string }) {
 
     async function handleDeleteReviewRow(review: TabularReview) {
         if (!can(roleFrom(review), "container.delete")) {
-            refuse(review.id, "delete this tabular review");
+            refuse(review.id, tr("pages.tabularReviews.page.deleteTabularReview"));
             return;
         }
         const snapshot = reviews;

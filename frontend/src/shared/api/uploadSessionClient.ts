@@ -86,7 +86,7 @@ export const UPLOAD_LIMIT_MESSAGES: Record<string, string> = {
  */
 export function failedUploadMessage<T>(
     outcomes: UploadOutcome<T>[],
-    fallback = "Documents could not be uploaded. Please try again.",
+    fallback = tr("shared.api.uploadSessionClient.documentsCouldNotUploadedPlease"),
 ): string {
     const failures = outcomes.filter((outcome) => outcome.status === "error");
     if (failures.length === 0) return fallback;

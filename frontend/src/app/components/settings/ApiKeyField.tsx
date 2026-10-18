@@ -50,7 +50,7 @@ export function ApiKeyField({
   variant = "settings",
   description,
   hasSavedKey,
-  keyLabel = "API key",
+  keyLabel = tr("settings.apiKeyField.apiKey"),
   validateKey,
   setting,
   onSave,

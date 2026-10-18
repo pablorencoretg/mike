@@ -15,7 +15,7 @@ import { can, roleFrom } from "@/app/lib/permissions";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { ConfirmPopup } from "@/app/components/popups/ConfirmPopup";
 import { WarningPopup } from "@/app/components/popups/WarningPopup";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -91,7 +91,7 @@ export default function ProjectAssistantPage({ params }: Props) {
     // who may not delete anything.
     async function handleDeleteChatRow(chat: Chat) {
         if (!can(roleFrom(chat), "container.delete")) {
-            setOwnerOnlyAction("delete this chat");
+            setOwnerOnlyAction(tr("pages.projects.id.assistant.page.deleteChat2"));
             return;
         }
         // Await first, remove after: a refusal or an outage used to make the
@@ -152,10 +152,14 @@ export default function ProjectAssistantPage({ params }: Props) {
         setSelectedChatIds(failedIds);
         const notices = [
             blocked > 0
-                ? `${blocked} selected chat${blocked === 1 ? " was" : "s were"} skipped because only a project owner can delete them.`
+                ? trn(blocked, "x.chatsSkippedOne", "x.chatsSkippedOther")
                 : null,
             failedIds.length > 0
-                ? `${failedIds.length} chat${failedIds.length === 1 ? " was" : "s were"} not deleted because the request failed. ${failedIds.length === 1 ? "It remains" : "They remain"} selected so you can try again.`
+                ? trn(
+                      failedIds.length,
+                      "x.chatsFailedOne",
+                      "x.chatsFailedOther",
+                  )
                 : null,
         ].filter((notice): notice is string => notice !== null);
         if (notices.length > 0)

@@ -81,7 +81,7 @@ export function useItemWorkspace(
         setWorkspace(target);
         notifyWorkspaceSwitched(
             name,
-            "What you opened belongs to this workspace.",
+            tr("app.hooks.useItemWorkspace.whatOpenedBelongsWorkspace"),
         );
     }, [itemId, orgId, workspaceId, organizations, setWorkspace]);
 }

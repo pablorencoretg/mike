@@ -9,6 +9,7 @@ import {
 } from "@/shared/ui/dropdown";
 import { cn } from "@/app/lib/utils";
 import { LIQUID_GLASS_HOVER_CLASS } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 export type HeaderActionsMenuItem = {
     label: string;
@@ -20,7 +21,7 @@ export type HeaderActionsMenuItem = {
 
 export function HeaderActionsMenu({
     items,
-    title = "Actions",
+    title = tr("shared.headerActionsMenu.actions"),
     triggerClassName,
     onCloseAutoFocus,
     modal = true,

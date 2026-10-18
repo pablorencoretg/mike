@@ -157,7 +157,7 @@ export const WorkflowAssets = forwardRef<
   async function upload(filesToUpload: File[]) {
     if (uploadInFlightRef.current) {
       appendWarning(
-        "An upload is already in progress. Wait for it to finish, then add the files again.",
+        tr("workflows.workflowAssets.uploadAlreadyProgressWaitFinish"),
       );
       return;
     }
@@ -200,7 +200,9 @@ export const WorkflowAssets = forwardRef<
         action: uploadAction(supported.length, supported.length),
         fallback:
           supported.length === 1
-            ? `${supported[0]?.name ?? "That file"} could not be uploaded. Try again.`
+            ? tr("workflowsExtra.fileUploadFailed", {
+                name: supported[0]?.name ?? tr("workflowsExtra.thatFile"),
+              })
             : tr("workflows.workflowAssets.thoseFilesCouldNotUploaded"),
         onRetry: () => void upload(supported),
       });
@@ -214,7 +216,7 @@ export const WorkflowAssets = forwardRef<
     if (documents.length === 0) return;
     if (uploadInFlightRef.current) {
       appendWarning(
-        "Files are already being added. Wait for them to finish, then add the saved files again.",
+        tr("workflows.workflowAssets.filesAlreadyBeingAddedWait"),
       );
       return;
     }

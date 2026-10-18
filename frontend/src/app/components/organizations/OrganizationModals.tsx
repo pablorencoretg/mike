@@ -29,8 +29,7 @@ function friendlyError(error: unknown, fallback: string) {
   return userFacingApiError(error, fallback);
 }
 
-const OWNER_ONLY_INVITATION =
-  "Only an organization owner can change an admin invitation";
+const OWNER_ONLY_INVITATION = tr("messages.ownerOnlyInvitation");
 
 /**
  * A refresh runs *after* its mutation has already succeeded, so a failing
@@ -55,8 +54,7 @@ async function refreshQuietly(
 }
 
 /** Appended to a success notice whose follow-up refresh did not land. */
-const STALE_LIST_NOTICE =
-  "The list below may be out of date — reload to see the current one.";
+const STALE_LIST_NOTICE = tr("messages.staleListNotice");
 
 export function CreateOrganizationModal({
   open,
@@ -111,7 +109,7 @@ export function CreateOrganizationModal({
       }
       onCreated(org);
     } catch (err) {
-      setError(friendlyError(err, "Could not create the organization."));
+      setError(friendlyError(err, tr("organizations.organizationModals.couldNotCreateOrganization")));
     } finally {
       setCreating(false);
     }
@@ -272,7 +270,7 @@ export function InviteOrganizationMemberModal({
     try {
       await createOrgInvitation(org.id, email, role);
     } catch (err) {
-      setError(friendlyError(err, "Could not send the invitation."));
+      setError(friendlyError(err, tr("organizations.organizationModals.couldNotSendInvitation")));
       return false;
     }
     setNotice(tr("organizations.organizationModals.invitationSent", { email }));
@@ -304,7 +302,7 @@ export function InviteOrganizationMemberModal({
       setNotice(successNotice);
       changed = true;
     } catch (err) {
-      setError(friendlyError(err, `Could not ${action} the invitation.`));
+      setError(friendlyError(err, tr("organizations.organizationModals.couldNotInvitation", { action })));
     } finally {
       setBusyId(null);
     }

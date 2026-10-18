@@ -146,7 +146,7 @@ type McpOAuthPopupMessage = {
  * quietly reset the UI — from a real error worth surfacing to the user.
  */
 class McpOAuthCancelledError extends Error {
-  constructor(message = "OAuth authorization was cancelled.") {
+  constructor(message = tr("pages.settings.connectors.page.oauthAuthorizationWasCancelled")) {
     super(message);
     this.name = "McpOAuthCancelledError";
   }
@@ -446,7 +446,7 @@ export default function ConnectorsPage() {
     try {
       setConnectors(await listMcpConnectors());
     } catch (err) {
-      setError(connectorMessage(err, "load your connectors"));
+      setError(connectorMessage(err, tr("pages.settings.connectors.page.loadConnectors")));
     } finally {
       setLoading(false);
     }
@@ -545,7 +545,7 @@ export default function ConnectorsPage() {
         current && current.id !== connectorId ? current : fresh,
       );
     } catch (err) {
-      setDetailError(connectorMessage(err, "load this connector"));
+      setDetailError(connectorMessage(err, tr("pages.settings.connectors.page.loadConnector")));
     } finally {
       setLoadingConnectorId((current) =>
         current === connectorId ? null : current,
@@ -625,9 +625,13 @@ export default function ConnectorsPage() {
     if (connector.status?.schemaReady === false) {
       setAddErrorGuideUrl(googleSetupGuideUrl(provider));
       setAddError(
-        `An administrator needs to apply the ${
-          provider === "google-drive" ? "Google Drive" : "Gmail and Calendar"
-        } database migration and restart the server before you can add ${connector.name}.`,
+        tr("x.googleMigrationNeeded", {
+          product:
+            provider === "google-drive"
+              ? "Google Drive"
+              : tr("x.gmailAndCalendar"),
+          name: connector.name,
+        }),
       );
       return;
     }
@@ -940,7 +944,7 @@ export default function ConnectorsPage() {
           // the incomplete connector from Installed is immediately actionable.
           await loadConnectors();
         }
-        const message = connectorMessage(err, "add this connector");
+        const message = connectorMessage(err, tr("pages.settings.connectors.page.addConnector2"));
         const discarded = await discardCreatedConnector();
         setAddErrorGuideUrl(
           isConnectorSetupError(err)

@@ -95,7 +95,7 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
             } catch (cause) {
                 reportAccessFailure(
                     cause,
-                    "load who this chat is shared with",
+                    tr("assistant.chatAccessModal.loadWhoChatShared"),
                     chatId,
                 );
             }
@@ -149,7 +149,7 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
                     await refreshAccess().catch((error) =>
                         reportAccessFailure(
                             error,
-                            "refresh who this chat is shared with",
+                            tr("assistant.chatAccessModal.refreshWhoChatShared"),
                             chat.id,
                         ),
                     );
@@ -159,7 +159,7 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
                     await refreshAccess().catch((error) =>
                         reportAccessFailure(
                             error,
-                            "refresh who this chat is shared with",
+                            tr("assistant.chatAccessModal.refreshWhoChatShared"),
                             chat.id,
                         ),
                     );

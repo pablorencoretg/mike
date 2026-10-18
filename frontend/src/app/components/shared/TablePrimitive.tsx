@@ -231,7 +231,7 @@ const SORT_OPTIONS: TableFilterOption<TableSortDirection>[] = [
 
 /** Ascending/descending sort menu for a column header. */
 export function TableSortFilter({
-    allLabel = "Default Order",
+    allLabel = tr("shared.tablePrimitive.defaultOrder"),
     widthClassName = "w-40",
     ...props
 }: {

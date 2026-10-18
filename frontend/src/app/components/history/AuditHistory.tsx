@@ -92,6 +92,7 @@ import {
   DropdownTrigger,
 } from "@/shared/ui/dropdown";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 const STATUS_DOT_STYLES: Record<string, string> = {
   completed: "bg-green-400/80",
@@ -128,12 +129,12 @@ type AuditSortKey = "created_at" | "title";
 type HistoryDateRange = { from: string; to: string };
 
 const DATE_RANGE_PRESETS = [
-  { value: "today", label: "Today" },
-  { value: "last7", label: "Last 7 days" },
-  { value: "last30", label: "Last 30 days" },
-  { value: "thisMonth", label: "This month" },
-  { value: "lastMonth", label: "Last month" },
-  { value: "custom", label: "Custom range" },
+  { value: "today", label: tr("audit.dateRange.today") },
+  { value: "last7", label: tr("audit.dateRange.last7") },
+  { value: "last30", label: tr("audit.dateRange.last30") },
+  { value: "thisMonth", label: tr("audit.dateRange.thisMonth") },
+  { value: "lastMonth", label: tr("audit.dateRange.lastMonth") },
+  { value: "custom", label: tr("audit.dateRange.custom") },
 ] as const;
 
 type HistoryDatePreset = (typeof DATE_RANGE_PRESETS)[number]["value"];
@@ -179,7 +180,7 @@ function dateRangeError(range: HistoryDateRange): string | null {
 }
 
 function formatRangeDate(value: string): string {
-  if (!value) return "Open";
+  if (!value) return tr("audit.openEnded");
   return new Date(`${value}T00:00:00`).toLocaleDateString(undefined, {
     day: "numeric",
     month: "short",
@@ -494,8 +495,8 @@ export function AuditHistory({
                 <DropdownTrigger asChild>
                   <HeaderButtonUI
                     iconOnly
-                    aria-label={`${title} actions`}
-                    title={`${title} actions`}
+                    aria-label={tr("audit.rowActions", { title })}
+                    title={tr("audit.rowActions", { title })}
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </HeaderButtonUI>
@@ -678,7 +679,10 @@ export function AuditHistory({
                   role="button"
                   tabIndex={0}
                   aria-haspopup="dialog"
-                  aria-label={`View details for ${subject.name === "-" ? auditAction(event) : subject.name}`}
+                  aria-label={tr("audit.viewDetailsFor", {
+                    name:
+                      subject.name === "-" ? auditAction(event) : subject.name,
+                  })}
                   className="h-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500/40"
                   onClick={(click) => {
                     click.currentTarget.focus();
@@ -699,7 +703,9 @@ export function AuditHistory({
                     className="items-center"
                     selected={selected}
                     onSelectionChange={() => toggleSelection(event.id)}
-                    checkboxTitle={`Select ${event.title ?? auditAction(event)}`}
+                    checkboxTitle={tr("audit.selectEvent", {
+                      name: event.title ?? auditAction(event),
+                    })}
                   >
                     <time
                       dateTime={event.created_at}
@@ -728,7 +734,7 @@ export function AuditHistory({
                             email={event.user_email}
                           />
                         )}
-                        <span className="truncate">{actor}</span>
+                        <span className="truncate">{valueLabel(actor)}</span>
                       </span>
                     </TableCell>
                   )}
@@ -740,7 +746,7 @@ export function AuditHistory({
                   </TableCell>
                   <TableCell
                     className="w-64 pr-6 text-xs text-gray-800"
-                    title={`${subject.type}: ${subject.name}${subjectEmail && subjectEmail !== subject.name ? ` (${subjectEmail})` : ""}`}
+                    title={`${valueLabel(subject.type)}: ${subject.name}${subjectEmail && subjectEmail !== subject.name ? ` (${subjectEmail})` : ""}`}
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       {subject.name !== "-" && (
@@ -773,7 +779,9 @@ export function AuditHistory({
                   </TableCell>
                   <TableCell className="w-10">
                     <RowActions
-                      ariaLabel={`Actions for ${event.title ?? auditAction(event)}`}
+                      ariaLabel={tr("audit.actionsForEvent", {
+                        name: event.title ?? auditAction(event),
+                      })}
                       renderItems={rowActions}
                     />
                   </TableCell>
@@ -855,7 +863,9 @@ function HistoryExportModal({
       className="h-auto max-h-[calc(100dvh-2rem)]"
       breadcrumbs={[
         title,
-        title === "My Activity" ? tr("history.auditHistory.exportMyActivity") : tr("history.auditHistory.exportAuditLog"),
+        title === tr("history.auditHistory.myActivity")
+          ? tr("history.auditHistory.exportMyActivity")
+          : tr("history.auditHistory.exportAuditLog"),
       ]}
       cancelAction={{ label: tr("history.auditHistory.cancel"), onClick: onClose }}
       primaryAction={{
@@ -919,7 +929,10 @@ function HistoryDateRangeFields({
           variant="flat"
           className="h-8 rounded-lg px-2.5 text-xs"
           id={`${id}-preset`}
-          aria-label={`Date range: ${DATE_RANGE_PRESETS.find(({ value }) => value === preset)?.label}`}
+          aria-label={tr("audit.dateRange.label", {
+            label: DATE_RANGE_PRESETS.find(({ value }) => value === preset)
+              ?.label,
+          })}
           value={preset}
           options={DATE_RANGE_PRESETS}
           disabled={disabled}

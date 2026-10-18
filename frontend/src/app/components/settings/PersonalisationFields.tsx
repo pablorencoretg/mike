@@ -26,6 +26,7 @@ import {
   type ProfessionalTitle,
 } from "@/app/onboarding/options";
 import { tr } from "@/shared/i18n/runtime";
+import { valueLabel } from "@/shared/i18n/values";
 
 const COMMON_PRACTICE_AREAS = PRACTICE_AREA_OPTIONS.filter(
   (area) => area !== "Other",
@@ -225,7 +226,7 @@ export function PersonalisationFields({
         placeholder={tr("settings.personalisationFields.selectTitle")}
         options={PROFESSIONAL_TITLE_OPTIONS.map((title) => ({
           value: title,
-          label: title,
+          label: valueLabel(title),
         }))}
         onChange={(value) =>
           form.setProfessionalTitle(value ? (value as ProfessionalTitle) : null)
@@ -256,11 +257,11 @@ export function PersonalisationFields({
           options={[
             ...COUNTRY_OPTIONS.map((country) => ({
               value: country,
-              label: country,
+              label: valueLabel(country),
             })),
             {
               value: OTHER_JURISDICTION_OPTION,
-              label: OTHER_JURISDICTION_OPTION,
+              label: valueLabel(OTHER_JURISDICTION_OPTION),
             },
           ]}
           onChange={form.setJurisdictionChoice}
@@ -324,7 +325,7 @@ export function PersonalisationFields({
                 onCheckedChange={() => form.toggleArea(area)}
                 onSelect={(event) => event.preventDefault()}
               >
-                {area}
+                {valueLabel(area)}
               </DropdownCheckboxItem>
             ))}
             <DropdownCheckboxItem
@@ -345,9 +346,11 @@ export function PersonalisationFields({
               <OptionPill
                 key={area}
                 onClick={() => form.toggleArea(area)}
-                aria-label={tr("settings.personalisationFields.remove", { area })}
+                aria-label={tr("settings.personalisationFields.remove", {
+                  area: valueLabel(area),
+                })}
               >
-                {area}
+                {valueLabel(area)}
                 <X className="h-3 w-3" />
               </OptionPill>
             ))}

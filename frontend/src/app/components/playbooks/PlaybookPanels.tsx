@@ -17,7 +17,7 @@ export function PlaybookPanels({
   sidebar,
   children,
   variant = "sidebar",
-  resizeLabel = "Resize rules panel",
+  resizeLabel = tr("playbooks.playbookPanels.resizeRulesPanel"),
 }: {
   sidebar: ReactNode;
   children: ReactNode;
