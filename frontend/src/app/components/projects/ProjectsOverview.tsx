@@ -81,6 +81,8 @@ import { EmptyState } from "@/app/components/ui/empty-state";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { useQueryParamTab } from "@/app/hooks/useQueryParamTab";
 import { AccessScopeLabel } from "@/app/components/shared/AccessScopeLabel";
+import { useT } from "@/shared/i18n/I18nContext";
+import type { MessageKey, Translate } from "@/shared/i18n/translate";
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString(undefined, {
@@ -96,13 +98,16 @@ function formatDate(iso: string) {
  */
 function getProjectCreatorLabel(
     project: Project,
-    currentUserId?: string | null,
+    currentUserId: string | null | undefined,
+    t: Translate,
 ) {
-    if (project.is_owner ?? project.user_id === currentUserId) return "Me";
+    if (project.is_owner ?? project.user_id === currentUserId) {
+        return t("common.me");
+    }
     return (
         project.owner_display_name?.trim() ||
         project.owner_email?.trim() ||
-        "Shared"
+        t("common.shared")
     );
 }
 
@@ -111,15 +116,15 @@ function getProjectCreatorLabel(
 type ProjectFilter = "all" | "private" | "public" | "mine" | "shared";
 type ProjectSortKey = "name" | "cm" | "files" | "chats" | "reviews" | "created";
 
-const ORGANIZATION_PROJECT_FILTERS: { id: ProjectFilter; label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "private", label: "Private" },
-    { id: "public", label: "Public" },
+const ORGANIZATION_PROJECT_FILTERS: { id: ProjectFilter; labelKey: MessageKey }[] = [
+    { id: "all", labelKey: "common.all" },
+    { id: "private", labelKey: "common.private" },
+    { id: "public", labelKey: "common.public" },
 ];
-const PERSONAL_PROJECT_FILTERS: { id: ProjectFilter; label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "mine", label: "My Projects" },
-    { id: "shared", label: "Shared with Me" },
+const PERSONAL_PROJECT_FILTERS: { id: ProjectFilter; labelKey: MessageKey }[] = [
+    { id: "all", labelKey: "common.all" },
+    { id: "mine", labelKey: "projects.filters.mine" },
+    { id: "shared", labelKey: "projects.filters.sharedWithMe" },
 ];
 const PROJECT_FILTER_SCOPES: Record<ProjectFilter, ProjectScope> = {
     all: "all",
@@ -128,21 +133,28 @@ const PROJECT_FILTER_SCOPES: Record<ProjectFilter, ProjectScope> = {
     mine: "mine",
     shared: "shared",
 };
-const ACCESS_FILTER_OPTIONS: TableFilterOption<"public" | "private">[] = [
-    { value: "public", label: "Public" },
-    { value: "private", label: "Private" },
-];
+function accessFilterOptions(
+    t: Translate,
+): TableFilterOption<"public" | "private">[] {
+    return [
+        { value: "public", label: t("common.public") },
+        { value: "private", label: t("common.private") },
+    ];
+}
 
 export function ProjectsOverview() {
+    const t = useT();
     const router = useRouter();
     const searchParams = useSearchParams();
     const [modalOpen, setModalOpen] = useState(false);
     const [detailsProject, setDetailsProject] = useState<Project | null>(null);
     const workspace = useWorkspaceParam();
     const isPersonalWorkspace = workspace === PERSONAL_WORKSPACE;
-    const projectFilters = isPersonalWorkspace
-        ? PERSONAL_PROJECT_FILTERS
-        : ORGANIZATION_PROJECT_FILTERS;
+    const projectFilters = (
+        isPersonalWorkspace
+            ? PERSONAL_PROJECT_FILTERS
+            : ORGANIZATION_PROJECT_FILTERS
+    ).map(({ id, labelKey }) => ({ id, label: t(labelKey) }));
     const [activeFilter, setActiveFilter] = useQueryParamTab(
         projectFilters.map((filter) => filter.id),
         "all",
@@ -200,7 +212,7 @@ export function ProjectsOverview() {
         ownerUserIdFilter: ownerFilter,
         sort,
     });
-    const loadError = loadErrorObj ? "Could not load projects." : null;
+    const loadError = loadErrorObj ? t("projects.loadError") : null;
     const effectiveLoading = loading && !previewEmptyStates;
     const visibleProjects = useMemo(
         () => (previewEmptyStates ? [] : projects),
@@ -304,7 +316,7 @@ export function ProjectsOverview() {
         sort?.key === "created" ? sort.direction : null;
     const nameFilterButton = (
         <TableSortFilter
-            label="Sort by project name"
+            label={t("projects.sort.name")}
             value={nameSortDirection}
             align="right"
             onChange={(direction) => handleSortChange("name", direction)}
@@ -312,15 +324,15 @@ export function ProjectsOverview() {
     );
     const accessFilterButton = !isPersonalWorkspace && (
         <TableFilters
-            label="Filter by access"
+            label={t("projects.filterBy.access")}
             value={
                 activeFilter === "public" || activeFilter === "private"
                     ? activeFilter
                     : null
             }
-            allLabel="All Access"
+            allLabel={t("projects.filters.allAccess")}
             widthClassName="w-40"
-            options={ACCESS_FILTER_OPTIONS}
+            options={accessFilterOptions(t)}
             onChange={(value) => {
                 setActiveFilter(value ?? "all");
                 clearSelection();
@@ -329,16 +341,16 @@ export function ProjectsOverview() {
     );
     const cmFilterButton = (
         <TableSortFilter
-            label="Sort by CM"
+            label={t("projects.sort.cm")}
             value={cmSortDirection}
             onChange={(direction) => handleSortChange("cm", direction)}
         />
     );
     const practiceFilterButton = (
         <TableFilters
-            label="Filter by practice"
+            label={t("projects.filterBy.practice")}
             value={practiceFilter}
-            allLabel="All Practices"
+            allLabel={t("projects.filters.allPractices")}
             options={practices.map((practice) => ({
                 value: practice,
                 label: practice,
@@ -348,8 +360,8 @@ export function ProjectsOverview() {
     );
     const ownerFilterButton = (
         <PersonFilter
-            label="Filter by creator"
-            selectedTitle={(name) => `Created by ${name}`}
+            label={t("projects.filterBy.creator")}
+            selectedTitle={(name) => t("common.createdBy", { name })}
             value={
                 ownerPeople.find((person) => person.user_id === ownerFilter) ??
                 null
@@ -362,28 +374,28 @@ export function ProjectsOverview() {
     );
     const filesFilterButton = (
         <TableSortFilter
-            label="Sort by files"
+            label={t("projects.sort.files")}
             value={filesSortDirection}
             onChange={(direction) => handleSortChange("files", direction)}
         />
     );
     const chatsFilterButton = (
         <TableSortFilter
-            label="Sort by chats"
+            label={t("projects.sort.chats")}
             value={chatsSortDirection}
             onChange={(direction) => handleSortChange("chats", direction)}
         />
     );
     const reviewsFilterButton = (
         <TableSortFilter
-            label="Sort by tabular reviews"
+            label={t("projects.sort.reviews")}
             value={reviewsSortDirection}
             onChange={(direction) => handleSortChange("reviews", direction)}
         />
     );
     const createdFilterButton = (
         <TableSortFilter
-            label="Sort by created date"
+            label={t("projects.sort.created")}
             value={createdSortDirection}
             onChange={(direction) => handleSortChange("created", direction)}
         />
@@ -569,7 +581,7 @@ export function ProjectsOverview() {
                         ? undefined
                         : () => router.push(`/projects/${project!.id}`)
                 }
-                viewLabel="Open"
+                viewLabel={t("common.open")}
                 onEditDetails={
                     appliesToSelection || !canManage
                         ? undefined
@@ -612,17 +624,17 @@ export function ProjectsOverview() {
                         type: "search",
                         value: search,
                         onChange: setSearch,
-                        placeholder: "Search projects…",
+                        placeholder: t("projects.search"),
                     },
                     {
                         type: "new",
                         onClick: () => setModalOpen(true),
-                        title: "New project",
+                        title: t("projects.new"),
                     },
                 ]}
             >
                 <h1 className={`${PAGE_HEADER_TITLE_CLASS} text-gray-900`}>
-                    Projects
+                    {t("projects.title")}
                 </h1>
             </PageHeader>
 
@@ -659,55 +671,55 @@ export function ProjectsOverview() {
                                     }}
                                     onChange={toggleAll}
                                     className={TABLE_CHECKBOX_CLASS}
-                                    aria-label="Select all projects"
+                                    aria-label={t("projects.columns.selectAll")}
                                 />
                             )}
-                            <span className="mr-1">Name</span>
+                            <span className="mr-1">{t("projects.columns.name")}</span>
                             {!loading && nameFilterButton}
                         </TableStickyCell>
                         <TableHeaderCell className="ml-auto w-32">
-                            <span className="mr-1">Access</span>
+                            <span className="mr-1">{t("projects.columns.access")}</span>
                             {!loading && accessFilterButton}
                         </TableHeaderCell>
                         <TableHeaderCell className="w-32">
                             <div className="flex items-center gap-1">
-                                <span>CM</span>
+                                <span>{t("projects.columns.cm")}</span>
                                 {!loading && cmFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-36">
                             <div className="flex items-center gap-1">
-                                <span>Practice</span>
+                                <span>{t("projects.columns.practice")}</span>
                                 {!loading && practiceFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-32">
                             <div className="flex items-center gap-1">
-                                <span>Creator</span>
+                                <span>{t("projects.columns.creator")}</span>
                                 {!loading && ownerFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-24">
                             <div className="flex items-center gap-1">
-                                <span>Files</span>
+                                <span>{t("projects.columns.files")}</span>
                                 {!loading && filesFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-24">
                             <div className="flex items-center gap-1">
-                                <span>Chats</span>
+                                <span>{t("projects.columns.chats")}</span>
                                 {!loading && chatsFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-36">
                             <div className="flex items-center gap-1">
-                                <span>Tabular Reviews</span>
+                                <span>{t("projects.columns.reviews")}</span>
                                 {!loading && reviewsFilterButton}
                             </div>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-32">
                             <div className="flex items-center gap-1">
-                                <span>Created</span>
+                                <span>{t("projects.columns.created")}</span>
                                 {!loading && createdFilterButton}
                             </div>
                         </TableHeaderCell>
@@ -759,7 +771,7 @@ export function ProjectsOverview() {
                     <TableEmptyState>
                         <EmptyState
                             icon={<OpenProjectSvgIcon />}
-                            title="Projects"
+                            title={t("projects.title")}
                             description={loadError}
                             tone="error"
                             action={
@@ -768,7 +780,7 @@ export function ProjectsOverview() {
                                     size="sm"
                                     onClick={retry}
                                 >
-                                    Try again
+                                    {t("common.tryAgain")}
                                 </PillButtonUI>
                             }
                         />
@@ -778,21 +790,21 @@ export function ProjectsOverview() {
                         {activeFilter === "public" || activeFilter === "shared" ? (
                             <p className="text-sm text-gray-400">
                                 {activeFilter === "public"
-                                    ? "No public projects"
-                                    : "No projects shared with you"}
+                                    ? t("projects.noPublic")
+                                    : t("projects.noShared")}
                             </p>
                         ) : (
                             <EmptyState
                                 icon={<OpenProjectSvgIcon />}
-                                title="Projects"
-                                description="Upload documents into projects and to commence chats and tabular reviews with them."
+                                title={t("projects.title")}
+                                description={t("projects.emptyDescription")}
                                 action={
                                     <PillButtonUI
                                         tone="black"
                                         size="sm"
                                         onClick={() => setModalOpen(true)}
                                     >
-                                        Create
+                                        {t("common.create")}
                                     </PillButtonUI>
                                 }
                             />
@@ -908,6 +920,7 @@ export function ProjectsOverview() {
                                             label={getProjectCreatorLabel(
                                                 project,
                                                 user?.id,
+                                                t,
                                             )}
                                             photo={project.owner_profile_photo}
                                             name={project.owner_display_name}
@@ -937,7 +950,7 @@ export function ProjectsOverview() {
                                                     `/projects/${project.id}`,
                                                 )
                                             }
-                                            viewLabel="Open"
+                                            viewLabel={t("common.open")}
                                             onEditDetails={
                                                 canManage
                                                     ? () => {
@@ -1006,9 +1019,11 @@ export function ProjectsOverview() {
             />
             <ConfirmPopup
                 open={confirmDeleteAllOpen && selectedIds.length > 0}
-                title="Delete all selected projects?"
-                message={`This will permanently delete every selected project you administer, including selected projects not currently shown. Every file within those projects will also be deleted. Projects you cannot delete will be skipped. ${selectedIds.length} projects are selected.`}
-                confirmLabel="Delete"
+                title={t("projects.deleteSelectedTitle")}
+                message={t("projects.deleteSelectedMessage", {
+                    count: selectedIds.length,
+                })}
+                confirmLabel={t("common.delete")}
                 confirmVariant="danger"
                 onCancel={() => setConfirmDeleteAllOpen(false)}
                 onConfirm={() => void handleDeleteSelected()}
