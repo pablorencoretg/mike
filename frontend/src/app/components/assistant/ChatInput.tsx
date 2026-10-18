@@ -491,6 +491,7 @@ function ChatInputForChatImpl(
             }
         },
         [
+            t,
             workspace,
             addAttachedDocuments,
             canSend,
