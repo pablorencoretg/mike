@@ -42,10 +42,14 @@ const ROLE_SUBJECT: Record<
 > = {
     owner: { get title() {
         return tr("popups.permissionDeniedPopup.ownerOnlyAction");
-    }, subject: "an owner" },
+    }, get subject() {
+        return tr("x.anOwner");
+    } },
     editor: { get title() {
         return tr("popups.permissionDeniedPopup.editorsOnly");
-    }, subject: "an editor" },
+    }, get subject() {
+        return tr("x.anEditor");
+    } },
 };
 
 /**
@@ -109,8 +113,8 @@ export function PermissionDeniedPopup({
     const body =
         message ??
         (action
-            ? `Only ${subject.subject} can ${action}.`
-            : `Only ${subject.subject} can perform this action.`);
+            ? tr("x.onlySubjectCan", { subject: subject.subject, action })
+            : tr("x.onlySubjectCanPerform", { subject: subject.subject }));
     const contact = pickContact(contacts);
 
     return (

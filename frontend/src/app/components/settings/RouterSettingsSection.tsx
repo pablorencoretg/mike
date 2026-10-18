@@ -51,12 +51,12 @@ function modelCostLabel(model: RouterCatalogModel): string | null {
   const input = formatPerMillion(model.pricing.input);
   const output = formatPerMillion(model.pricing.output);
   const costs = [
-    input ? `${input}/M input` : null,
-    output ? `${output}/M output` : null,
+    input ? tr("set.perMInput", { price: input }) : null,
+    output ? tr("set.perMOutput", { price: output }) : null,
   ].filter(Boolean);
   if (costs.length === 0) return null;
-  if (model.pricing.tiered) costs.push("tiered pricing");
-  if (model.pricing.variesByProvider) costs.push("varies by provider");
+  if (model.pricing.tiered) costs.push(tr("set.tieredPricing"));
+  if (model.pricing.variesByProvider) costs.push(tr("set.variesByProvider"));
   return costs.join(" · ");
 }
 
@@ -445,7 +445,7 @@ function RouterModelsSetting({
             id={`${provider}-model-input`}
             ref={inputRef}
             type="text"
-            aria-label={`${label} models`}
+            aria-label={tr("set.providerModels", { label })}
             // Without a catalog there is no list to control: a plain textbox.
             {...(loadCatalog
               ? {
@@ -461,7 +461,9 @@ function RouterModelsSetting({
               : {})}
             value={input}
             disabled={saving}
-            placeholder={`e.g. ${ROUTER_MODEL_ID[provider].example}`}
+            placeholder={tr("set.example", {
+              example: ROUTER_MODEL_ID[provider].example,
+            })}
             className={loadCatalog ? "pr-9" : undefined}
             onChange={(event) => {
               setInput(event.target.value);

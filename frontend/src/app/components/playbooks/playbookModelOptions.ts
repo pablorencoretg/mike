@@ -4,6 +4,7 @@ import type {
     ApiKeyState,
     PlaybookConfiguration,
 } from "@/app/lib/mikeApi";
+import { valueLabel } from "@/shared/i18n/values";
 
 export function buildPlaybookModelOptions(
     catalog: ModelOption[],
@@ -20,6 +21,6 @@ export function buildPlaybookModelOptions(
         )
         .map((model) => ({
             value: model.id,
-            label: `${model.group} · ${model.label}`,
+            label: `${valueLabel(model.group)} · ${model.label}`,
         }));
 }

@@ -633,7 +633,10 @@ export function TRView({ reviewId, projectId }: Props) {
                     { kind: "unknown", retryable: true, cause: dropUploadError },
                 ),
                 {
-                    action: `upload ${failedNames.length === 1 ? "that file" : "those files"}`,
+                    action:
+                        failedNames.length === 1
+                            ? tr("rich.uploadThatFile")
+                            : tr("rich.uploadThoseFiles"),
                     // Retry only the files that never landed, so the ones
                     // already attached are not uploaded twice.
                     onRetry: () => {

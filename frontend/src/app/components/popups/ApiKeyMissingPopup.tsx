@@ -25,7 +25,7 @@ export function ApiKeyMissingPopup({
 
     const body =
         message ??
-        "You haven't enabled any models yet. Add an API key in settings to get started.";
+        tr("x.noModelsEnabled");
 
     const handleGoToSettings = () => {
         onClose();

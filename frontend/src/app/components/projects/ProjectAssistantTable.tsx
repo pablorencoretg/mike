@@ -206,8 +206,8 @@ export function ProjectAssistantTable({
             }
 
             return (
-                (a.title ?? "Untitled Chat").localeCompare(
-                    b.title ?? "Untitled Chat",
+                (a.title ?? tr("x.untitledChatTitle")).localeCompare(
+                    b.title ?? tr("x.untitledChatTitle"),
                 ) * multiplier
             );
         });

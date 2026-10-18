@@ -797,7 +797,7 @@ export function AssistantMessage({
                 : event.error
                   ? event.error
                   : count > 0
-                    ? `(${count} ${count === 1 ? "opinion" : "opinions"})`
+                    ? trn(count, "rich.opinionOne", "rich.opinionOther")
                     : undefined;
             return (
                 <CourtListenerBlock

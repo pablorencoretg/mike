@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { tr } from "../i18n/runtime";
+import { tr, trn } from "../i18n/runtime";
 
 type EventDotColor = "green" | "gray" | "red";
 
@@ -114,7 +114,7 @@ export function DocFindBlockUI({
 }) {
     const matchSuffix = isStreaming
         ? ""
-        : ` (${totalMatches} ${totalMatches === 1 ? "match" : "matches"})`;
+        : ` (${trn(totalMatches, "x.matchOne", "x.matchOther")})`;
 
     return (
         <DocumentEventBlockUI

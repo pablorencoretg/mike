@@ -64,42 +64,52 @@ import {
 import { notifySuccess, userFacingApiError } from "@/app/lib/userFacingError";
 import { cn } from "@/app/lib/utils";
 import { DropdownItem } from "@/shared/ui/dropdown";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
+import type { MessageKey } from "@/shared/i18n/translate";
 
 type Kind = OrgDepartureItem["kind"];
 
 /** The types of work, in the order a departure lists them. */
-const KIND_GROUPS: { kind: Kind; label: string; one: string; many: string }[] =
+const KIND_GROUPS: {
+  kind: Kind;
+  label: string;
+  one: MessageKey;
+  many: MessageKey;
+  plural: MessageKey;
+}[] =
   [
     { kind: "project", get label() {
         return tr("organizations.organizationDepartedMembers.projects");
-    }, one: "project", many: "projects" },
+    }, one: "units.projectOne", many: "units.projectOther", plural: "units.projects" },
     {
       kind: "workflow",
       get label() {
         return tr("organizations.organizationDepartedMembers.workflows");
     },
-      one: "workflow",
-      many: "workflows",
+      one: "units.workflowOne",
+      many: "units.workflowOther",
+      plural: "units.workflows",
     },
     { kind: "chat", get label() {
         return tr("organizations.organizationDepartedMembers.chats");
-    }, one: "chat", many: "chats" },
+    }, one: "units.chatOne", many: "units.chatOther", plural: "units.chats" },
     {
       kind: "tabular_review",
       get label() {
         return tr("organizations.organizationDepartedMembers.tabularReviews");
     },
-      one: "tabular review",
-      many: "tabular reviews",
+      one: "units.tabularReviewOne",
+      many: "units.tabularReviewOther",
+      plural: "units.tabularReviews",
     },
     {
       kind: "document",
       get label() {
         return tr("organizations.organizationDepartedMembers.libraryFiles");
     },
-      one: "library file",
-      many: "library files",
+      one: "units.libraryFileOne",
+      many: "units.libraryFileOther",
+      plural: "units.libraryFiles",
     },
   ];
 
@@ -113,8 +123,8 @@ interface Target {
   label: string;
 }
 
-const count = (n: number, one: string, many = `${one}s`) =>
-  `${n} ${n === 1 ? one : many}`;
+const count = (n: number, one: MessageKey, many: MessageKey) =>
+  trn(n, one, many);
 
 function formatDate(value: string) {
   const date = new Date(value);
@@ -130,7 +140,11 @@ function formatDate(value: string) {
 function deadline(expiresAt: string, now: number) {
   const days = Math.ceil((new Date(expiresAt).getTime() - now) / DAY_MS);
   const distance =
-    days <= 0 ? "today" : days === 1 ? "tomorrow" : `in ${days} days`;
+    days <= 0
+      ? tr("dep.today")
+      : days === 1
+        ? tr("dep.tomorrow")
+        : tr("dep.inDays", { days });
   return {
     text: `${formatDate(expiresAt)} · ${distance}`,
     soon: days <= SOON_DAYS,
@@ -141,10 +155,16 @@ function deadline(expiresAt: string, now: number) {
 function contentsLabel(item: OrgDepartureItem) {
   if (!item.contents) return "";
   const parts = [
-    item.contents.documents > 0 && count(item.contents.documents, "document"),
-    item.contents.chats > 0 && count(item.contents.chats, "chat"),
+    item.contents.documents > 0 &&
+      count(item.contents.documents, "units.documentOne", "units.documentOther"),
+    item.contents.chats > 0 &&
+      count(item.contents.chats, "units.chatOne", "units.chatOther"),
     item.contents.tabular_reviews > 0 &&
-      count(item.contents.tabular_reviews, "review"),
+      count(
+        item.contents.tabular_reviews,
+        "units.reviewOne",
+        "units.reviewOther",
+      ),
   ].filter(Boolean);
   if (parts.length) return parts.join(", ");
   // A workflow with no files of its own still has its steps.
@@ -155,7 +175,7 @@ function contentsLabel(item: OrgDepartureItem) {
 const departedName = (departure: OrgDeparture) =>
   departure.member?.display_name ||
   departure.member?.email ||
-  "Former member";
+  tr("dep.formerMember");
 
 const ICON_CLASS = "mr-2 h-4 w-4 shrink-0";
 
@@ -319,7 +339,11 @@ export function OrganizationDepartedMembers({
     return selected.length > target.ids.length && isSelected(target.ids)
       ? {
           ids: selected,
-          label: `the ${count(selected.length, "selected item")}`,
+          label: count(
+            selected.length,
+            "units.theSelectedItemOne",
+            "units.theSelectedItemOther",
+          ),
         }
       : target;
   }
@@ -351,11 +375,16 @@ export function OrganizationDepartedMembers({
       setSelectedIds([]);
       if (result.unresolved > 0)
         setFailure(
-          tr("organizations.organizationDepartedMembers.couldNotReassignedRecoveryPeriod", { count: count(result.unresolved, "item") }),
+          tr("organizations.organizationDepartedMembers.couldNotReassignedRecoveryPeriod", { count: count(result.unresolved, "units.itemOne", "units.itemOther") }),
         );
       else
         notifySuccess(
-          `Reassigned to ${owner?.display_name || owner?.email || "the selected member"}.`,
+          tr("dep.reassignedTo", {
+            name:
+              owner?.display_name ||
+              owner?.email ||
+              tr("dep.theSelectedMember"),
+          }),
         );
       await load();
     } catch (error) {
@@ -373,7 +402,7 @@ export function OrganizationDepartedMembers({
       setSelectedIds([]);
       if (result.unresolved > 0)
         setFailure(
-          tr("organizations.organizationDepartedMembers.couldNotDeletedTryAgain", { count: count(result.unresolved, "item") }),
+          tr("organizations.organizationDepartedMembers.couldNotDeletedTryAgain", { count: count(result.unresolved, "units.itemOne", "units.itemOther") }),
         );
       else notifySuccess(tr("organizations.organizationDepartedMembers.archivedWorkDeleted"));
       await load();
@@ -460,7 +489,11 @@ export function OrganizationDepartedMembers({
               renderMenuItems(
                 {
                   ids: selected,
-                  label: `the ${count(selected.length, "selected item")}`,
+                  label: count(
+            selected.length,
+            "units.theSelectedItemOne",
+            "units.theSelectedItemOther",
+          ),
                 },
                 close,
               )
@@ -561,9 +594,10 @@ export function OrganizationDepartedMembers({
           <TableBody>
             {departures.map((departure) => {
               const name = departedName(departure);
-              const possessive = departure.member
-                ? `${name}'s`
-                : "this former member's";
+              const ofOwner = (things: string) =>
+                departure.member
+                  ? tr("dep.ofOwner", { owner: name, things })
+                  : tr("dep.ofFormerMember", { things });
               const ids = departure.items.map((item) => item.id);
               const target: Target = {
                 ids,
@@ -628,7 +662,7 @@ export function OrganizationDepartedMembers({
                       : tr("organizations.organizationDepartedMembers.accountDeleted")}
                   </TableCell>
                   <TableCell className="w-56">
-                    {count(departure.items.length, "item")}
+                    {count(departure.items.length, "units.itemOne", "units.itemOther")}
                   </TableCell>
                   <TableCell className="w-32">
                     {formatDate(departure.departed_at)}
@@ -652,11 +686,11 @@ export function OrganizationDepartedMembers({
                       const groupIds = items.map((item) => item.id);
                       const groupTarget: Target = {
                         ids: groupIds,
-                        label: `${possessive} ${count(items.length, group.one, group.many)}`,
+                        label: ofOwner(count(items.length, group.one, group.many)),
                       };
                       const groupOpen = !!query || openGroups.has(groupKey);
                       const groupSelected = isSelected(groupIds);
-                      const groupName = `${possessive} ${group.many}`;
+                      const groupName = ofOwner(tr(group.plural));
                       return [
                         <TableRow
                           key={groupKey}
@@ -837,7 +871,9 @@ export function OrganizationDepartedMembers({
       <ConfirmPopup
         open={deleting !== null}
         title={tr("organizations.organizationDepartedMembers.deleteArchivedWork")}
-        message={`Permanently delete ${deleting?.label ?? "this work"}, with its contents? This cannot be undone.`}
+        message={tr("dep.deleteConfirm", {
+          label: deleting?.label ?? tr("dep.thisWork"),
+        })}
         confirmLabel={tr("organizations.organizationDepartedMembers.delete")}
         confirmVariant="danger"
         confirmStatus={working ? "loading" : "idle"}

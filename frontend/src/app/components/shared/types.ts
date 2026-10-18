@@ -653,7 +653,7 @@ function getDocumentCitationQuotes(a: Citation): DocumentCitationQuote[] {
  */
 export function formatCitationPage(a: Citation): string {
   if (a.kind === "case") {
-    return a.citation || a.case_name || `Case ${a.cluster_id}`;
+    return a.citation || a.case_name || tr("sh.caseN", { id: a.cluster_id });
   }
   const quotes = getDocumentCitationQuotes(a);
   // Spreadsheets are located by cell, e.g. "Sheet1!B7" (or several).
@@ -668,9 +668,9 @@ export function formatCitationPage(a: Citation): string {
   const pages = Array.from(
     new Set(quotes.map((q) => String(q.page)).filter(Boolean)),
   );
-  if (pages.length > 1) return `Pages ${pages.join(", ")}`;
-  if (pages.length === 1) return `Page ${pages[0]}`;
-  return `Page ${a.page}`;
+  if (pages.length > 1) return tr("sh.pages", { pages: pages.join(", ") });
+  if (pages.length === 1) return tr("sh.page", { page: pages[0] });
+  return tr("sh.page", { page: a.page });
 }
 
 /**

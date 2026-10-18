@@ -25,6 +25,7 @@ import {
   LIQUID_GLASS_SUBTLE_CLASS,
 } from "./LiquidGlassUI";
 import { tr } from "../i18n/runtime";
+import { valueLabel } from "../i18n/values";
 
 export type ModelToggleGroup = string;
 
@@ -318,7 +319,7 @@ export function ModelToggleUI({
                     setExpandedGroup(expanded ? null : group);
                   }}
                 >
-                  <span className="flex-1">{group}</span>
+                  <span className="flex-1">{valueLabel(group)}</span>
                   <ChevronDown
                     className={`h-3.5 w-3.5 text-gray-400 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
                   />
@@ -350,7 +351,7 @@ export function ModelToggleUI({
                             `${model.group}\u0000${model.label.toLocaleLowerCase()}`,
                           ) ?? 0) > 1) && (
                           <span className="shrink-0 text-right text-[10px] font-medium text-gray-400">
-                            {model.source}
+                            {valueLabel(model.source)}
                           </span>
                         )}
                     </DropdownItem>

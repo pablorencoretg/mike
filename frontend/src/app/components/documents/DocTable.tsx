@@ -139,6 +139,7 @@ import {
     type TableSortDirection,
 } from "@/app/components/shared/TablePrimitive";
 import { tr, trn } from "@/shared/i18n/runtime";
+import { trnRich } from "@/shared/i18n/rich";
 
 // Above this many documents the zip is built by a background export job
 // instead of inside the request: a small selection zips in well under a second
@@ -4342,10 +4343,10 @@ export function DocTable({
         <div className="space-y-2">
             <p>
                 {tr("documents.docTable.aboutSave")}{" "}
-                <span className="font-medium text-gray-950">{pendingVersionDrop.sourceDoc.filename}</span> {" "}{tr("documents.docTable.asNewVersion")}{" "} <span className="font-medium text-gray-950">{pendingVersionDrop.targetDoc.filename}</span>.
+                <span className="font-medium text-gray-950">{pendingVersionDrop.sourceDoc.filename}</span> {tr("documents.docTable.asNewVersion")} <span className="font-medium text-gray-950">{pendingVersionDrop.targetDoc.filename}</span>.
             </p>
             <p>
-                <span className="font-medium text-gray-950">{pendingVersionDrop.sourceDoc.filename}</span> {" "}{tr("documents.docTable.willNoLongerExistAs")}
+                <span className="font-medium text-gray-950">{pendingVersionDrop.sourceDoc.filename}</span> {tr("documents.docTable.willNoLongerExistAs")}
                 {(currentVersionNumber(pendingVersionDrop.sourceDoc) ?? 1) > 1
                     ? tr("documents.docTable.itsOlderVersionsWillDeleted")
                     : ""}
@@ -4359,8 +4360,18 @@ export function DocTable({
     const pendingDeleteDocMessage = pendingDeleteDoc ? (
         <div className="space-y-2">
             <p>
-                <span className="font-medium text-gray-950">{pendingDeleteDoc.filename}</span> has{" "}
-                {pendingDeleteDocVersionCount} {pendingDeleteDocVersionCount === 1 ? "version" : "versions"}{tr("documents.docTable.deletingDocumentWillDeleteAll")}
+                {trnRich(
+                    pendingDeleteDocVersionCount,
+                    "rich.docVersionsOne",
+                    "rich.docVersionsOther",
+                    {
+                        filename: (
+                            <span className="font-medium text-gray-950">
+                                {pendingDeleteDoc.filename}
+                            </span>
+                        ),
+                    },
+                )}
             </p>
         </div>
     ) : undefined;
@@ -4372,14 +4383,14 @@ export function DocTable({
                     {pendingDeleteFolder.folderIds.length}{" "}
                     {pendingDeleteFolder.folderIds.length === 1 ? "folder" : "folders"}
                 </span>
-                {tr("documents.docTable.including")}{" "} <span className="font-medium text-gray-950">{pendingDeleteFolder.folder.name}</span>
+                {tr("documents.docTable.including")} <span className="font-medium text-gray-950">{pendingDeleteFolder.folder.name}</span>
                 {pendingDeleteFolder.folderIds.length > 1 ? tr("documents.docTable.itsNestedSubfolders") : ""}.
             </p>
             {pendingDeleteFolder.documentCount > 0 && (
                 <p>
                     {pendingDeleteFolder.documentCount}{" "}
-                    {pendingDeleteFolder.documentCount === 1 ? "document" : "documents"} {" "}{tr("documents.docTable.deleted")}{" "}
-                    {pendingDeleteFolder.folderIds.length === 1 ? "folder" : "folders"} {" "}{tr("documents.docTable.willAlsoPermanentlyDeleted")}
+                    {pendingDeleteFolder.documentCount === 1 ? "document" : "documents"} {tr("documents.docTable.deleted")}{" "}
+                    {pendingDeleteFolder.folderIds.length === 1 ? "folder" : "folders"} {tr("documents.docTable.willAlsoPermanentlyDeleted")}
                 </p>
             )}
         </div>

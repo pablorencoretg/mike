@@ -68,12 +68,12 @@ const MAX_UPLOAD_SESSION_BYTES = 2 * 1024 * 1024 * 1024;
  */
 export const UPLOAD_LIMIT_MESSAGES: Record<string, string> = {
     too_many_files: tr("shared.api.uploadSessionClient.canUploadAtMostFiles", { MAX_UPLOAD_SESSION_FILES }),
-    upload_file_too_large: `Each uploaded file must be ${Math.round(
-        MAX_UPLOAD_FILE_BYTES / (1024 * 1024),
-    )} MB or smaller.`,
-    upload_batch_too_large: `An upload batch must be ${Math.round(
-        MAX_UPLOAD_SESSION_BYTES / (1024 * 1024 * 1024),
-    )} GB or smaller.`,
+    upload_file_too_large: tr("tb.fileTooLarge", {
+        size: Math.round(MAX_UPLOAD_FILE_BYTES / (1024 * 1024)),
+    }),
+    upload_batch_too_large: tr("tb.batchTooLarge", {
+        size: Math.round(MAX_UPLOAD_SESSION_BYTES / (1024 * 1024 * 1024)),
+    }),
 };
 
 /**

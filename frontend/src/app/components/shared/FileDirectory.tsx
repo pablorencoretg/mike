@@ -704,7 +704,9 @@ function WorkspaceFileDirectory({
                         <button
                             type="button"
                             aria-expanded={isExpanded}
-                            aria-label={`${isExpanded ? "Collapse" : "Expand"} ${folder.name}`}
+                            aria-label={tr(isExpanded ? "set.collapseItem" : "set.expandItem", {
+                                name: folder.name,
+                            })}
                             onClick={() =>
                                 toggleLibraryFolder(
                                     folder.id,
@@ -1144,7 +1146,9 @@ function WorkspaceFileDirectory({
                                         <button
                                             type="button"
                                             aria-expanded={isExpanded}
-                                            aria-label={`${isExpanded ? "Collapse" : "Expand"} ${project.name}`}
+                                            aria-label={tr(isExpanded ? "set.collapseItem" : "set.expandItem", {
+                                                name: project.name,
+                                            })}
                                             onClick={() =>
                                                 toggleFolder(project.id)
                                             }

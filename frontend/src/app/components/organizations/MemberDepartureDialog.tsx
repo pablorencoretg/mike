@@ -13,7 +13,8 @@ import {
   type OrgMember,
   type OrgMemberHandover,
 } from "@/app/lib/mikeApi";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
+import type { MessageKey } from "@/shared/i18n/translate";
 
 // Shared work is handed to one successor; unshared work is archived for
 // 30 days. Existing co-owned items stay with their remaining owners.
@@ -31,16 +32,17 @@ export interface MemberDepartureResult {
   error: unknown | null;
 }
 
-const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? "" : "s"}`;
+type CountKeys = readonly [MessageKey, MessageKey];
+const count = (n: number, [one, other]: CountKeys) => trn(n, one, other);
 
 function joinCounts(parts: string[]): string {
   return parts.length <= 1
     ? (parts[0] ?? "")
-    : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+    : `${parts.slice(0, -1).join(", ")}${tr("units.and")}${parts[parts.length - 1]}`;
 }
 
 const nameOf = (member: DepartingMember) =>
-  member.display_name?.trim() || member.email || "This member";
+  member.display_name?.trim() || member.email || tr("dep.thisMember");
 
 export function MemberDepartureDialog({
   orgId,
@@ -129,28 +131,28 @@ export function MemberDepartureDialog({
 
   const several = departing.length > 1;
   const who = leaving
-    ? "You"
+    ? tr("dep.you")
     : several
-      ? "These members"
+      ? tr("dep.theseMembers")
       : nameOf(departing[0] ?? { user_id: "" });
   const lead = leaving
-    ? "You will lose access to this organization's shared resources."
+    ? tr("dep.leadLeaving")
     : several
-      ? `${departing.length} selected members will lose access to this organization.`
-      : `${who} will lose organization access.`;
+      ? tr("dep.leadSeveral", { count: departing.length })
+      : tr("dep.leadOne", { who });
   const owedSummary = joinCounts([
-    ...(projects.length ? [count(projects.length, "project")] : []),
-    ...(workflows.length ? [count(workflows.length, "workflow")] : []),
-    ...(sharedChats ? [count(sharedChats, "shared chat")] : []),
-    ...(sharedReviews ? [count(sharedReviews, "shared tabular review")] : []),
-    ...(sharedDocuments ? [count(sharedDocuments, "document")] : []),
+    ...(projects.length ? [count(projects.length, ["units.projectOne", "units.projectOther"])] : []),
+    ...(workflows.length ? [count(workflows.length, ["units.workflowOne", "units.workflowOther"])] : []),
+    ...(sharedChats ? [count(sharedChats, ["units.sharedChatOne", "units.sharedChatOther"])] : []),
+    ...(sharedReviews ? [count(sharedReviews, ["units.sharedReviewOne", "units.sharedReviewOther"])] : []),
+    ...(sharedDocuments ? [count(sharedDocuments, ["units.documentOne", "units.documentOther"])] : []),
   ]);
   const archivedSummary = joinCounts([
-    ...(privateProjects ? [count(privateProjects, "private project")] : []),
-    ...(privateWorkflows ? [count(privateWorkflows, "private workflow")] : []),
-    ...(chats ? [count(chats, "private chat")] : []),
-    ...(reviews ? [count(reviews, "tabular review")] : []),
-    ...(documents ? [count(documents, "document")] : []),
+    ...(privateProjects ? [count(privateProjects, ["units.privateProjectOne", "units.privateProjectOther"])] : []),
+    ...(privateWorkflows ? [count(privateWorkflows, ["units.privateWorkflowOne", "units.privateWorkflowOther"])] : []),
+    ...(chats ? [count(chats, ["units.privateChatOne", "units.privateChatOther"])] : []),
+    ...(reviews ? [count(reviews, ["units.tabularReviewOne", "units.tabularReviewOther"])] : []),
+    ...(documents ? [count(documents, ["units.documentOne", "units.documentOther"])] : []),
   ]);
 
   const ready = handover !== null && roster !== null && !loadFailed;
@@ -250,7 +252,9 @@ export function MemberDepartureDialog({
                   {tr("organizations.memberDepartureDialog.transferOwnership")}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {owedSummary} {owed === 1 ? "needs" : "need"} {" "}{tr("organizations.memberDepartureDialog.newOwnerSharedPublicWork")}
+                  {trn(owed, "dep.needsOwnerOne", "dep.needsOwnerOther", {
+                    summary: owedSummary,
+                  })}
                 </p>
                 {titles.length === 0 ? null : titles.length === 1 ? (
                   <p className="text-xs text-gray-500 [overflow-wrap:anywhere]">

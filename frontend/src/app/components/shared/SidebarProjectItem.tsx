@@ -284,7 +284,9 @@ export function SidebarProjectItem({
                     onClick={() => onExpandedChange(!expanded)}
                     aria-expanded={expanded}
                     aria-controls={expanded ? listId : undefined}
-                    aria-label={`${expanded ? "Hide" : "Show"} recent chats and reviews in ${project.name}`}
+                    aria-label={tr(expanded ? "sh.hideRecentIn" : "sh.showRecentIn", {
+                        name: project.name,
+                    })}
                     className={cn(
                         "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-400 transition-opacity hover:text-gray-700 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40",
                         expanded || isActive
@@ -350,7 +352,12 @@ export function SidebarProjectItem({
                                         <Link
                                             href={item.href}
                                             title={item.title}
-                                            aria-label={`${item.kind === "chat" ? "Chat" : "Tabular review"}: ${item.title}`}
+                                            aria-label={tr(
+                                                item.kind === "chat"
+                                                    ? "sh.chatItem"
+                                                    : "sh.reviewItem",
+                                                { title: item.title },
+                                            )}
                                             aria-current={
                                                 itemActive ? "page" : undefined
                                             }

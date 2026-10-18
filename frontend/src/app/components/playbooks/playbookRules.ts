@@ -1,11 +1,12 @@
 import type { PlaybookRule } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 export function createPlaybookRule(index: number): PlaybookRule {
   return {
     id: `rule-${crypto.randomUUID()}`,
-    name: `New rule ${index}`,
+    name: tr("pb.newRule", { index }),
     // The content schema requires a concept even before the first edit.
-    concept: "Describe the contract term this rule looks for.",
+    concept: tr("pb.defaultConcept"),
     scope: "clause",
     required: false,
     guidance: "",

@@ -70,9 +70,9 @@ export function DocxCommentComposer({
   const editable = snapshot.editable && snapshot.editingMode !== "viewing";
   const hasAuthor = !!author?.trim();
   const unavailable = !editable
-    ? "This document is read-only."
+    ? tr("sh.readOnlyDocument")
     : !hasAuthor
-      ? "An author name is required to add comments."
+      ? tr("sh.authorRequired")
       : null;
 
   useEffect(

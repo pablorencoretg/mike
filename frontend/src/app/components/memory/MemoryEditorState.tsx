@@ -26,7 +26,7 @@ export function MemoryConflictNotice({
       role="alert"
     >
       <p className="font-medium">
-        {project ? tr("memory.memoryEditorState.projectMemory") : tr("memory.memoryEditorState.memory")} {" "}{tr("memory.memoryEditorState.changedWhileWereEditing")}
+        {project ? tr("memory.memoryEditorState.projectMemory") : tr("memory.memoryEditorState.memory")} {tr("memory.memoryEditorState.changedWhileWereEditing")}
       </p>
       <p className="mt-1 text-xs text-amber-800">
         {tr("memory.memoryEditorState.reloadWhatSavedNowKeep")}

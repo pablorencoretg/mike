@@ -27,14 +27,14 @@ const PROVIDER_SECTIONS = [
     {
         id: "active",
         active: true,
-        title: "Saved Providers",
-        empty: "No saved providers yet. Add an API key to one of the providers below.",
+        title: tr("set.savedProviders"),
+        empty: tr("set.noSavedProviders"),
     },
     {
         id: "available",
         active: false,
-        title: "Available Providers",
-        empty: "Every provider has a key saved.",
+        title: tr("set.availableProviders"),
+        empty: tr("set.everyProviderSaved"),
     },
 ] as const;
 

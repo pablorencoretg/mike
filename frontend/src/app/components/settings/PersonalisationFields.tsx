@@ -307,7 +307,9 @@ export function PersonalisationFields({
             >
               <span className="truncate">
                 {form.practiceAreas.length
-                  ? `${form.practiceAreas.length} selected`
+                  ? tr("set.selectedCount", {
+                      count: form.practiceAreas.length,
+                    })
                   : tr("settings.personalisationFields.selectPracticeAreas")}
               </span>
               <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />

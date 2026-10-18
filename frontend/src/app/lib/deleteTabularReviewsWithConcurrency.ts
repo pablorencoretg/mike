@@ -1,5 +1,5 @@
 import { notifyPartialFailure } from "@/app/lib/userFacingError";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 const DEFAULT_DELETE_CONCURRENCY = 5;
 
@@ -60,10 +60,10 @@ export function notifyBulkReviewDeleteOutcome({
 }): void {
     const notices = [
         blocked > 0
-            ? `${blocked} selected review${blocked === 1 ? " was" : "s were"} skipped because only a review owner can delete them.`
+            ? trn(blocked, "tb.reviewsSkippedOne", "tb.reviewsSkippedOther")
             : null,
         failedCount > 0
-            ? `${failedCount} review${failedCount === 1 ? " was" : "s were"} not deleted because the request failed. ${failedCount === 1 ? "It remains" : "They remain"} selected so you can try again.`
+            ? trn(failedCount, "tb.reviewsFailedOne", "tb.reviewsFailedOther")
             : null,
     ].filter((notice): notice is string => notice !== null);
     if (notices.length === 0) return;

@@ -73,7 +73,7 @@ export function ProfilePhotoSettings() {
       {editing ? <ImageCropModal
         file={file ?? undefined}
         imageUrl={profile?.profilePhoto}
-        name={profile?.displayName || user?.email || "You"}
+        name={profile?.displayName || user?.email || tr("set.you")}
         variant="photo"
         saving={saving === "save"}
         removing={saving === "remove"}

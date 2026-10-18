@@ -45,7 +45,7 @@ export function OrganizationProvidersSettings() {
   return (
     <OrganizationProviderKeys
       orgId={orgId}
-      orgName={org?.name ?? "Organization"}
+      orgName={org?.name ?? tr("acc.organization")}
     />
   );
 }

@@ -62,7 +62,12 @@ export function PlaybookReviewDocuments({
         <>
           <p className="mb-3 text-xs text-gray-500" aria-live="polite">
             {disabled
-              ? `${documents.filter((document) => document.status === "completed").length} of ${documents.length} reviewed`
+              ? tr("pb.reviewedOf", {
+                  done: documents.filter(
+                    (document) => document.status === "completed",
+                  ).length,
+                  total: documents.length,
+                })
               : dragging
                 ? tr("playbooks.playbookReviewDocuments.dropDocumentsAddThem")
                 : tr("playbooks.playbookReviewDocuments.dropMoreDocumentsHereUse")}

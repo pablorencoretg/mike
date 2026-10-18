@@ -17,7 +17,9 @@ const VIEWS: { id: PlaybookView; label: string; name?: string }[] = [
   // Named apart from the rule editor's own Overview tab.
   { id: "overview", get label() {
         return tr("playbooks.playbookToolbar.overview");
-    }, name: "Playbook overview" },
+    }, get name() {
+        return tr("pb.playbookOverview");
+    } },
   { id: "rules", get label() {
         return tr("playbooks.playbookToolbar.rules");
     } },

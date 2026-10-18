@@ -44,7 +44,7 @@ const RULE_DRAG_TYPE = "application/x-mike-playbook-rule";
 type ContextTarget = { topicId: string | null; ruleId?: string };
 
 function ruleDisplayName(rule: PlaybookRule) {
-  return rule.name.trim() || "Untitled rule";
+  return rule.name.trim() || tr("pb.untitledRule");
 }
 
 export function PlaybookEditor({
@@ -111,7 +111,10 @@ export function PlaybookEditor({
     const id = `topic-${crypto.randomUUID()}`;
     onChange({
       ...content,
-      topics: [...content.topics, { id, name: "New topic", rules: [] }],
+      topics: [
+        ...content.topics,
+        { id, name: tr("pb.newTopic"), rules: [] },
+      ],
     });
     setExpandedTopics((current) => new Set([...current, id]));
     setNewTopicId(id);
@@ -149,7 +152,7 @@ export function PlaybookEditor({
     const copy: PlaybookRule = {
       ...structuredClone(source),
       id: `rule-${crypto.randomUUID()}`,
-      name: `${ruleDisplayName(source)} (copy)`,
+      name: tr("pb.copyOf", { name: ruleDisplayName(source) }),
     };
     const insertCopy = (siblings: PlaybookRule[]) =>
       siblings.flatMap((rule) => (rule.id === ruleId ? [rule, copy] : [rule]));
@@ -230,7 +233,9 @@ export function PlaybookEditor({
       for (const topic of content.topics) {
         if (topic.id === target.topicId) continue;
         actions.push({
-          label: `Move to ${topic.name.trim() || "Untitled topic"}`,
+          label: tr("pb.moveTo", {
+            name: topic.name.trim() || tr("pb.untitledTopic"),
+          }),
           disabled,
           onSelect: () => moveRule(target.ruleId!, { topicId: topic.id }),
         });
@@ -531,7 +536,12 @@ export function PlaybookEditor({
                   <TextButtonUI
                     size="icon-xs"
                     className="h-7 w-3"
-                    aria-label={`${expandedTopics.has(topic.id) ? "Collapse" : "Expand"} topic ${topic.name}`}
+                    aria-label={tr(
+                      expandedTopics.has(topic.id)
+                        ? "pb.collapseTopic"
+                        : "pb.expandTopic",
+                      { name: topic.name },
+                    )}
                     aria-expanded={expandedTopics.has(topic.id)}
                     onClick={() =>
                       setExpandedTopics((current) => {
@@ -571,7 +581,9 @@ export function PlaybookEditor({
                     className="-mx-1 h-7 min-w-0 rounded-md bg-transparent px-1 py-0 text-xs text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500/40"
                   />
                   <HeaderActionsMenu
-                    title={`Topic actions for ${topic.name || "Untitled topic"}`}
+                    title={tr("pb.topicActions", {
+                      name: topic.name || tr("pb.untitledTopic"),
+                    })}
                     triggerClassName="h-6 w-6"
                     items={menuActions({ topicId: topic.id })}
                     onCloseAutoFocus={(event) => {

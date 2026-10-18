@@ -128,7 +128,9 @@ function insertAt<T>(items: T[], index: number, item: T) {
 
 function positionLabel(kind: PositionKind, index: number) {
   const { label } = POSITION_GROUPS[kind];
-  return kind === "standard" ? label : `${label} ${index + 1}`;
+  return kind === "standard"
+    ? label
+    : tr("pb.positionN", { label, number: index + 1 });
 }
 
 /** A clause whose usage contradicts the position it illustrates. */
@@ -150,7 +152,7 @@ export function describeSourceRefs(refs: string[]) {
   return refs
     .map((ref) => {
       const paragraph = /^P(\d+)$/.exec(ref);
-      if (paragraph) return `paragraph ${paragraph[1]}`;
+      if (paragraph) return tr("pb.paragraph", { number: paragraph[1] });
       const cell = /^T(\d+)R(\d+)C(\d+)$/.exec(ref);
       if (cell) return tr("playbooks.playbookRuleForm.tableRowCell", { cell: cell[1], cell2: cell[2], cell3: cell[3] });
       return ref;
@@ -641,7 +643,7 @@ function PositionCard({
           </span>
         )}
         <input
-          aria-label={`${label} name`}
+          aria-label={tr("pb.nameOf", { label })}
           value={position.name}
           placeholder={label}
           onChange={(event) =>

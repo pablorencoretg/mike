@@ -333,7 +333,11 @@ export function ProjectMemoryModal({
             <ConfirmPopup
                 open={disableMemoryConfirmOpen}
                 title={tr("projects.projectMemoryModal.turnOffProjectMemory")}
-                message={`This will delete the existing project memory.md file${dirty ? " and your unsaved draft" : ""}, cancel pending memory updates, and stop future memory updates until you turn project memory on again.`}
+                message={tr(
+                    dirty
+                        ? "x.projectMemoryDisableDirty"
+                        : "x.projectMemoryDisable",
+                )}
                 confirmLabel={tr("projects.projectMemoryModal.disable")}
                 confirmVariant="danger"
                 confirmStatus={

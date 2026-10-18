@@ -573,7 +573,7 @@ export function WorkflowDetailPage({ id, workflowType }: Props) {
   }
 
   const defaultContributorName =
-    profile?.displayName?.trim() || user?.email || "your account name";
+    profile?.displayName?.trim() || user?.email || tr("tb.yourAccountName");
   const openSourcePending =
     workflow.open_source_submission?.status === "pending";
   const workflowActionItems: HeaderActionsMenuItem[] = [

@@ -222,7 +222,11 @@ export function EditCardsSection({
         pending.length > 0
             ? docCount > 1
                 ? tr("assistant.message.editCardsSection.trackedChangesAcrossDocuments", { pendingCount: pending.length, docCount })
-                : `${pending.length} tracked ${pending.length === 1 ? "change" : "changes"}`
+                : trn(
+                      pending.length,
+                      "rich.trackedChangeOne",
+                      "rich.trackedChangeOther",
+                  )
             : docCount > 1
               ? tr("assistant.message.editCardsSection.resolvedTrackedChangesAcrossDocuments", { resolvedCount, docCount })
               : trn(

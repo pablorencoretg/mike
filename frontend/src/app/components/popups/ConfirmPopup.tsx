@@ -7,7 +7,7 @@ import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { CloseButton } from "@/shared/ui/CloseButton";
 import { cn } from "@/app/lib/utils";
 import { LIQUID_GLASS_FLOAT_CLASS } from "@/shared/ui/LiquidGlassUI";
-import { tr } from "@/shared/i18n/runtime";
+import { getActiveLocale, tr } from "@/shared/i18n/runtime";
 
 type ConfirmStatus = "idle" | "loading" | "complete";
 
@@ -135,13 +135,17 @@ export function ConfirmPopup({
   );
 }
 
+// The English labels are inflected ("Delete" → "Deleting...", "Deleted");
+// other languages get a neutral word instead.
 function progressiveLabel(label: string) {
+  if (getActiveLocale() !== "en") return tr("x.working");
   const lower = label.toLowerCase();
   if (lower.endsWith("e")) return `${label.slice(0, -1)}ing...`;
   return `${label}ing...`;
 }
 
 function completedLabel(label: string) {
+  if (getActiveLocale() !== "en") return tr("x.done");
   const lower = label.toLowerCase();
   if (lower.endsWith("e")) return `${label}d`;
   return `${label}ed`;

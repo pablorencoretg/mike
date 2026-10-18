@@ -77,7 +77,7 @@ export function distinctPeople(
 }
 
 export const personName = (person: PersonOption) =>
-  person.display_name || person.email || "Unknown user";
+  person.display_name || person.email || tr("sh.unknownUser");
 
 /**
  * Search and select one person in a table header, loading additional people

@@ -206,7 +206,7 @@ export function ApiKeyField({
       }
       const ok = await onRemove();
       if (ok) {
-        notifySuccess(`${label} removed.`);
+        notifySuccess(tr("set.keyRemoved", { label }));
       } else {
         notifyError(
           new UserVisibleError(

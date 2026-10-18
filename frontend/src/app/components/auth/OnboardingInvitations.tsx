@@ -101,7 +101,7 @@ export function OnboardingInvitations({
                 </div>
             ) : null}
             {invitations?.map((invitation) => {
-                const name = invitation.org_name || "Organization";
+                const name = invitation.org_name || tr("acc.organization");
                 const joinedRole = joined[invitation.id];
                 return (
                     <ConnectorCard key={invitation.id} kind="invitation" name={name}

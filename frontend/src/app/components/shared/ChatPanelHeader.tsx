@@ -82,7 +82,9 @@ export function buildChatHistoryItems({
                         ? {
                               label: elapsed,
                               dateTime: activityAt,
-                              description: `Updated ${new Date(activityAt).toLocaleString()}`,
+                              description: tr("sh.updatedAt", {
+                                  date: new Date(activityAt).toLocaleString(),
+                              }),
                           }
                         : undefined,
             };

@@ -129,7 +129,8 @@ import {
     formatUnsupportedDocumentWarning,
     partitionSupportedDocumentFiles,
 } from "@/app/lib/documentUploadValidation";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
+import { trRich } from "@/shared/i18n/rich";
 
 interface Props {
     params: Promise<{ id: string; chatId?: string }>;
@@ -1811,31 +1812,40 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                     pendingDeleteFolder ? (
                         <div className="space-y-2">
                             <p>
-                                {tr("pages.projects.id.assistant.chat.chatId.page.willPermanentlyDelete")}{" "}
-                                <span className="font-medium text-gray-950">
-                                    {pendingDeleteFolder.folderIds.length}{" "}
-                                    {pendingDeleteFolder.folderIds.length === 1
-                                        ? "folder"
-                                        : "folders"}
-                                </span>
-                                {tr("pages.projects.id.assistant.chat.chatId.page.including")}{" "}
-                                <span className="font-medium text-gray-950">
-                                    {pendingDeleteFolder.folder.name}
-                                </span>
-                                {pendingDeleteFolder.folderIds.length > 1
-                                    ? tr("pages.projects.id.assistant.chat.chatId.page.itsNestedSubfolders")
-                                    : ""}
-                                .
+                                {trRich("rich.folderDeleteLead", {
+                                    folders: (
+                                        <span className="font-medium text-gray-950">
+                                            {trn(
+                                                pendingDeleteFolder.folderIds.length,
+                                                "rich.folderOne",
+                                                "rich.folderOther",
+                                            )}
+                                        </span>
+                                    ),
+                                    name: (
+                                        <span className="font-medium text-gray-950">
+                                            {pendingDeleteFolder.folder.name}
+                                        </span>
+                                    ),
+                                    nested:
+                                        pendingDeleteFolder.folderIds.length > 1
+                                            ? tr("rich.nestedSubfolders")
+                                            : "",
+                                })}
                             </p>
                             {pendingDeleteFolder.documentCount > 0 && (
                                 <p>
-                                    {pendingDeleteFolder.documentCount}{" "}
-                                    {pendingDeleteFolder.documentCount === 1
-                                        ? "document"
-                                        : "documents"}{" "}{tr("pages.projects.id.assistant.chat.chatId.page.deleted")}{" "}
                                     {pendingDeleteFolder.folderIds.length === 1
-                                        ? "folder"
-                                        : "folders"}{" "}{tr("pages.projects.id.assistant.chat.chatId.page.willAlsoPermanentlyDeleted")}
+                                        ? trn(
+                                              pendingDeleteFolder.documentCount,
+                                              "rich.docsInFolderOneOne",
+                                              "rich.docsInFolderOtherOne",
+                                          )
+                                        : trn(
+                                              pendingDeleteFolder.documentCount,
+                                              "rich.docsInFolderOneOther",
+                                              "rich.docsInFolderOtherOther",
+                                          )}
                                 </p>
                             )}
                         </div>

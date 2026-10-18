@@ -77,7 +77,9 @@ export function DocxCommentCard({
             data-comment-key={thread.key}
             data-active={thread.isActive || undefined}
             tabIndex={0}
-            aria-label={`Comment by ${thread.author || "Unknown author"}`}
+            aria-label={tr("sh.commentBy", {
+              author: thread.author || tr("sh.unknownAuthor"),
+            })}
             className={`w-[var(--mike-docx-comment-width)] p-3 focus-visible:outline-2 focus-visible:outline-blue-500/40 ${thread.activatable ? "cursor-pointer" : ""} ${LIQUID_FLOAT_PANEL_SURFACE_CLASS} ${thread.isActive ? "ring-1 ring-ring/30" : ""}`}
             onClick={(event) => {
                 // Controls and forms inside the card keep their own behavior,
@@ -113,7 +115,12 @@ export function DocxCommentCard({
                             {entry.author || tr("shared.views.docxCommentCard.unknownAuthor")}
                         </p>
                         <CommentMenu
-                            label={`Actions for ${index === 0 ? "comment" : "reply"} by ${entry.author || "Unknown author"}`}
+                            label={tr(
+                              index === 0
+                                ? "sh.actionsForCommentBy"
+                                : "sh.actionsForReplyBy",
+                              { author: entry.author || tr("sh.unknownAuthor") },
+                            )}
                             canEdit={
                                 writable &&
                                 docxCommentEditable(entry, items, author)

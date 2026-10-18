@@ -13,7 +13,7 @@ import { useDocumentWorkspace } from "@/app/contexts/WorkspaceContext";
 import { useWorkspaceIdentity } from "@/app/hooks/useWorkspaceIdentity";
 import { listPlaybooks, type Playbook } from "@/app/lib/mikeApi";
 import { LIQUID_GLASS_SUBTLE_CLASS } from "@/shared/ui/LiquidGlassUI";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 type Props = {
   open: boolean;
@@ -27,7 +27,7 @@ function ruleNames(playbook: Playbook) {
   return [
     ...(playbook.content.rules ?? []),
     ...playbook.content.topics.flatMap((topic) => topic.rules),
-  ].map((rule) => rule.name || "Untitled rule");
+  ].map((rule) => rule.name || tr("pb.untitledRule"));
 }
 
 /** Picks a playbook to run in chat; laid out like the workflow picker. */
@@ -211,7 +211,9 @@ function PlaybookPreview({
   ].filter((fact) => fact.value);
   return (
     <section
-      aria-label={`${playbook.name || "Untitled playbook"} preview`}
+      aria-label={tr("pb.preview", {
+        name: playbook.name || tr("common.untitledPlaybook"),
+      })}
       className="flex min-h-0 min-w-0 flex-1 flex-col overflow-visible"
     >
       <div
@@ -246,7 +248,7 @@ function PlaybookPreview({
           )}
           <div>
             <p className="mb-1.5 font-medium text-gray-700">
-              {rules.length} {rules.length === 1 ? "rule" : "rules"}
+              {trn(rules.length, "rich.ruleOne", "rich.ruleOther")}
             </p>
             <ul className="list-disc space-y-0.5 pl-4">
               {rules.map((name, index) => (

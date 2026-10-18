@@ -122,8 +122,9 @@ export function RowActionMenuItems({
     // "Delete" alone would make the title "Couldn't delete"; callers that
     // name the row ("Delete review") already read as an action.
     const deleteAction =
-        deleteLabel.trim().toLowerCase() === "delete"
-            ? "delete this item"
+        deleteLabel.trim().toLowerCase() ===
+        tr("shared.rowActions.delete").toLowerCase()
+            ? tr("sh.deleteThisItem")
             : deleteLabel.trim().toLowerCase();
 
     async function runDelete() {

@@ -284,7 +284,7 @@ function OrganizationMemberPicker({
             {showResults ? (
                 <div
                     role="listbox"
-                    aria-label={`${label} matches`}
+                    aria-label={tr("acc.matches", { label })}
                     className={`absolute left-0 right-0 top-full z-[260] mt-1 max-h-48 overflow-y-auto rounded-xl p-1 ${LIQUID_GLASS_FLOAT_CLASS}`}
                 >
                     {matches.length > 0 ? (
@@ -639,7 +639,9 @@ export function OrganizationAccessEditor({
                 )}
                 <OrganizationAssignmentList
                     label={
-                        pickOwners ? `${ownerLabel} list` : tr("modals.accessEditor.peopleAccess")
+                        pickOwners
+                            ? tr("acc.listOf", { label: ownerLabel })
+                            : tr("modals.accessEditor.peopleAccess")
                     }
                     assignments={sharedAssignments}
                     emptyMessage={
@@ -922,7 +924,7 @@ export function AccessEditor({
                                     email.toLowerCase() ===
                                         normalizedCurrentEmail);
                             const name = isYou
-                                ? "You"
+                                ? tr("set.you")
                                 : entry.display_name?.trim() || "—";
                             const isPending = pendingEmail === email;
                             return (

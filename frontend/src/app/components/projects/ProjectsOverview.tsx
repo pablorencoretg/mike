@@ -83,7 +83,7 @@ import { useQueryParamTab } from "@/app/hooks/useQueryParamTab";
 import { AccessScopeLabel } from "@/app/components/shared/AccessScopeLabel";
 import { useT } from "@/shared/i18n/I18nContext";
 import type { MessageKey, Translate } from "@/shared/i18n/translate";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 import { valueLabel } from "@/shared/i18n/values";
 
 function formatDate(iso: string) {
@@ -467,16 +467,18 @@ export function ProjectsOverview() {
         const named = failedNames.length
             ? ` (${failedNames.slice(0, 3).join(", ")}${
                   failedNames.length > 3
-                      ? ` and ${failedNames.length - 3} more`
+                      ? tr("x.andMore", { count: failedNames.length - 3 })
                       : ""
               })`
             : "";
         notifyPartialFailure(
             tr("projects.projectsOverview.projectsCouldnTDeletedThey", { failedIdsCount: failedIds.length, idsCount: ids.length, named }),
             {
-                action: `delete ${failedIds.length} project${
-                    failedIds.length === 1 ? "" : "s"
-                }`,
+                action: trn(
+                    failedIds.length,
+                    "x.deleteProjectsActionOne",
+                    "x.deleteProjectsActionOther",
+                ),
                 dedupeKey: "projects-bulk-delete",
                 onRetry: () => void deleteProjectRows(failedIds),
             },

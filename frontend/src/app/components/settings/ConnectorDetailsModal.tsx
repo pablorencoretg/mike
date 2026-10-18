@@ -308,7 +308,12 @@ function ToolList({
                                     }
                                     className="inline-flex h-5 w-5 items-center justify-center rounded text-gray-400 transition-colors hover:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                                     aria-expanded={isExpanded}
-                                    aria-label={`${isExpanded ? "Collapse" : "Expand"} ${tool.title}`}
+                                    aria-label={tr(
+                                        isExpanded
+                                            ? "set.collapseItem"
+                                            : "set.expandItem",
+                                        { name: tool.title },
+                                    )}
                                 >
                                     <ChevronDown
                                         className={`h-3.5 w-3.5 transition-transform ${
@@ -328,7 +333,7 @@ function ToolList({
                                     checked={tool.enabled && !(readOnly && tool.write)}
                                     disabled={busyKey !== null || (readOnly && tool.write)}
                                     aria-busy={busy}
-                                    aria-label={`${tool.title} enabled`}
+                                    aria-label={tr("set.toolEnabled", { name: tool.title })}
                                     onCheckedChange={(enabled) =>
                                         onToolEnabled(tool.id, enabled)
                                     }

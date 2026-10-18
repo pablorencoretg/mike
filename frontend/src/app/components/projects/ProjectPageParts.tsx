@@ -307,7 +307,7 @@ export function DocVersionHistory({
                                     >
                                         {isDeleted && (
                                             <span className="font-medium text-gray-500">
-                                                [Deleted]{" "}
+                                                {tr("x.deletedMarker")}{" "}
                                             </span>
                                         )}
                                         {displayLabel}

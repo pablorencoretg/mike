@@ -7,11 +7,12 @@ import type {
     TabularReviewRow,
 } from "../shared/types";
 import { preprocessCitations } from "./citation-utils";
+import { tr } from "@/shared/i18n/runtime";
 
 function formatCellForExport(cell: TabularCell | undefined): string {
     if (!cell) return "";
     if (cell.status === "pending" || cell.status === "generating") return "";
-    if (cell.status === "error") return "Error";
+    if (cell.status === "error") return tr("tb.error");
     const summary = cell.content?.summary;
     if (!summary) return "";
     const { processed } = preprocessCitations(summary);
@@ -28,7 +29,7 @@ function sanitizeFilename(name: string): string {
             .replace(/[\\/:*?"<>|]/g, "")
             .replace(/\s+/g, " ")
             .trim()
-            .slice(0, 80) || "Tabular Review"
+            .slice(0, 80) || tr("tb.tabularReview")
     );
 }
 

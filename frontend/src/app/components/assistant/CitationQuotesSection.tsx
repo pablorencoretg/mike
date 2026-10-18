@@ -57,8 +57,9 @@ export function documentQuoteId(documentId: string, index: number): string {
 function formatCellTarget(quote: PanelDocumentQuote): string | null {
     const { sheet, cell } = quote.target;
     if (!cell) return sheet ?? null;
-    const cellWord = cell.includes(":") ? "cells" : "cell";
-    const cellPart = `${cellWord} ${cell}`;
+    const cellPart = tr(cell.includes(":") ? "tb.cellOther" : "tb.cellOne", {
+        cell,
+    });
     return sheet ? `${sheet}, ${cellPart}` : cellPart;
 }
 
@@ -66,7 +67,9 @@ function formatQuoteTarget(quote: PanelDocumentQuote): string | null {
     if (quote.target.sheet || quote.target.cell) {
         return formatCellTarget(quote);
     }
-    return quote.target.page !== undefined ? `Page ${quote.target.page}` : null;
+    return quote.target.page !== undefined
+        ? tr("tb.page", { page: quote.target.page })
+        : null;
 }
 
 function documentQuoteItems(

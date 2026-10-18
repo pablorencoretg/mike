@@ -1077,7 +1077,10 @@ export function DocumentSidePanel({
             <ConfirmPopup
                 open={replaceConfirmOpen}
                 title={tr("shared.documentSidePanel.replaceVersion2")}
-                message={`This will wipe ${versionTitleFor(replaceTargetVersion)} and replace it with ${replaceFile?.name ?? "the selected file"}. Save as a new version instead if you want to keep both copies.`}
+                message={tr("sh.replaceVersionWarning", {
+                    version: versionTitleFor(replaceTargetVersion),
+                    file: replaceFile?.name ?? tr("sh.theSelectedFile"),
+                })}
                 confirmLabel={tr("shared.documentSidePanel.replace2")}
                 confirmStatus={replacingVersionId != null ? "loading" : "idle"}
                 cancelLabel={tr("shared.documentSidePanel.cancel")}
@@ -1177,7 +1180,7 @@ function versionTitleFor(version: DocumentVersion | null) {
 
 function versionFilenameFor(version: DocumentVersion) {
     if (version.filename?.trim()) return version.filename.trim();
-    return version.source === "upload" ? "Original" : "—";
+    return version.source === "upload" ? tr("sh.original") : "—";
 }
 
 function fileTypeForVersion(version: DocumentVersion, fallback: string | null) {

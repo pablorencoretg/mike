@@ -7,23 +7,23 @@ import { tr } from "@/shared/i18n/runtime";
 // Readable labels for the argument names Mike's built-in connectors use.
 // Anything else (for example an MCP server's own parameters) shows its key.
 const labels: Record<string, string> = {
-  to: "To",
+  to: tr("sh.field.to"),
   cc: "Cc",
   bcc: "Bcc",
-  subject: "Subject",
+  subject: tr("sh.field.subject"),
   get body() {
         return tr("shared.connectorActionCard.message");
     },
-  calendar_id: "Calendar",
-  event_id: "Event",
-  file_id: "File",
-  parent_id: "Destination folder",
-  file_type: "File type",
-  content: "New contents",
-  file: "File",
-  destination: "Destination folder",
-  name: "Name",
-  draft_id: "Draft",
+  calendar_id: tr("sh.field.calendar"),
+  event_id: tr("sh.field.event"),
+  file_id: tr("sh.field.file"),
+  parent_id: tr("sh.field.destinationFolder"),
+  file_type: tr("sh.field.fileType"),
+  content: tr("sh.field.newContents"),
+  file: tr("sh.field.file"),
+  destination: tr("sh.field.destinationFolder"),
+  name: tr("sh.field.name"),
+  draft_id: tr("sh.field.draft"),
   get message_id() {
         return tr("shared.connectorActionCard.message");
     },
@@ -33,10 +33,10 @@ const labels: Record<string, string> = {
   get description() {
         return tr("shared.connectorActionCard.description");
     },
-  location: "Location",
-  start: "Start",
-  end: "End (exclusive for all-day events)",
-  attendees: "Attendees",
+  location: tr("sh.field.location"),
+  start: tr("sh.field.start"),
+  end: tr("sh.field.end"),
+  attendees: tr("sh.field.attendees"),
   get add_label_ids() {
         return tr("shared.connectorActionCard.addLabels");
     },
@@ -88,7 +88,10 @@ export function ConnectorActionCard({ item }: { item: ConnectorApprovalItem }) {
   );
   return (
     <article
-      aria-label={`${item.title} on ${item.connector_name}`}
+      aria-label={tr("sh.itemOnConnector", {
+        title: item.title,
+        connector: item.connector_name,
+      })}
       className="space-y-3 text-left"
     >
       <div>

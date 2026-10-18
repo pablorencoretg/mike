@@ -100,7 +100,7 @@ export function DeletedOrganizations({
               <div className="min-w-0 space-y-1 [overflow-wrap:anywhere]">
                 <SettingsLabel>{org.name}</SettingsLabel>
                 <SettingsDescription>
-                  {tr("organizations.deletedOrganizations.recoverBefore")}{" "} {new Date(org.purge_after).toLocaleString()}.
+                  {tr("organizations.deletedOrganizations.recoverBefore")} {new Date(org.purge_after).toLocaleString()}.
                 </SettingsDescription>
               </div>
               <PillButtonUI

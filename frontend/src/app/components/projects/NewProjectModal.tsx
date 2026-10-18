@@ -32,7 +32,7 @@ import {
     type PendingOrgOverride,
 } from "../modals/CreateAccessStep";
 import { AccessVisibilityField } from "../modals/AccessVisibilityField";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 const PERSONAL_WORKSPACE = "__personal__";
 
@@ -290,15 +290,19 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                         (file) => !uploadedFilesRef.current.has(file),
                     ).length;
                 setError(
-                    `Project created, but access was not granted to ${grantFailures
-                        .map((failure) => failure.email)
-                        .join(", ")}: ${grantFailures[0].detail}${
-                        stillPending > 0
-                            ? ` The ${stillPending} selected ${
-                                  stillPending === 1 ? "file is" : "files are"
-                              } still pending and will be attached when you try again.`
-                            : ""
-                    }`,
+                    tr("x.projectCreatedGrantFailed", {
+                        emails: grantFailures
+                            .map((failure) => failure.email)
+                            .join(", "),
+                        detail: grantFailures[0].detail,
+                    }) +
+                        (stillPending > 0
+                            ? trn(
+                                  stillPending,
+                                  "x.projectPendingOne",
+                                  "x.projectPendingOther",
+                              )
+                            : ""),
                 );
                 // Stay open on THIS dialog: createdProjectRef holds the
                 // project, so pressing Create again retries only the grants.
@@ -389,7 +393,9 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
             const failureMessage = [
                 uploadFailure,
                 failedLinkNames.length > 0
-                    ? `${failedLinkNames.join(", ")} could not be added to the project.`
+                    ? tr("x.couldNotAddToProject", {
+                          names: failedLinkNames.join(", "),
+                      })
                     : null,
             ]
                 .filter(Boolean)
@@ -495,7 +501,12 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
             secondaryAction={
                 step === "documents"
                     ? {
-                          label: `Upload${pendingFiles.length > 0 ? ` (${pendingFiles.length})` : ""}`,
+                          label:
+                              pendingFiles.length > 0
+                                  ? tr("x.uploadCount", {
+                                        count: pendingFiles.length,
+                                    })
+                                  : tr("x.upload"),
                           icon: <Upload className="h-3.5 w-3.5" />,
                           onClick: () => fileInputRef.current?.click(),
                           disabled: loading,

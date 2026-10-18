@@ -391,7 +391,9 @@ export function MarkdownEditor({
     const trail = after.length === 0 || after.startsWith("\n") ? "" : "\n";
     const header =
       "| " +
-      Array.from({ length: cols }, (_, index) => `Column ${index + 1}`).join(
+      Array.from({ length: cols }, (_, index) =>
+        tr("tb.columnN", { number: index + 1 }),
+      ).join(
         " | ",
       ) +
       " |";

@@ -66,7 +66,16 @@ export function ConnectorCard({
     </div>
   );
   return (
-    <section aria-label={`${name} ${kind}`} className="min-w-0">
+    <section
+      aria-label={
+        kind === "invitation"
+          ? tr("set.invitationNamed", { name })
+          : kind === "connector"
+            ? tr("set.connectorNamed", { name })
+            : `${name} ${kind}`
+      }
+      className="min-w-0"
+    >
       <GlassCardUI>
         {onOpen ? (
           <div

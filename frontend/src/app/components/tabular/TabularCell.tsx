@@ -181,7 +181,7 @@ function formatCitationLocation(citation: ParsedCitation): string {
     if (citation.sheet && citation.cell) {
         return `${citation.sheet}!${citation.cell}`;
     }
-    return `Page ${citation.page ?? 1}`;
+    return tr("tb.page", { page: citation.page ?? 1 });
 }
 
 export function TabularCell({

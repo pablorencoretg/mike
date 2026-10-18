@@ -70,7 +70,7 @@ import {
   TableStickyCell,
 } from "../shared/TablePrimitive";
 import { AccessScopeLabel } from "../shared/AccessScopeLabel";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 import { valueLabel } from "@/shared/i18n/values";
 
 type WorkflowListTab = "all" | "assistant" | "tabular" | "addons";
@@ -503,7 +503,11 @@ export function WorkflowList({
     : pendingDefaultDeleteCount > 0
       ? pendingDeleteWorkflows.length === 1
         ? tr("workflows.workflowList.deletingDefaultWorkflowAlsoPermanently")
-        : `The selected workflows will be permanently deleted. ${pendingDefaultDeleteCount} ${pendingDefaultDeleteCount === 1 ? "is a default workflow, so its corresponding Quick Action will" : "are default workflows, so their corresponding Quick Actions will"} also be deleted. Deleted defaults will not be created again automatically.`
+        : trn(
+            pendingDefaultDeleteCount,
+            "tb.defaultWorkflowsDeleteOne",
+            "tb.defaultWorkflowsDeleteOther",
+          )
       : pendingDeleteWorkflows.length === 1
         ? tr("workflows.workflowList.workflowWillPermanentlyDeleted")
         : tr("workflows.workflowList.selectedWorkflowsWillPermanentlyDeleted");

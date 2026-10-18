@@ -32,7 +32,7 @@ import { modelDisplayName } from "@/shared/lib/modelCatalog";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { TextSlabUI } from "@/shared/ui/TextSlabUI";
 import { PlaybookPanels } from "./PlaybookPanels";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 const STATUS_LABEL: Record<string, string> = {
   unacceptable: "Unacceptable",
@@ -94,8 +94,8 @@ export function runTitle(run: PlaybookRun) {
 
 /** "2 issues · 1 to review", or the run's state when it has no findings. */
 export function runOutcome(run: PlaybookRun) {
-  if (run.error || run.status === "failed") return "Failed";
-  if (run.status !== "completed") return "In progress";
+  if (run.error || run.status === "failed") return tr("pb.failed");
+  if (run.status !== "completed") return tr("pb.inProgress");
   const issues = run.findings.filter(
     (finding) =>
       finding.status === "unacceptable" ||
@@ -105,10 +105,10 @@ export function runOutcome(run: PlaybookRun) {
     (finding) => finding.status === "needs_review",
   ).length;
   const parts = [
-    issues ? `${issues} ${issues === 1 ? "issue" : "issues"}` : null,
-    toReview ? `${toReview} to review` : null,
+    issues ? trn(issues, "pb.issueOne", "pb.issueOther") : null,
+    toReview ? tr("pb.toReview", { count: toReview }) : null,
   ].filter(Boolean);
-  return parts.length ? parts.join(" · ") : "No issues";
+  return parts.length ? parts.join(" · ") : tr("pb.noIssues");
 }
 
 /**
@@ -498,7 +498,7 @@ function Redline({ before, after }: { before: string; after: string }) {
             key={index}
             className="rounded-sm bg-red-50 text-red-700 decoration-red-400"
           >
-            <span className="sr-only">{tr("playbooks.playbookRuns.removed")}{" "} </span>
+            <span className="sr-only">{tr("playbooks.playbookRuns.removed")} </span>
             {segment.text}
           </del>
         ) : segment.type === "added" ? (
@@ -506,7 +506,7 @@ function Redline({ before, after }: { before: string; after: string }) {
             key={index}
             className="rounded-sm bg-emerald-50 text-emerald-700 no-underline"
           >
-            <span className="sr-only">{tr("playbooks.playbookRuns.added")}{" "} </span>
+            <span className="sr-only">{tr("playbooks.playbookRuns.added")} </span>
             {segment.text}
           </ins>
         ) : (

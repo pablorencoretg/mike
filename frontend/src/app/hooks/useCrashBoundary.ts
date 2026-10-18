@@ -30,6 +30,8 @@ export function useCrashBoundary(
 
     return supportMailtoFor(
         describeError(error, { action: tr("app.hooks.useCrashBoundary.loadPage") }),
-        `Error reference: ${error.digest ?? "unavailable"}`,
+        tr("tb.errorReference", {
+            digest: error.digest ?? tr("tb.unavailable"),
+        }),
     );
 }

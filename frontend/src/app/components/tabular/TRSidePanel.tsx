@@ -784,7 +784,7 @@ function formatCitationLocation(citation: ParsedCitation): string {
     if (citation.sheet && citation.cell) {
         return tr("tabular.tRSidePanel.cell", { sheet: citation.sheet, cell: citation.cell });
     }
-    return `Page ${citation.page ?? 1}`;
+    return tr("tb.page", { page: citation.page ?? 1 });
 }
 
 function citationKey(cellId: string, citation: ParsedCitation): string {
