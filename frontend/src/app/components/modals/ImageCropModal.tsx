@@ -269,7 +269,11 @@ export function ImageCropModal({
                 <div
                   role="group"
                   tabIndex={0}
-                  aria-label={`${isPhoto ? "Photo" : "Logo"} position. Drag, or use the arrow keys, to move the image.`}
+                  aria-label={
+                    isPhoto
+                      ? tr("orgx.photoPosition")
+                      : tr("orgx.logoPosition")
+                  }
                   onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove}
                   onPointerUp={endDrag}

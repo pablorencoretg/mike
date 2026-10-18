@@ -48,12 +48,12 @@ export const REASONING_LEVELS = [
 export type ReasoningLevel = (typeof REASONING_LEVELS)[number];
 
 const REASONING_LEVEL_LABELS: Record<ReasoningLevel, string> = {
-  none: "None",
-  low: "Low",
-  medium: "Medium",
-  high: "High",
+  none: tr("shared.ui.modelToggleUI.none"),
+  low: tr("shared.ui.modelToggleUI.low"),
+  medium: tr("shared.ui.modelToggleUI.medium"),
+  high: tr("shared.ui.modelToggleUI.high"),
   xhigh: "XHigh",
-  max: "Max",
+  max: tr("shared.ui.modelToggleUI.max"),
 };
 
 const STANDARD_REASONING_LEVELS: readonly ReasoningLevel[] =

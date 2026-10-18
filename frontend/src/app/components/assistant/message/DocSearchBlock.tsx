@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { DocumentSearchEvent } from "@mike/contracts";
 import { EventBlock } from "./EventBlocks";
 import { EventDisclosureButton } from "./EventDisclosure";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 /** A document search uses the timeline's disclosure and reveals only its match count. */
 export function DocSearchBlock({ event, isStreaming, showConnector }: {
@@ -12,9 +12,9 @@ export function DocSearchBlock({ event, isStreaming, showConnector }: {
 }) {
     const [open, setOpen] = useState(false);
     const scope = new Map([
-        ["project", "project documents"], ["library", "the document library"],
-        ["templates", "the template library"], ["document", "this document"],
-    ]).get(event.scope) ?? "documents";
+        ["project", tr("x.scopeProject")], ["library", tr("x.scopeLibrary")],
+        ["templates", tr("x.scopeTemplates")], ["document", tr("x.scopeDocument")],
+    ]).get(event.scope) ?? tr("x.scopeDocuments");
     const count = event.match_count ?? 0;
 
     return (
@@ -30,7 +30,7 @@ export function DocSearchBlock({ event, isStreaming, showConnector }: {
             />
             {open && !isStreaming && (
                 <div className="mt-2">
-                    {event.error ?? `${count} ${count === 1 ? "match" : "matches"}`}
+                    {event.error ?? trn(count, "x.matchOne", "x.matchOther")}
                 </div>
             )}
         </EventBlock>

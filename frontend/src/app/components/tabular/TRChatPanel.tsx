@@ -2363,11 +2363,13 @@ export function TRChatPanel({
             <ApiKeyMissingPopup
                 open={rejectedApiKey !== null}
                 title={tr("tabular.tRChatPanel.apiKeyRejected")}
-                message={`${
+                message={
                     rejectedApiKey?.provider
-                        ? `The ${providerLabel(rejectedApiKey.provider)} API key`
-                        : "That API key"
-                } was rejected. If it is your own key, check it in Settings; otherwise contact your administrator.`}
+                        ? tr("x.apiKeyRejectedNamed", {
+                              provider: providerLabel(rejectedApiKey.provider),
+                          })
+                        : tr("x.apiKeyRejectedAnon")
+                }
                 onClose={() => setRejectedApiKey(null)}
             />
         </div>

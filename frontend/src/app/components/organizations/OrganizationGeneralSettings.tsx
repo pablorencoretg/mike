@@ -448,7 +448,9 @@ export function OrganizationGeneralSettings() {
       ) : null}
       <ConfirmPopup
         open={pending === "delete"}
-        title={`Delete ${org?.name ?? "this organization"}?`}
+        title={tr("orgx.deleteNamed", {
+          name: org?.name ?? tr("orgx.thisOrganization"),
+        })}
         message={tr("organizations.organizationGeneralSettings.removesAccessOrganizationAllMembers")}
         confirmLabel={tr("organizations.organizationGeneralSettings.delete")}
         confirmVariant="danger"

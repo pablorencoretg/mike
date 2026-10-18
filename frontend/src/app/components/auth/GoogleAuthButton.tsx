@@ -13,10 +13,10 @@ import { tr } from "@/shared/i18n/runtime";
 
 const GOOGLE_ERROR_MESSAGES = {
     provider_disabled:
-        "Google sign-in is turned off for this workspace. Use your email and password instead.",
+        tr("auth.googleAuthButton.googleSignTurnedOffWorkspace"),
     oauth_provider_not_supported:
-        "Google sign-in is turned off for this workspace. Use your email and password instead.",
-    over_request_rate_limit: "Too many attempts. Wait a moment and try again.",
+        tr("auth.googleAuthButton.googleSignTurnedOffWorkspace"),
+    over_request_rate_limit: tr("auth.googleAuthButton.tooManyAttemptsWaitMoment"),
 } as const;
 
 interface GoogleAuthButtonProps {

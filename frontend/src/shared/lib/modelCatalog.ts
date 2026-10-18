@@ -627,19 +627,19 @@ export function noModelsReason(
 
 export const NO_MODELS_MESSAGES: Record<NoModelsReason, string> = {
   "router-models":
-    "Your router is connected, but it has no saved models. Open your provider in Bring Your Own Keys and add a model under Model Selections.",
+    tr("shared.lib.modelCatalog.routerConnectedButHasNo"),
   "providers-disabled":
-    "Your saved API keys are all turned off. Turn a provider back on in Bring Your Own Keys to select a model.",
+    tr("shared.lib.modelCatalog.savedApiKeysAllTurned"),
   "api-keys":
-    "Add an API key in Bring Your Own Keys before selecting a model.",
+    tr("shared.lib.modelCatalog.addApiKeyBringOwn"),
   "org-router-models":
-    "Your organization has not added any models for its provider yet. Ask an organization admin to add them in Organization.",
+    tr("shared.lib.modelCatalog.organizationHasNotAddedAny"),
   "org-providers-disabled":
-    "Your organization has turned its model providers off. Ask an organization admin to turn one back on in Organization.",
+    tr("shared.lib.modelCatalog.organizationHasTurnedItsModel"),
   "org-api-keys":
-    "Your organization has not set up a model provider yet. Ask an organization admin to add one in Organization.",
+    tr("shared.lib.modelCatalog.organizationHasNotSetUp"),
   "org-api-keys-or-own":
-    "Your organization has not set up a model provider yet. Ask an organization admin to add one in Organization, or add your own API key in Bring Your Own Keys.",
+    tr("shared.lib.modelCatalog.organizationHasNotSetUp2"),
 };
 
 /** Whether the fix for an empty picker sits with the organization's admins. */

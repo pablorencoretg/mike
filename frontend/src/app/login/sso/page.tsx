@@ -25,9 +25,9 @@ import { tr } from "@/shared/i18n/runtime";
 /** The shared auth table with this screen's deltas: the address asked for
  *  here is a work address, so "valid email" is not specific enough. */
 const SSO_ERROR_MESSAGES = authMessages({
-    invalid_request: "Enter a valid company email address.",
-    validation_failed: "Enter a valid company email address.",
-    email_address_invalid: "Enter a valid company email address.",
+    invalid_request: tr("app.login.sso.page.enterValidCompanyEmailAddress"),
+    validation_failed: tr("app.login.sso.page.enterValidCompanyEmailAddress"),
+    email_address_invalid: tr("app.login.sso.page.enterValidCompanyEmailAddress"),
 });
 
 export default function SsoLoginPage() {

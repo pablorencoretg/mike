@@ -38,11 +38,11 @@ function localSignupError(message: string): UserFacingError {
  * still says what actually happened.
  */
 const SIGNUP_ERROR_MESSAGES = authMessages({
-    validation_failed: "Check your email address and password and try again.",
-    invalid_request: "Check your email address and password and try again.",
+    validation_failed: tr("app.signup.page.checkEmailAddressPasswordTry"),
+    invalid_request: tr("app.signup.page.checkEmailAddressPasswordTry"),
     over_email_send_rate_limit:
-        "Too many signup emails have been requested. Wait a few minutes and try again.",
-    request_timeout: "The signup request timed out. Try again.",
+        tr("app.signup.page.tooManySignupEmailsHave"),
+    request_timeout: tr("app.signup.page.signupRequestTimedOutTry"),
 });
 
 /** Classify a signup failure into text a person can act on. */

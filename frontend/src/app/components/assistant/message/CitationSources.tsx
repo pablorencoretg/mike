@@ -112,7 +112,7 @@ export function buildCitationAppendix(citations: Citation[]) {
     });
     const textLines = [
         "",
-        "Citations",
+        tr("x.citationsHeading"),
         ...entries.map((entry) => {
             const quote = entry.quote ? ` "${entry.quote}"` : "";
             return `${entry.number} ${ensureTerminalPeriod(entry.label)}${quote}`;
@@ -120,7 +120,7 @@ export function buildCitationAppendix(citations: Citation[]) {
     ];
     const html = [
         `<section class="copied-citations">`,
-        `<h3>Citations</h3>`,
+        `<h3>${escapeHtmlText(tr("x.citationsHeading"))}</h3>`,
         ...entries.map((entry) => {
             const label = escapeHtmlText(ensureTerminalPeriod(entry.label));
             const quote = entry.quote

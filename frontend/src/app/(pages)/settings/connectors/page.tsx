@@ -63,17 +63,17 @@ import { tr } from "@/shared/i18n/runtime";
 
 /** What the user was doing, for "Couldn't ..." and honest retry text. */
 const CONNECTOR_ACTION_LABELS = {
-  create: "add this connector",
-  save: "save this connector",
-  "clear-token": "clear the stored token",
-  delete: "delete this connector",
-  refresh: "refresh this connector",
-  "connector-enabled": "change this connector",
-  "tool-enabled": "change this tool",
-  "google-add": "add this connector",
-  "google-update": "update this connector",
-  "write-approval": "change write approval for this connector",
-  "read-only": "change this connector's read-only setting",
+  create: tr("pages.settings.connectors.page.addConnector2"),
+  save: tr("pages.settings.connectors.page.saveConnector"),
+  "clear-token": tr("pages.settings.connectors.page.clearStoredToken"),
+  delete: tr("pages.settings.connectors.page.deleteConnector"),
+  refresh: tr("pages.settings.connectors.page.refreshConnector"),
+  "connector-enabled": tr("pages.settings.connectors.page.changeConnector"),
+  "tool-enabled": tr("pages.settings.connectors.page.changeTool"),
+  "google-add": tr("pages.settings.connectors.page.addConnector2"),
+  "google-update": tr("pages.settings.connectors.page.updateConnector"),
+  "write-approval": tr("pages.settings.connectors.page.changeWriteApprovalConnector"),
+  "read-only": tr("pages.settings.connectors.page.changeConnectorSReadOnly"),
 } as const;
 
 /**

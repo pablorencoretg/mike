@@ -841,13 +841,11 @@ function PeopleTable({
           <p className="text-sm text-gray-400">
             {search.trim()
               ? tr("organizations.organizationMembers.noPeopleMatchSearch")
-              : `This organization has no ${
-                  roleFilter === "owner"
-                    ? "owners"
-                    : roleFilter === "admin"
-                      ? "admins"
-                      : "ordinary members"
-                }.`}
+              : roleFilter === "owner"
+                ? tr("orgx.noOwners")
+                : roleFilter === "admin"
+                  ? tr("orgx.noAdmins")
+                  : tr("orgx.noOrdinary")}
           </p>
         </TableEmptyState>
       ) : (
@@ -883,7 +881,7 @@ function PeopleTable({
                   </span>
                   {member.user_id === currentUserId ? (
                     <span className="ml-1 text-[10px] text-gray-400">
-                      (You)
+                      {tr("orgx.you")}
                     </span>
                   ) : null}
                 </TablePrimaryCell>

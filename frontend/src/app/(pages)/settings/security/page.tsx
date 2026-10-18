@@ -48,10 +48,10 @@ const MFA_ERROR_MESSAGES = authMessages({
   // On this page a one-time code is always an authenticator code, and a
   // step-up is about the setting being changed, not about signing in.
   otp_expired:
-    "That code expired. Enter the current six-digit code from your authenticator app.",
-  insufficient_aal: "Verify your identity again before changing this setting.",
+    tr("pages.settings.security.page.codeExpiredEnterCurrentSix"),
+  insufficient_aal: tr("pages.settings.security.page.verifyIdentityAgainBeforeChanging"),
   reauthentication_needed:
-    "Verify your identity again before changing this setting.",
+    tr("pages.settings.security.page.verifyIdentityAgainBeforeChanging"),
 });
 
 type MfaFactor = {

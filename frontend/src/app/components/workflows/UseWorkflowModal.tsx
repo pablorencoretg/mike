@@ -314,8 +314,12 @@ function UseWorkflowModalForWorkspace({ workflow, onClose, skipSelect = false }:
                       {tr("workflows.useWorkflowModal.workflows")}
                   </button>,
                   wf.metadata.title,
-                  wf.metadata.type === "assistant" ? "New Chat" : "New Review",
-                  screen === "details" ? "Details" : "Attach Documents",
+                  wf.metadata.type === "assistant"
+                      ? tr("x.newChat")
+                      : tr("x.newReview"),
+                  screen === "details"
+                      ? tr("x.details")
+                      : tr("x.attachDocuments"),
               ];
 
     const selectPageAction = () => {

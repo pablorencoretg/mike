@@ -136,13 +136,13 @@ function QuickActionsModalForWorkspace({
 
   const breadcrumbs =
     screen === "list"
-      ? ["Assistant", "Quick Actions"]
+      ? [tr("nav.assistant"), tr("x.quickActions")]
       : [
-          "Assistant",
-          "Quick Actions",
+          tr("nav.assistant"),
+          tr("x.quickActions"),
           screen === "create"
-            ? "New Quick Action"
-            : (selected?.name ?? "Quick Action"),
+            ? tr("x.newQuickAction")
+            : (selected?.name ?? tr("x.quickAction")),
         ];
 
   return (

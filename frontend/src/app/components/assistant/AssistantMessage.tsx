@@ -38,7 +38,7 @@ import {
     WorkflowAppliedBlock,
     type CourtListenerBlockItem,
 } from "./message/EventBlocks";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 interface Props {
     events?: AssistantEvent[];
@@ -623,11 +623,16 @@ export function AssistantMessage({
             const count = event.result_count ?? 0;
             const detail = event.isStreaming
                 ? event.query
-                    ? `for "${event.query}"`
+                    ? tr("cl.forQuery", { query: event.query })
                     : undefined
                 : event.error
                   ? event.error
-                  : `${count} ${count === 1 ? "result" : "results"}${event.query ? ` for "${event.query}"` : ""}`;
+                  : event.query
+                    ? tr("cl.withQuery", {
+                          results: trn(count, "cl.resultOne", "cl.resultOther"),
+                          query: event.query,
+                      })
+                    : trn(count, "cl.resultOne", "cl.resultOther");
             return (
                 <CourtListenerBlock
                     key={globalIdx}
@@ -647,9 +652,7 @@ export function AssistantMessage({
         }
         if (event.type === "courtlistener_get_cases") {
             const caseCount = event.case_count ?? event.cluster_ids.length;
-            const displayLabel = `${caseCount} ${
-                caseCount === 1 ? "case" : "cases"
-            }`;
+            const displayLabel = trn(caseCount, "cl.caseOne", "cl.caseOther");
             const detail = event.error ? event.error : undefined;
             const items: CourtListenerBlockItem[] =
                 event.cases?.map((caseItem) => ({
@@ -700,14 +703,19 @@ export function AssistantMessage({
                     ),
                 );
                 const caseCount = caseIds.size || searches.length;
-                const searchLabel = `${searches.length} ${
-                    searches.length === 1 ? "search" : "searches"
-                } in ${caseCount} ${caseCount === 1 ? "case" : "cases"}`;
+                const searchLabel = tr("cl.searchesInCases", {
+                    searches: trn(
+                        searches.length,
+                        "cl.searchOne",
+                        "cl.searchOther",
+                    ),
+                    cases: trn(caseCount, "cl.caseOne", "cl.caseOther"),
+                });
                 const detail = event.isStreaming
                     ? undefined
                     : event.error
                       ? event.error
-                      : `(${matches} ${matches === 1 ? "match" : "matches"})`;
+                      : `(${trn(matches, "x.matchOne", "x.matchOther")})`;
                 const items: CourtListenerBlockItem[] = searches.map(
                     (search) => ({
                         caseName: search.case_name ?? null,
@@ -743,14 +751,25 @@ export function AssistantMessage({
             const matches = event.total_matches ?? 0;
             const caseLabel =
                 [event.case_name, event.citation].filter(Boolean).join(", ") ||
-                (event.cluster_id ? `cluster ${event.cluster_id}` : "case");
+                (event.cluster_id
+                    ? tr("cl.cluster", { id: event.cluster_id })
+                    : tr("cl.case"));
             const detail = event.isStreaming
                 ? event.query
-                    ? `for "${event.query}" in ${caseLabel}`
+                    ? tr("cl.forQueryIn", { query: event.query, caseLabel })
                     : caseLabel
                 : event.error
                   ? event.error
-                  : `${matches} ${matches === 1 ? "match" : "matches"}${event.query ? ` for "${event.query}"` : ""} in ${caseLabel}`;
+                  : event.query
+                    ? tr("cl.matchesForIn", {
+                          matches: trn(matches, "x.matchOne", "x.matchOther"),
+                          query: event.query,
+                          caseLabel,
+                      })
+                    : tr("cl.matchesIn", {
+                          matches: trn(matches, "x.matchOne", "x.matchOther"),
+                          caseLabel,
+                      });
             return (
                 <CourtListenerBlock
                     key={globalIdx}
@@ -800,12 +819,16 @@ export function AssistantMessage({
         if (event.type === "courtlistener_verify_citations") {
             const citations = event.citation_count ?? 0;
             const matches = event.match_count ?? 0;
-            const citationLabel = `${citations} ${citations === 1 ? "citation" : "citations"}`;
+            const citationLabel = trn(
+                citations,
+                "cl.citationOne",
+                "cl.citationOther",
+            );
             const detail = event.isStreaming
                 ? undefined
                 : event.error
                   ? event.error
-                  : `(${matches} ${matches === 1 ? "match" : "matches"})`;
+                  : `(${trn(matches, "x.matchOne", "x.matchOther")})`;
             // Adjacent `case_citation` events are emitted between the start
             // and final verify_citations events (one per matched citation) —
             // collect them so the user can expand to see resolved cases.

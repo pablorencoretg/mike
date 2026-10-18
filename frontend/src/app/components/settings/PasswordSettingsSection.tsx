@@ -36,7 +36,7 @@ import { tr } from "@/shared/i18n/runtime";
 const PASSWORD_ERROR_MESSAGES = authMessages({
   validation_failed: PASSWORD_LENGTH_MESSAGE,
   invalid_request: PASSWORD_LENGTH_MESSAGE,
-  reauthentication_needed: "Log in again before setting a password.",
+  reauthentication_needed: tr("settings.passwordSettingsSection.logAgainBeforeSettingPassword"),
 });
 
 export function PasswordSettingsSection() {

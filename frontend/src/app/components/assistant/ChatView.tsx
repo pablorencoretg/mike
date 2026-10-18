@@ -1317,11 +1317,13 @@ export function AssistantChatColumn({
             <ApiKeyMissingPopup
                 open={rejectedApiKey !== null}
                 title={tr("assistant.chatView.apiKeyRejected")}
-                message={`${
+                message={
                     rejectedKeyProvider
-                        ? `The ${providerLabel(rejectedKeyProvider)} API key`
-                        : "That API key"
-                } was rejected. If it is your own key, check it in Settings; otherwise contact your administrator.`}
+                        ? tr("x.apiKeyRejectedNamed", {
+                              provider: providerLabel(rejectedKeyProvider),
+                          })
+                        : tr("x.apiKeyRejectedAnon")
+                }
                 onClose={() => onDismissInvalidApiKey?.()}
             />
             {leaveChatId && leaveChatId === permissionChat?.id && <LeaveChatPopup
@@ -1337,7 +1339,7 @@ export function AssistantChatColumn({
                 open={renameOpen}
                 breadcrumbs={[tr("assistant.chatView.assistant"), tr("assistant.chatView.renameChat2")]}
                 label={tr("assistant.chatView.chatTitle")}
-                initialValue={activeChat?.title?.trim() || "Untitled chat"}
+                initialValue={activeChat?.title?.trim() || tr("x.untitledChat")}
                 saving={renaming}
                 onClose={() => {
                     if (!renaming) setRenameOpen(false);

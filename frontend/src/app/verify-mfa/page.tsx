@@ -27,9 +27,9 @@ const MFA_ERROR_MESSAGES = authMessages({
     // Only here is a missing authenticator a lock-out rather than a
     // settings row that disappeared.
     mfa_factor_not_found:
-        "This authenticator is no longer registered. Contact support to regain access.",
-    validation_failed: "Enter the six-digit code from your authenticator app.",
-    invalid_request: "Enter the six-digit code from your authenticator app.",
+        tr("app.verifyMfa.page.authenticatorNoLongerRegisteredContact"),
+    validation_failed: tr("app.verifyMfa.page.enterSixDigitCodeFrom2"),
+    invalid_request: tr("app.verifyMfa.page.enterSixDigitCodeFrom2"),
 });
 
 type MfaFactor = {

@@ -46,9 +46,9 @@ interface EmailWarning {
 // differs here, because a validation failure on this screen can only mean
 // the address itself.
 const EMAIL_ERROR_MESSAGES = authMessages({
-  validation_failed: "Enter a valid email address.",
-  invalid_request: "Enter a valid email address.",
-  reauthentication_needed: "Log in again before changing your email.",
+  validation_failed: tr("pages.settings.page.enterValidEmailAddress"),
+  invalid_request: tr("pages.settings.page.enterValidEmailAddress"),
+  reauthentication_needed: tr("pages.settings.page.logAgainBeforeChangingEmail"),
 });
 
 const EMAIL_TAKEN_CODES = new Set(["email_exists", "user_already_exists"]);

@@ -514,11 +514,11 @@ function NewTRModalForWorkspace({
     const breadcrumbs =
         isProjectMode && projectName
             ? [
-                  "Projects",
+                  tr("nav.projects"),
                   `${projectName}${projectCmNumber ? ` (#${projectCmNumber})` : ""}`,
-                  "New Tabular Review",
+                  tr("x.newTabularReview"),
               ]
-            : ["Tabular Reviews", "New Tabular Review"];
+            : [tr("nav.tabularReview"), tr("x.newTabularReview")];
 
     return (
         <Modal

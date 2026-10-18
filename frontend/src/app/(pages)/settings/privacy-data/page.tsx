@@ -86,10 +86,10 @@ const DELETE_DATA_COPY: Record<
 
 /** Imperative, lower case: "Couldn't delete your chats". */
 const DELETE_ACTION_LABELS: Record<DeleteDataAction, string> = {
-  chats: "delete your chats",
-  "tabular-reviews": "delete your tabular reviews",
-  projects: "delete your projects",
-  memory: "delete your memory",
+  chats: tr("pages.settings.privacyData.page.deleteChats"),
+  "tabular-reviews": tr("pages.settings.privacyData.page.deleteTabularReviews"),
+  projects: tr("pages.settings.privacyData.page.deleteProjects"),
+  memory: tr("pages.settings.privacyData.page.deleteMemory"),
 };
 
 export default function PrivacyDataPage() {

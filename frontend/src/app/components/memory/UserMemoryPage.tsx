@@ -62,8 +62,8 @@ function WorkspaceMemory({
 }) {
   // What this memory is called, wherever the page names it.
   const memoryName = organizationName
-    ? `Memory in ${organizationName}`
-    : "Personal memory";
+    ? tr("mem.memoryIn", { organizationName })
+    : tr("mem.personalMemory");
   const [settingsMutation, setSettingsMutation] = useState<
     "enable" | "disable" | null
   >(null);
@@ -293,7 +293,9 @@ function WorkspaceMemory({
             ? tr("memory.userMemoryPage.turnOffDeleteMemory", { organizationName })
             : tr("memory.userMemoryPage.turnOffDeletePersonalMemory")
         }
-        message={`This will delete the existing memory.md file for ${organizationName ?? "Personal"}${dirty ? " and your unsaved draft" : ""}, cancel pending memory updates, and stop future memory updates here until you turn it on again. Your memory in other workspaces is not affected.`}
+        message={tr(dirty ? "mem.disableMessageDirty" : "mem.disableMessage", {
+          workspace: organizationName ?? "Personal",
+        })}
         confirmLabel={tr("memory.userMemoryPage.disable")}
         confirmVariant="danger"
         confirmStatus={settingsMutation ? "loading" : "idle"}

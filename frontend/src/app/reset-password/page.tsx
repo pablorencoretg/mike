@@ -37,13 +37,13 @@ import { tr } from "@/shared/i18n/runtime";
 const RESET_ERROR_MESSAGES = authMessages({
     validation_failed: PASSWORD_LENGTH_MESSAGE,
     invalid_request: PASSWORD_LENGTH_MESSAGE,
-    otp_expired: "This password-reset link has expired. Request a new one.",
-    session_expired: "This password-reset link has expired. Request a new one.",
+    otp_expired: tr("app.resetPassword.page.passwordResetLinkHasExpired"),
+    session_expired: tr("app.resetPassword.page.passwordResetLinkHasExpired"),
     session_not_found:
-        "This password-reset link is invalid or has expired. Request a new one.",
+        tr("app.resetPassword.page.passwordResetLinkInvalidHas2"),
     cookie_session_required:
-        "This password-reset link is invalid or has expired. Request a new one.",
-    reauthentication_needed: "Log in again before changing your password.",
+        tr("app.resetPassword.page.passwordResetLinkInvalidHas2"),
+    reauthentication_needed: tr("app.resetPassword.page.logAgainBeforeChangingPassword"),
 });
 
 function ResetPasswordContent() {

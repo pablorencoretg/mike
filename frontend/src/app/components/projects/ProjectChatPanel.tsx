@@ -1011,11 +1011,13 @@ export function ProjectChatPanel({
             <ApiKeyMissingPopup
                 open={rejectedApiKey !== null}
                 title={tr("projects.projectChatPanel.apiKeyRejected")}
-                message={`${
+                message={
                     rejectedKeyProvider
-                        ? `The ${providerLabel(rejectedKeyProvider)} API key`
-                        : "That API key"
-                } was rejected. If it is your own key, check it in Settings; otherwise contact your administrator.`}
+                        ? tr("x.apiKeyRejectedNamed", {
+                              provider: providerLabel(rejectedKeyProvider),
+                          })
+                        : tr("x.apiKeyRejectedAnon")
+                }
                 onClose={dismissInvalidApiKey}
             />
         </>

@@ -82,11 +82,11 @@ export function SidebarChatItem({
     const chatTitle = chat.title ?? tr("shared.sidebarChatItem.untitledChat");
     const rowLabel = [
         projectName ? `${projectName}: ${chatTitle}` : chatTitle,
-        chat.is_owner === false ? "(Shared)" : null,
+        chat.is_owner === false ? tr("x.shared") : null,
         responseStatus === "loading"
-            ? "(Response loading)"
+            ? tr("x.responseLoading")
             : responseStatus === "complete"
-              ? "(Response complete)"
+              ? tr("x.responseComplete")
               : null,
     ]
         .filter(Boolean)
@@ -244,7 +244,9 @@ export function SidebarChatItem({
                     <DropdownTrigger asChild>
                         <button
                             type="button"
-                            aria-label={`Actions for ${chat.title ?? "Untitled chat"}`}
+                            aria-label={tr("x.actionsFor", {
+                                name: chat.title ?? tr("x.untitledChat"),
+                            })}
                             className={`flex h-6 w-0 shrink-0 items-center justify-center overflow-hidden rounded-md bg-transparent text-gray-500 opacity-0 transition-opacity hover:text-gray-900 ${
                                 actionsRevealed
                                     ? "w-6 opacity-100"
@@ -309,7 +311,7 @@ export function SidebarChatItem({
                 open={renameOpen}
                 breadcrumbs={[tr("shared.sidebarChatItem.assistant"), tr("shared.sidebarChatItem.renameChat")]}
                 label={tr("shared.sidebarChatItem.chatTitle")}
-                initialValue={chat.title?.trim() || "Untitled chat"}
+                initialValue={chat.title?.trim() || tr("x.untitledChat")}
                 saving={renaming}
                 onClose={() => {
                     if (!renaming) setRenameOpen(false);

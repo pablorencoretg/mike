@@ -45,10 +45,10 @@ const LOGIN_ERROR_MESSAGES = authMessages({
     // anyone test which addresses are registered.
     user_not_found: AUTH_ERROR_MESSAGES.invalid_credentials,
     // Here the account exists; it is this sign-in route that is closed.
-    signup_disabled: "This account can't be used to log in.",
-    validation_failed: "Enter your email address and password.",
-    invalid_request: "Enter your email address and password.",
-    request_timeout: "The login request timed out. Try again.",
+    signup_disabled: tr("app.login.page.accountCanTUsedLog"),
+    validation_failed: tr("app.login.page.enterEmailAddressPassword"),
+    invalid_request: tr("app.login.page.enterEmailAddressPassword"),
+    request_timeout: tr("app.login.page.loginRequestTimedOutTry"),
 });
 
 /** Classify a login failure into text a person can act on. */

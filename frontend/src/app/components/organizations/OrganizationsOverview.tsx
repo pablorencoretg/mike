@@ -260,14 +260,16 @@ export function OrganizationsOverview() {
           ) : (
             <div className="grid grid-cols-1 gap-3">
               {invitations.map((invitation) => {
-                const name = invitation.org_name ?? "An organization";
+                const name = invitation.org_name ?? tr("orgx.anOrganization");
                 const answering = answeringId === invitation.id;
                 return (
                   <ConnectorCard
                     key={invitation.id}
                     kind="invitation"
                     name={name}
-                    detail={`Invited you as ${ORG_ROLE_LABELS[invitation.role]}`}
+                    detail={tr("orgx.invitedYouAs", {
+                      role: ORG_ROLE_LABELS[invitation.role],
+                    })}
                     icon={<OrganizationSkeuoIcon className="h-6 w-6" />}
                     action={
                       <span className="flex items-center gap-2">

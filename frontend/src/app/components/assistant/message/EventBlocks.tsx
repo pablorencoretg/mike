@@ -19,7 +19,7 @@ import {
     DocReadBlockUI,
 } from "@/shared/ui/DocumentEventBlocksUI";
 import { RESPONSE_GLASS_SURFACE, withoutMarkdownNode } from "./messageStyles";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 const THINKING_PHRASES = [
     tr("thinking.thinking"),
@@ -595,9 +595,9 @@ export function AskInputsBlock({
                             if (!itemResponse) return null;
                             if (itemResponse.kind === "approval")
                                 return itemResponse.decision === "approve"
-                                    ? "Approved"
-                                    : "Rejected";
-                            if (itemResponse.skipped) return "Skipped";
+                                    ? tr("x.approved")
+                                    : tr("x.rejected");
+                            if (itemResponse.skipped) return tr("x.skipped");
                             if (itemResponse.kind === "multi_choice") {
                                 return itemResponse.answers?.join(", ") ?? "";
                             }
@@ -695,17 +695,16 @@ export function CourtListenerBlock({
                         const label = [item.caseName, item.citation]
                             .filter(Boolean)
                             .join(", ");
-                        const primary = label || item.url || "Unknown case";
+                        const primary =
+                            label || item.url || tr("x.unknownCase");
                         const searchText = item.query
-                            ? `Searched for "${item.query}" in ${primary}${
-                                  typeof item.totalMatches === "number"
-                                      ? ` (${item.totalMatches} ${
-                                            item.totalMatches === 1
-                                                ? "match"
-                                                : "matches"
-                                        })`
-                                      : ""
-                              }`
+                            ? tr("x.searchedIn", {
+                                  query: item.query,
+                                  primary,
+                              }) +
+                              (typeof item.totalMatches === "number"
+                                  ? ` (${trn(item.totalMatches, "x.matchOne", "x.matchOther")})`
+                                  : "")
                             : null;
                         return (
                             <li key={idx}>

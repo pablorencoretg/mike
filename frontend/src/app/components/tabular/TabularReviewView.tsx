@@ -2166,7 +2166,7 @@ export function TRView({ reviewId, projectId }: Props) {
                                     ? ` (#${project.cm_number})`
                                     : ""),
                             tr("tabular.tabularReviewView.tabularReviews"),
-                            ...(review ? [review.title || "Untitled Review"] : []),
+                            ...(review ? [review.title || tr("x.untitledReview")] : []),
                             tr("tabular.tabularReviewView.addDocuments"),
                         ]}
                         uploadStateId={`tabular-review:${review?.id ?? "new"}:project`}
@@ -2183,7 +2183,7 @@ export function TRView({ reviewId, projectId }: Props) {
                         onSelect={(docs: Document[]) => handleAddDocuments(docs)}
                         breadcrumb={[
                             tr("tabular.tabularReviewView.tabularReviews"),
-                            ...(review ? [review.title || "Untitled Review"] : []),
+                            ...(review ? [review.title || tr("x.untitledReview")] : []),
                             tr("tabular.tabularReviewView.addDocuments"),
                         ]}
                         uploadStateId={`tabular-review:${review?.id ?? "new"}:library`}
@@ -2254,7 +2254,7 @@ export function TRView({ reviewId, projectId }: Props) {
                 breadcrumbs={[
                     ...(project
                         ? [
-                              "Projects",
+                              tr("nav.projects"),
                               project.name +
                                   (project.cm_number
                                       ? ` (#${project.cm_number})`
@@ -2310,7 +2310,11 @@ export function TRView({ reviewId, projectId }: Props) {
                 }
                 message={
                     apiKeyWarning?.kind === "rejected"
-                        ? `The ${apiKeyWarning.provider ? providerLabel(apiKeyWarning.provider) : "model provider"} API key was rejected. If you added your own key, check it in Settings → Bring Your Own Keys; otherwise contact your administrator.`
+                        ? tr("x.apiKeyRejectedReview", {
+                              provider: apiKeyWarning.provider
+                                  ? providerLabel(apiKeyWarning.provider)
+                                  : tr("x.modelProvider"),
+                          })
                         : undefined
                 }
                 onClose={() => setApiKeyWarning(null)}

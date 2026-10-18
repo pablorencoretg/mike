@@ -5,7 +5,7 @@ import { RESPONSE_GLASS_SURFACE } from "./messageStyles";
 import { resolveDocumentEdit } from "@/app/lib/mikeApi";
 import type { EditAnnotation } from "../../shared/types";
 import { applyOptimisticResolution } from "../EditCard";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 /**
  * Card rendered above the per-edit EditCards when a message produced
@@ -225,7 +225,11 @@ export function EditCardsSection({
                 : `${pending.length} tracked ${pending.length === 1 ? "change" : "changes"}`
             : docCount > 1
               ? tr("assistant.message.editCardsSection.resolvedTrackedChangesAcrossDocuments", { resolvedCount, docCount })
-              : `${resolvedCount} resolved tracked ${resolvedCount === 1 ? "change" : "changes"}`;
+              : trn(
+                    resolvedCount,
+                    "x.resolvedChangeOne",
+                    "x.resolvedChangeOther",
+                );
 
     return (
         <EditCardsSectionUI

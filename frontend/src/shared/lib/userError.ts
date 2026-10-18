@@ -83,20 +83,20 @@ export class UserVisibleError extends Error {
 export const GENERIC_FAILURE_MESSAGE = tr("messages.genericFailure");
 
 const KIND_TITLES: Record<UserErrorKind, string> = {
-    offline: "You're offline",
-    network: "Connection problem",
-    timeout: "Request timed out",
-    aborted: "Cancelled",
-    unauthenticated: "Sign in required",
-    forbidden: "Permission denied",
-    not_found: "Not found",
-    conflict: "Conflict",
-    validation: "Check your input",
-    payload_too_large: "Too large",
-    rate_limited: "Slow down",
-    unavailable: "Service unavailable",
-    server: "Something went wrong",
-    unknown: "Something went wrong",
+    offline: tr("shared.lib.userError.reOffline"),
+    network: tr("shared.lib.userError.connectionProblem"),
+    timeout: tr("shared.lib.userError.requestTimedOut"),
+    aborted: tr("shared.lib.userError.cancelled"),
+    unauthenticated: tr("shared.lib.userError.signRequired"),
+    forbidden: tr("shared.lib.userError.permissionDenied"),
+    not_found: tr("shared.lib.userError.notFound"),
+    conflict: tr("shared.lib.userError.conflict"),
+    validation: tr("shared.lib.userError.checkInput"),
+    payload_too_large: tr("shared.lib.userError.tooLarge"),
+    rate_limited: tr("shared.lib.userError.slowDown"),
+    unavailable: tr("shared.lib.userError.serviceUnavailable"),
+    server: tr("shared.lib.userError.somethingWentWrong"),
+    unknown: tr("shared.lib.userError.somethingWentWrong"),
 };
 
 /**
@@ -123,19 +123,19 @@ export function networkMessage(origin?: string): string {
 export const SERVER_FAILURE_MESSAGE = tr("messages.serverFailure");
 
 const KIND_MESSAGES: Record<UserErrorKind, string> = {
-    offline: "Your device is offline. Check your connection and try again.",
+    offline: tr("shared.lib.userError.deviceOfflineCheckConnectionTry"),
     network: networkMessage(),
-    timeout: "The server took too long to respond. Try again.",
-    aborted: "The request was cancelled.",
-    unauthenticated: "Your session has expired. Sign in again to continue.",
-    forbidden: "You don't have permission to do this.",
-    not_found: "That item no longer exists or was moved.",
-    conflict: "This was changed somewhere else. Refresh and try again.",
-    validation: "Some of the information provided isn't valid.",
-    payload_too_large: "That's too large to upload.",
-    rate_limited: "Too many requests. Wait a moment and try again.",
+    timeout: tr("shared.lib.userError.serverTookTooLongRespond"),
+    aborted: tr("shared.lib.userError.requestWasCancelled"),
+    unauthenticated: tr("shared.lib.userError.sessionHasExpiredSignAgain"),
+    forbidden: tr("shared.lib.userError.donTHavePermissionDo"),
+    not_found: tr("shared.lib.userError.itemNoLongerExistsWas"),
+    conflict: tr("shared.lib.userError.wasChangedSomewhereElseRefresh"),
+    validation: tr("shared.lib.userError.someInformationProvidedIsnT"),
+    payload_too_large: tr("shared.lib.userError.sTooLargeUpload"),
+    rate_limited: tr("shared.lib.userError.tooManyRequestsWaitMoment"),
     unavailable:
-        "Mike is temporarily unavailable. Try again in a moment.",
+        tr("shared.lib.userError.mikeTemporarilyUnavailableTryAgain"),
     server: SERVER_FAILURE_MESSAGE,
     unknown: GENERIC_FAILURE_MESSAGE,
 };

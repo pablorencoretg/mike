@@ -138,7 +138,7 @@ import {
     type TableFilterOption,
     type TableSortDirection,
 } from "@/app/components/shared/TablePrimitive";
-import { tr } from "@/shared/i18n/runtime";
+import { tr, trn } from "@/shared/i18n/runtime";
 
 // Above this many documents the zip is built by a background export job
 // instead of inside the request: a small selection zips in well under a second
@@ -176,11 +176,11 @@ export interface DocTableQuery {
 }
 
 const SORT_KEY_LABELS: Record<DocumentSortKey, string> = {
-    name: "Name",
-    size: "Size",
-    version: "Version",
-    created: "Created",
-    updated: "Updated",
+    name: tr("documents.docTable.name"),
+    size: tr("documents.docTable.size"),
+    version: tr("documents.docTable.version"),
+    created: tr("documents.docTable.created"),
+    updated: tr("documents.docTable.updated"),
 };
 
 interface DocTableOperations {
@@ -3460,17 +3460,27 @@ export function DocTable({
         const failedNames = snapshot
             .filter((doc) => failedIds.includes(doc.id))
             .map((doc) => doc.filename);
-        const one = failedIds.length === 1;
-        const where =
-            targetFolderId === null
-                ? ` out of ${one ? "its folder" : "their folders"}`
-                : "";
+        const movingOut = targetFolderId === null;
         notifyPartialFailure(
-            `${failedIds.length} ${one ? "document" : "documents"} could not be moved${where}${
-                    failedNames.length > 0 ? `: ${failedNames.join(", ")}` : ""
-                }.`,
+            trn(
+                failedIds.length,
+                movingOut ? "docs.moveOutFailedOne" : "docs.moveFailedOne",
+                movingOut ? "docs.moveOutFailedOther" : "docs.moveFailedOther",
+                {
+                    names:
+                        failedNames.length > 0
+                            ? `: ${failedNames.join(", ")}`
+                            : "",
+                },
+            ),
             {
-                action: `move ${one ? "the document" : "those documents"}${where}`,
+                action: trn(
+                    failedIds.length,
+                    movingOut ? "docs.moveOutActionOne" : "docs.moveActionOne",
+                    movingOut
+                        ? "docs.moveOutActionOther"
+                        : "docs.moveActionOther",
+                ),
                 onRetry: () => {
                     setSelectedDocIds(failedIds);
                     void moveDocsToFolder(failedIds, targetFolderId);
@@ -3572,13 +3582,18 @@ export function DocTable({
                 .filter((doc) => failedIds.includes(doc.id))
                 .map((doc) => doc.filename);
             notifyPartialFailure(
-                `${failedCount} ${failedCount === 1 ? "document" : "documents"} could not be deleted${
+                trn(failedCount, "docs.deleteFailedOne", "docs.deleteFailedOther", {
+                    names:
                         failedNames.length > 0
                             ? `: ${failedNames.join(", ")}`
-                            : ""
-                    }. They are still in the list.`,
+                            : "",
+                }),
                 {
-                    action: `delete ${failedCount === 1 ? "the document" : "those documents"}`,
+                    action: trn(
+                        failedCount,
+                        "docs.deleteActionOne",
+                        "docs.deleteActionOther",
+                    ),
                     // Only the rows that survived, so a retry cannot delete
                     // anything twice.
                     dedupeKey: "bulk-delete-documents",
@@ -3673,13 +3688,23 @@ export function DocTable({
                 .filter((folder) => failedFolderRootIds.includes(folder.id))
                 .map((folder) => folder.name);
             notifyPartialFailure(
-                `${failedFolderRootIds.length} ${failedFolderRootIds.length === 1 ? "folder" : "folders"} could not be deleted${
-                        failedFolderNames.length > 0
-                            ? `: ${failedFolderNames.join(", ")}`
-                            : ""
-                    }. ${failedFolderRootIds.length === 1 ? "It is" : "They are"} still in the list and stay selected.`,
+                trn(
+                    failedFolderRootIds.length,
+                    "docs.folderDeleteFailedOne",
+                    "docs.folderDeleteFailedOther",
+                    {
+                        names:
+                            failedFolderNames.length > 0
+                                ? `: ${failedFolderNames.join(", ")}`
+                                : "",
+                    },
+                ),
                 {
-                    action: `delete ${failedFolderRootIds.length === 1 ? "the folder" : "those folders"}`,
+                    action: trn(
+                        failedFolderRootIds.length,
+                        "docs.folderDeleteActionOne",
+                        "docs.folderDeleteActionOther",
+                    ),
                     dedupeKey: "bulk-delete-folders",
                     // Retrying is the Delete button on the still-selected rows;
                     // re-running this handler here would also re-delete the
@@ -3884,7 +3909,7 @@ export function DocTable({
     const createdSortDirection = effectiveSort?.key === "created" ? effectiveSort.direction : null;
     const updatedSortDirection = effectiveSort?.key === "updated" ? effectiveSort.direction : null;
     const resetSortLabel = defaultSort
-        ? `Default (${SORT_KEY_LABELS[defaultSort.key]})`
+        ? tr("docs.defaultSort", { label: SORT_KEY_LABELS[defaultSort.key] })
         : tr("documents.docTable.defaultOrder");
     const nameFilterButton = enableHeaderFilters ? (
         <TableSortFilter

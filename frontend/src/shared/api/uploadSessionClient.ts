@@ -67,7 +67,7 @@ const MAX_UPLOAD_SESSION_BYTES = 2 * 1024 * 1024 * 1024;
  * the copy below, so a limit change cannot leave a stale number in the UI.
  */
 export const UPLOAD_LIMIT_MESSAGES: Record<string, string> = {
-    too_many_files: `You can upload at most ${MAX_UPLOAD_SESSION_FILES} files at a time.`,
+    too_many_files: tr("shared.api.uploadSessionClient.canUploadAtMostFiles", { MAX_UPLOAD_SESSION_FILES }),
     upload_file_too_large: `Each uploaded file must be ${Math.round(
         MAX_UPLOAD_FILE_BYTES / (1024 * 1024),
     )} MB or smaller.`,

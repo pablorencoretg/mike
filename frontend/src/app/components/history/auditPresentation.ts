@@ -77,7 +77,7 @@ export const ACTION_LABELS: Record<string, string> = {
 export const SURFACE_LABELS: Record<string, string> = {
   assistant: tr("audit.surfaces.assistant"),
   project: tr("audit.surfaces.project"),
-  word: "Word",
+  word: tr("history.auditPresentation.word"),
   tabular: tr("audit.surfaces.tabular"),
   workflows: tr("audit.surfaces.workflows"),
   account: tr("audit.surfaces.account"),
