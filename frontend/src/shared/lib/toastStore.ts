@@ -1,5 +1,6 @@
 /** Framework-independent notification store, usable by API clients and Node tests. */
 import type { ReactNode } from "react";
+import { tr } from "../i18n/runtime";
 
 export type ToastTone = "error" | "success" | "info";
 
@@ -21,7 +22,7 @@ export function retryToastAction(
     onFailure: (error: unknown) => void,
 ): ToastAction {
     return {
-        label: "Retry",
+        label: tr("shared.lib.toastStore.retry"),
         onClick: async () => {
             try {
                 await onRetry();

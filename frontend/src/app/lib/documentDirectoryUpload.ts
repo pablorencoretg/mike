@@ -1,3 +1,4 @@
+import { tr } from "@/shared/i18n/runtime";
 export type DocumentUploadEntry = {
     file: File;
     relativePath: string;
@@ -22,7 +23,7 @@ export function folderUploadProgressLabel(
     const uploadedCount = statuses.filter((status) =>
         ["uploaded", "processing", "completed"].includes(status),
     ).length;
-    return `${uploadedCount} of ${statuses.length} uploaded`;
+    return tr("app.lib.documentDirectoryUpload.uploaded", { uploadedCount, statusesCount: statuses.length });
 }
 
 export type DocumentUploadFolderPathResolution<TFolder> =

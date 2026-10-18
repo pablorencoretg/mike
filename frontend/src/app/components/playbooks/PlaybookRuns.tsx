@@ -32,6 +32,7 @@ import { modelDisplayName } from "@/shared/lib/modelCatalog";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { TextSlabUI } from "@/shared/ui/TextSlabUI";
 import { PlaybookPanels } from "./PlaybookPanels";
+import { tr } from "@/shared/i18n/runtime";
 
 const STATUS_LABEL: Record<string, string> = {
   unacceptable: "Unacceptable",
@@ -59,14 +60,22 @@ const FINDING_GROUPS: {
   statuses: PlaybookFinding["status"][];
 }[] = [
   {
-    title: "Issues",
+    get title() {
+        return tr("playbooks.playbookRuns.issues");
+    },
     dot: "bg-red-500",
     statuses: ["unacceptable", "missing_required"],
   },
-  { title: "Needs review", dot: "bg-amber-500", statuses: ["needs_review"] },
-  { title: "Acceptable", dot: "bg-emerald-500", statuses: ["acceptable"] },
+  { get title() {
+        return tr("playbooks.playbookRuns.needsReview");
+    }, dot: "bg-amber-500", statuses: ["needs_review"] },
+  { get title() {
+        return tr("playbooks.playbookRuns.acceptable");
+    }, dot: "bg-emerald-500", statuses: ["acceptable"] },
   {
-    title: "Not applicable",
+    get title() {
+        return tr("playbooks.playbookRuns.notApplicable");
+    },
     dot: "bg-gray-400",
     statuses: ["not_applicable", "outside_scope"],
   },
@@ -80,7 +89,7 @@ export function formatDateTime(iso: string) {
 }
 
 export function runTitle(run: PlaybookRun) {
-  return run.documentName || "Untitled document";
+  return run.documentName || tr("playbooks.playbookRuns.untitledDocument");
 }
 
 /** "2 issues · 1 to review", or the run's state when it has no findings. */
@@ -144,7 +153,7 @@ export function PlaybookRuns({
       },
       (err) => {
         if (!current) return;
-        setError(describeError(err, { action: "load the runs" }).message);
+        setError(describeError(err, { action: tr("playbooks.playbookRuns.loadRuns") }).message);
         setRuns([]);
       },
     );
@@ -193,7 +202,7 @@ export function PlaybookRuns({
   const documentPanel = selected?.documentId ? (
     <section
       ref={documentPane}
-      aria-label="Reviewed document"
+      aria-label={tr("playbooks.playbookRuns.reviewedDocument")}
       className={`flex min-h-[24rem] min-w-0 flex-col overflow-hidden @[41rem]/run-layout:min-h-0 ${EDITOR_SURFACE_CLASS}`}
     >
       <div className="flex h-11 shrink-0 items-center gap-2 px-4">
@@ -231,7 +240,7 @@ export function PlaybookRuns({
   ) : null;
   const resultsPanel = (
     <section
-      aria-label="Run results"
+      aria-label={tr("playbooks.playbookRuns.runResults")}
       className={`@container flex min-h-[24rem] min-w-0 flex-1 flex-col overflow-hidden @[48rem]:min-h-0 @[41rem]/run-layout:min-h-0 ${EDITOR_SURFACE_CLASS}`}
     >
       {selected ? (
@@ -266,13 +275,13 @@ export function PlaybookRuns({
       ) : (
         all !== null && (
           <EmptyState
-            title="No runs yet"
-            description="Run this playbook on a contract to see your findings here."
+            title={tr("playbooks.playbookRuns.noRunsYet")}
+            description={tr("playbooks.playbookRuns.runPlaybookContractSeeFindings")}
             action={
               canRun && (
                 <PillButtonUI tone="black" onClick={onRun}>
                   <Play aria-hidden="true" className="h-3.5 w-3.5" />
-                  Run
+                  {tr("playbooks.playbookRuns.run")}
                 </PillButtonUI>
               )
             }
@@ -288,12 +297,12 @@ export function PlaybookRuns({
       resizeLabel="Resize runs panel"
       sidebar={
         <section
-          aria-label="Your runs"
+          aria-label={tr("playbooks.playbookRuns.runs")}
           className={`flex min-h-0 min-w-0 flex-col ${EDITOR_SURFACE_CLASS}`}
         >
           <div className="flex h-9 shrink-0 items-center pl-3 pr-1.5">
             {/* Runs are listed per person: another member's are not shown. */}
-            <h2 className="text-xs text-gray-700">Your runs</h2>
+            <h2 className="text-xs text-gray-700">{tr("playbooks.playbookRuns.runs")}</h2>
           </div>
           <div className="max-h-64 min-h-0 space-y-1 overflow-y-auto px-1 pb-2 @[48rem]:max-h-none @[48rem]:flex-1">
             {all === null ? (
@@ -314,11 +323,11 @@ export function PlaybookRuns({
                   }}
                   className="underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                 >
-                  Try again
+                  {tr("playbooks.playbookRuns.tryAgain")}
                 </button>
               </p>
             ) : all.length === 0 ? (
-              <p className="px-2 py-1.5 text-xs text-gray-500">None yet.</p>
+              <p className="px-2 py-1.5 text-xs text-gray-500">{tr("playbooks.playbookRuns.noneYet")}</p>
             ) : (
               all.map((run) => {
                 const active = run.id === selected?.id;
@@ -372,15 +381,15 @@ function RunResults({ run, ...edits }: { run: PlaybookRun } & EditHandlers) {
   const settings = (
     <dl className="flex flex-wrap gap-x-8 gap-y-2">
       <div className="min-w-0">
-        <dt className="text-xs text-gray-500">Model</dt>
+        <dt className="text-xs text-gray-500">{tr("playbooks.playbookRuns.model")}</dt>
         <dd className="mt-0.5 text-sm text-gray-900">
           {modelDisplayName(run.model)}
         </dd>
       </div>
       <div className="min-w-0">
-        <dt className="text-xs text-gray-500">Mode</dt>
+        <dt className="text-xs text-gray-500">{tr("playbooks.playbookRuns.mode")}</dt>
         <dd className="mt-0.5 text-sm text-gray-900">
-          {run.reviewMode === "permissive" ? "Permissive" : "Strict"}
+          {run.reviewMode === "permissive" ? tr("playbooks.playbookRuns.permissive") : tr("playbooks.playbookRuns.strict")}
         </dd>
       </div>
     </dl>
@@ -407,22 +416,19 @@ function RunResults({ run, ...edits }: { run: PlaybookRun } & EditHandlers) {
       {run.summary && (
         <section aria-labelledby={summaryId} className="space-y-1.5">
           <h3 id={summaryId} className="text-sm font-medium text-gray-900">
-            Summary
+            {tr("playbooks.playbookRuns.summary")}
           </h3>
           <p className="text-sm leading-relaxed text-gray-700">{run.summary}</p>
         </section>
       )}
       {run.documentName && !isWordSource && (
         <p className="text-xs text-gray-500">
-          This review used extracted text from{" "}
-          <span className="font-medium">{run.documentName}</span>. For a
-          formatting-preserving Word redline, provide the original DOCX in
-          Assistant; if it is unavailable, Mike can create a text-reconstructed
-          DOCX and will warn that formatting may differ.
+          {tr("playbooks.playbookRuns.reviewUsedExtractedTextFrom")}{" "}
+          <span className="font-medium">{run.documentName}</span>{tr("playbooks.playbookRuns.formattingPreservingWordRedlineProvide")}
         </p>
       )}
       {groups.length === 0 && run.status === "completed" && (
-        <p className="text-sm text-gray-500">No findings.</p>
+        <p className="text-sm text-gray-500">{tr("playbooks.playbookRuns.noFindings")}</p>
       )}
       {groups.map((group) => (
         <FindingGroup key={group.title} {...group} {...edits} />
@@ -492,7 +498,7 @@ function Redline({ before, after }: { before: string; after: string }) {
             key={index}
             className="rounded-sm bg-red-50 text-red-700 decoration-red-400"
           >
-            <span className="sr-only">Removed: </span>
+            <span className="sr-only">{tr("playbooks.playbookRuns.removed")}{" "} </span>
             {segment.text}
           </del>
         ) : segment.type === "added" ? (
@@ -500,7 +506,7 @@ function Redline({ before, after }: { before: string; after: string }) {
             key={index}
             className="rounded-sm bg-emerald-50 text-emerald-700 no-underline"
           >
-            <span className="sr-only">Added: </span>
+            <span className="sr-only">{tr("playbooks.playbookRuns.added")}{" "} </span>
             {segment.text}
           </ins>
         ) : (
@@ -531,14 +537,14 @@ function FindingCard({
         </span>
       </div>
       {finding.location && (
-        <FindingPart label="Where">
+        <FindingPart label={tr("playbooks.playbookRuns.where")}>
           <p className="text-sm text-gray-700 [overflow-wrap:anywhere]">
             {finding.location}
           </p>
         </FindingPart>
       )}
       {finding.analysis && (
-        <FindingPart label="Assessment">
+        <FindingPart label={tr("playbooks.playbookRuns.assessment")}>
           <p className="text-sm leading-relaxed text-gray-700">
             {finding.analysis}
           </p>
@@ -546,7 +552,7 @@ function FindingCard({
       )}
       {/* With a suggestion, the diff shows the contract language too. */}
       {finding.quote && !finding.suggestedText && (
-        <FindingPart label="Contract language">
+        <FindingPart label={tr("playbooks.playbookRuns.contractLanguage")}>
           <TextSlabUI className="text-xs text-gray-600">
             <blockquote>{finding.quote}</blockquote>
           </TextSlabUI>
@@ -555,7 +561,7 @@ function FindingCard({
       {finding.edit ? (
         // The change is in the document as a tracked change: decide it here.
         <FindingPart
-          label={missing ? "Recommended clause to add" : "Recommended change"}
+          label={missing ? tr("playbooks.playbookRuns.recommendedClauseAdd") : tr("playbooks.playbookRuns.recommendedChange")}
         >
           <EditCard
             annotation={finding.edit}
@@ -569,8 +575,8 @@ function FindingCard({
           <FindingPart
             label={
               missing || !finding.quote
-                ? "Recommended clause to add"
-                : "Recommended changes"
+                ? tr("playbooks.playbookRuns.recommendedClauseAdd")
+                : tr("playbooks.playbookRuns.recommendedChanges")
             }
           >
             <Redline

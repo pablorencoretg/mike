@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MikeIcon } from "@/shared/ui/MikeIconUI";
+import { tr } from "@/shared/i18n/runtime";
 
 interface SiteLogoProps {
     size?: "sm" | "md" | "lg" | "xl";
@@ -45,7 +46,7 @@ export function SiteLogo({
             >
                 <MikeIcon size={iconSizes[size]} />
             </span>
-            <span>Mike</span>
+            <span>{tr("siteLogo.mike")}</span>
         </h1>
     );
 

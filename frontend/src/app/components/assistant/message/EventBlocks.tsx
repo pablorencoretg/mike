@@ -19,6 +19,7 @@ import {
     DocReadBlockUI,
 } from "@/shared/ui/DocumentEventBlocksUI";
 import { RESPONSE_GLASS_SURFACE, withoutMarkdownNode } from "./messageStyles";
+import { tr } from "@/shared/i18n/runtime";
 
 const THINKING_PHRASES = [
     "Thinking...",
@@ -122,7 +123,7 @@ function ReasoningContent({ text }: { text: string }) {
             <div
                 ref={viewportRef}
                 role="region"
-                aria-label="Thought process"
+                aria-label={tr("assistant.message.eventBlocks.thoughtProcess")}
                 tabIndex={0}
                 className="max-h-36 overflow-y-auto overscroll-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
@@ -188,7 +189,7 @@ export function ReasoningBlock({
                 label={
                     isStreaming
                         ? THINKING_PHRASES[thinkingIndex]
-                        : "Thought process"
+                        : tr("assistant.message.eventBlocks.thoughtProcess")
                 }
             />
             {isContentOpen && <ReasoningContent text={text} />}
@@ -270,7 +271,7 @@ export function DocCreatedBlock({
         >
             <div className="flex min-w-0 items-center gap-1.5">
                 <EventLabel className="shrink-0">
-                    {isStreaming ? "Creating" : "Created"}
+                    {isStreaming ? tr("assistant.message.eventBlocks.creating") : tr("assistant.message.eventBlocks.created")}
                 </EventLabel>
                 {isStreaming || !onClick ? (
                     <span className="flex min-w-0 items-center gap-1.5">
@@ -329,7 +330,7 @@ export function DocReplicatedBlock({
         version_id: string;
     }) => void;
 }) {
-    const label = isStreaming ? "Replicating" : "Replicated";
+    const label = isStreaming ? tr("assistant.message.eventBlocks.replicating") : tr("assistant.message.eventBlocks.replicated");
     const suffix =
         !isStreaming && count > 1
             ? ` ${count} times`
@@ -470,7 +471,7 @@ export function DocDownloadBlock({
         <button
             type="button"
             onClick={handleDownload}
-            aria-label={`Download ${filename}`}
+            aria-label={tr("assistant.message.eventBlocks.download", { filename })}
             className="shrink-0 flex items-center bg-white/25 px-4 text-gray-500 transition-colors hover:bg-white/55 hover:text-gray-700 cursor-pointer @md:px-6"
         >
             <Download className="size-3 @md:size-[13px]" />
@@ -533,12 +534,12 @@ export function WorkflowAppliedBlock({
     return (
         <EventBlock showConnector={showConnector} dotColor="green">
             <div className="flex min-w-0 items-center gap-1.5">
-                <EventLabel className="shrink-0">Read</EventLabel>
+                <EventLabel className="shrink-0">{tr("assistant.message.eventBlocks.read")}</EventLabel>
                 {onClick ? (
                     <button
                         type="button"
                         onClick={onClick}
-                        aria-label={`Open workflow ${title}`}
+                        aria-label={tr("assistant.message.eventBlocks.openWorkflow", { title })}
                         className="flex min-w-0 cursor-pointer items-center gap-1.5 text-left transition-colors hover:text-gray-700"
                     >
                         <WorkflowSkeuoIcon className="h-3.5 w-3.5 shrink-0" />
@@ -571,11 +572,11 @@ export function AskInputsBlock({
     const onlyApprovals = event.items.every((item) => item.kind === "approval");
     const label = onlyApprovals
         ? response
-            ? "Asked for approval"
-            : "Asking for approval"
+            ? tr("assistant.message.eventBlocks.askedApproval")
+            : tr("assistant.message.eventBlocks.askingApproval")
         : response
-          ? "Asked for input"
-          : "Asking for input";
+          ? tr("assistant.message.eventBlocks.askedInput")
+          : tr("assistant.message.eventBlocks.askingInput");
     return (
         <EventBlock
             showConnector={showConnector}
@@ -606,22 +607,22 @@ export function AskInputsBlock({
                             const filenames = itemResponse.filenames;
                             return filenames.length
                                 ? filenames.join(", ")
-                                : "No documents attached";
+                                : tr("assistant.message.eventBlocks.noDocumentsAttached");
                         })();
                         return (
                             <div key={item.id}>
                                 <p className="text-xs text-gray-500">
                                     {index + 1}.{" "}
                                     {item.kind === "documents"
-                                        ? "Documents"
+                                        ? tr("assistant.message.eventBlocks.documents")
                                         : item.kind === "approval"
-                                          ? "Approval"
-                                          : "Question"}
+                                          ? tr("assistant.message.eventBlocks.approval")
+                                          : tr("assistant.message.eventBlocks.question")}
                                 </p>
                                 <p className="mt-0.5 [overflow-wrap:anywhere]">
                                     {item.kind === "documents"
                                         ? item.document_types.join(", ") ||
-                                          "Documents requested"
+                                          tr("assistant.message.eventBlocks.documentsRequested")
                                         : item.kind === "approval"
                                           ? `${item.connector_name}: ${item.title}`
                                           : item.question}
@@ -750,7 +751,7 @@ export function DocEditBlock({
     hasError?: boolean;
     onClick?: () => void;
 }) {
-    const label = isStreaming ? "Editing" : hasError ? "Edit failed" : "Edited";
+    const label = isStreaming ? tr("assistant.message.eventBlocks.editing") : hasError ? tr("assistant.message.eventBlocks.editFailed") : tr("assistant.message.eventBlocks.edited");
 
     return (
         <DocEditBlockUI

@@ -13,6 +13,7 @@ import {
   type OrgMember,
   type OrgMemberHandover,
 } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 // Shared work is handed to one successor; unshared work is archived for
 // 30 days. Existing co-owned items stay with their remaining owners.
@@ -102,7 +103,7 @@ export function MemberDepartureDialog({
           const name = member.display_name?.trim();
           return {
             value: member.user_id,
-            label: name || member.email || "Unnamed member",
+            label: name || member.email || tr("organizations.memberDepartureDialog.unnamedMember"),
             suffix: name && member.email ? `(${member.email})` : undefined,
           };
         }),
@@ -186,22 +187,22 @@ export function MemberDepartureDialog({
       onClose={() => {
         if (!working) onCancel();
       }}
-      breadcrumbs={["Organization", "Members", leaving ? "Leave" : "Remove"]}
+      breadcrumbs={[tr("organizations.memberDepartureDialog.organization"), tr("organizations.memberDepartureDialog.members"), leaving ? tr("organizations.memberDepartureDialog.leave") : tr("organizations.memberDepartureDialog.remove")]}
       size="sm"
       className="h-auto max-h-[calc(100vh-2rem)]"
       cancelAction={{
-        label: "Cancel",
+        label: tr("organizations.memberDepartureDialog.cancel"),
         disabled: working,
         onClick: onCancel,
       }}
       primaryAction={{
         label: working
           ? leaving
-            ? "Leaving..."
-            : "Removing..."
+            ? tr("organizations.memberDepartureDialog.leaving")
+            : tr("organizations.memberDepartureDialog.removing")
           : leaving
-            ? "Leave"
-            : "Remove",
+            ? tr("organizations.memberDepartureDialog.leave")
+            : tr("organizations.memberDepartureDialog.remove"),
         variant: "danger",
         disabled: !canConfirm,
         onClick: () => void confirm(),
@@ -215,12 +216,12 @@ export function MemberDepartureDialog({
 
         {loadFailed ? (
           <p role="alert" className="text-sm text-red-600">
-            Could not check what would be transferred or archived. Close this and try again.
+            {tr("organizations.memberDepartureDialog.couldNotCheckWhatWould")}
           </p>
         ) : !ready ? (
           <div
             role="status"
-            aria-label="Checking what would be transferred or archived"
+            aria-label={tr("organizations.memberDepartureDialog.checkingWhatWouldTransferredArchived")}
             className="space-y-5"
           >
             <div className="space-y-2">
@@ -246,10 +247,10 @@ export function MemberDepartureDialog({
                   id="member-departure-transfer"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Transfer ownership
+                  {tr("organizations.memberDepartureDialog.transferOwnership")}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {owedSummary} {owed === 1 ? "needs" : "need"} a new owner. Shared and public work will transfer together.
+                  {owedSummary} {owed === 1 ? "needs" : "need"} {" "}{tr("organizations.memberDepartureDialog.newOwnerSharedPublicWork")}
                 </p>
                 {titles.length === 0 ? null : titles.length === 1 ? (
                   <p className="text-xs text-gray-500 [overflow-wrap:anywhere]">
@@ -263,7 +264,7 @@ export function MemberDepartureDialog({
                           "list-none px-0 [&::-webkit-details-marker]:hidden",
                       })}
                     >
-                      View items
+                      {tr("organizations.memberDepartureDialog.viewItems")}
                       <ChevronDown className="h-3.5 w-3.5 transition-transform group-open/items:rotate-180" />
                     </summary>
                     <ul className="mt-2 space-y-1 text-xs text-gray-500">
@@ -281,17 +282,17 @@ export function MemberDepartureDialog({
                 {candidates.length > 0 ? (
                   <ModalSelect
                     id="member-departure-successor"
-                    aria-label="Hand over to"
+                    aria-label={tr("organizations.memberDepartureDialog.handOver")}
                     value={selectedSuccessor}
                     onChange={setSuccessor}
                     options={candidates}
-                    placeholder="Choose a member"
+                    placeholder={tr("organizations.memberDepartureDialog.chooseMember")}
                     disabled={working}
                     wrapLabels
                   />
                 ) : (
                   <p role="alert" className="text-sm text-red-600">
-                    There is no other member to hand this to.
+                    {tr("organizations.memberDepartureDialog.thereNoOtherMemberHand")}
                   </p>
                 )}
               </section>
@@ -306,13 +307,13 @@ export function MemberDepartureDialog({
                   id="member-departure-private-activity"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Private work retained for 30 days
+                  {tr("organizations.memberDepartureDialog.privateWorkRetained30Days")}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {archivedSummary} will be archived for 30 days.
+                  {tr("organizations.memberDepartureDialog.willArchived30Days", { archivedSummary })}
                 </p>
                 <p className="text-xs text-gray-500">
-                  Only organization owners can recover, reassign or delete this work. Anything not recovered within 30 days will be permanently deleted, including its contents.
+                  {tr("organizations.memberDepartureDialog.onlyOrganizationOwnersCanRecover")}
                 </p>
               </section>
             ) : null}

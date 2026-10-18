@@ -1,3 +1,4 @@
+import { tr } from "@/shared/i18n/runtime";
 /**
  * Warning for a PDF whose pages carry no text layer (scanned without OCR). The
  * assistant reads PDFs through their text layer only, so those pages are
@@ -10,7 +11,7 @@ export function textLayerWarning(
 ): string | null {
     if (!textlessPageCount || textlessPageCount < 1) return null;
     if (pageCount != null && textlessPageCount >= pageCount) {
-        return "No text layer: this PDF looks scanned, so the assistant cannot read it. Run OCR on it and upload it again.";
+        return tr("app.lib.textLayerWarning.noTextLayerPdfLooks");
     }
     const pages =
         pageCount != null
@@ -18,5 +19,5 @@ export function textLayerWarning(
             : `${textlessPageCount} ${textlessPageCount === 1 ? "page" : "pages"}`;
     const verb = textlessPageCount === 1 ? "has" : "have";
     const pronoun = textlessPageCount === 1 ? "it" : "them";
-    return `${pages} ${verb} no text layer (likely scanned), so the assistant cannot read ${pronoun}.`;
+    return tr("app.lib.textLayerWarning.noTextLayerLikelyScanned", { pages, verb, pronoun });
 }

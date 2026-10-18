@@ -5,6 +5,7 @@ import { RESPONSE_GLASS_SURFACE } from "./messageStyles";
 import { resolveDocumentEdit } from "@/app/lib/mikeApi";
 import type { EditAnnotation } from "../../shared/types";
 import { applyOptimisticResolution } from "../EditCard";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * Card rendered above the per-edit EditCards when a message produced
@@ -113,8 +114,8 @@ function BulkEditActions({
                         versionId: annotation.version_id ?? null,
                         message:
                             verb === "accept"
-                                ? "Couldn't save one or more accepts."
-                                : "Couldn't save one or more rejects.",
+                                ? tr("assistant.message.editCardsSection.couldnTSaveOneMore")
+                                : tr("assistant.message.editCardsSection.couldnTSaveOneMore2"),
                     });
                 }
                 done++;
@@ -139,7 +140,7 @@ function BulkEditActions({
                 disabled={!!busy}
                 loading={busy === "accept"}
             >
-                {busy === "accept" ? "Accepting all..." : "Accept all"}
+                {busy === "accept" ? tr("assistant.message.editCardsSection.acceptingAll") : tr("assistant.message.editCardsSection.acceptAll")}
             </PillButtonUI>
             <PillButtonUI
                 tone="white"
@@ -148,7 +149,7 @@ function BulkEditActions({
                 disabled={!!busy}
                 loading={busy === "reject"}
             >
-                {busy === "reject" ? "Rejecting all..." : "Reject all"}
+                {busy === "reject" ? tr("assistant.message.editCardsSection.rejectingAll") : tr("assistant.message.editCardsSection.rejectAll")}
             </PillButtonUI>
             {progress && (
                 <span className="text-xs font-sans text-gray-500">
@@ -165,7 +166,7 @@ function BulkEditActions({
                     disabled={!!busy}
                     className="ml-auto"
                 >
-                    View
+                    {tr("assistant.message.editCardsSection.view")}
                 </PillButtonUI>
             )}
         </div>
@@ -220,10 +221,10 @@ export function EditCardsSection({
     const summary =
         pending.length > 0
             ? docCount > 1
-                ? `${pending.length} tracked changes across ${docCount} documents`
+                ? tr("assistant.message.editCardsSection.trackedChangesAcrossDocuments", { pendingCount: pending.length, docCount })
                 : `${pending.length} tracked ${pending.length === 1 ? "change" : "changes"}`
             : docCount > 1
-              ? `${resolvedCount} resolved tracked changes across ${docCount} documents`
+              ? tr("assistant.message.editCardsSection.resolvedTrackedChangesAcrossDocuments", { resolvedCount, docCount })
               : `${resolvedCount} resolved tracked ${resolvedCount === 1 ? "change" : "changes"}`;
 
     return (

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { tr } from "@/shared/i18n/runtime";
 
 // The "Load more" row at the foot of a paginated table. Renders nothing
 // while loading, once there's nothing more to load, or once the list is
@@ -72,10 +73,10 @@ export function TableLoadMoreRow({
             >
                 {loadingMore && <Loader2 className="h-3 w-3 animate-spin" />}
                 {loadingMore
-                    ? "Loading…"
+                    ? tr("shared.tableLoadMoreRow.loading")
                     : hasError
-                      ? "Retry loading"
-                      : "Load more"}
+                      ? tr("shared.tableLoadMoreRow.retryLoading")
+                      : tr("shared.tableLoadMoreRow.loadMore")}
             </button>
         </div>
     );

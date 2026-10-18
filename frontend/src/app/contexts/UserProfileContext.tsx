@@ -53,6 +53,7 @@ import {
     clearConfiguredModels,
     refreshConfiguredModels,
 } from "@/app/hooks/useConfiguredModels";
+import { tr } from "@/shared/i18n/runtime";
 
 interface UserProfile extends RouterProfileLists {
     profilePhoto?: string | null;
@@ -239,7 +240,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
             setApiKeysDegraded(false);
         } catch (error) {
             console.warn(
-                "[profile] fetch failed after retry; API key availability is unknown and fails open",
+                tr("app.contexts.userProfileContext.profileFetchFailedAfterRetry"),
                 error,
             );
             setApiKeysDegraded(true);
@@ -247,7 +248,7 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
             // the load has to say that it failed rather than let the user read
             // placeholders as answers.
             notifyError(error, {
-                action: "load your profile",
+                action: tr("app.contexts.userProfileContext.loadProfile"),
                 dedupeKey: "profile-load",
                 onRetry: () => {
                     void retryRef.current?.reloadProfile();

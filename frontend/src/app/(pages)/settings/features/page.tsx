@@ -11,6 +11,7 @@ import { SettingsHeading } from "@/app/components/settings/SettingsHeading";
 import { SettingsRow } from "@/app/components/settings/SettingsRow";
 import { ToggleSwitchUI } from "@/shared/ui/ToggleSwitchUI";
 import { useUserProfile } from "@/app/contexts/UserProfileContext";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function FeaturesPage() {
   const {
@@ -52,20 +53,20 @@ export default function FeaturesPage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <SettingsHeading>Assistant</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.features.page.assistant")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow>
             <div className="min-w-0 space-y-1">
-              <SettingsLabel>Quick actions</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.features.page.quickActions")}</SettingsLabel>
               <SettingsDescription>
-                Show the quick actions row on the assistant start screen.
+                {tr("pages.settings.features.page.showQuickActionsRowAssistant")}
               </SettingsDescription>
             </div>
             <ToggleSwitchUI
               checked={quickActionsVisible}
               disabled={savingQuickActions}
               aria-busy={savingQuickActions}
-              aria-label="Quick actions"
+              aria-label={tr("pages.settings.features.page.quickActions")}
               onCheckedChange={(checked) => {
                 void setQuickActionsVisible(checked);
               }}
@@ -75,20 +76,20 @@ export default function FeaturesPage() {
       </section>
 
       <section className="space-y-3">
-        <SettingsHeading>Legal Research</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.features.page.legalResearch")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow>
             <div className="min-w-0 space-y-1">
-              <SettingsLabel>Enable CourtListener</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.features.page.enableCourtlistener")}</SettingsLabel>
               <SettingsDescription>
-                CourtListener provides access to US case law.
+                {tr("pages.settings.features.page.courtlistenerProvidesAccessUsCase")}
               </SettingsDescription>
             </div>
             <ToggleSwitchUI
               checked={courtListenerEnabled}
               disabled={saving}
               aria-busy={saving}
-              aria-label="Enable CourtListener"
+              aria-label={tr("pages.settings.features.page.enableCourtlistener")}
               onCheckedChange={(enabled) =>
                 void handleCourtListenerChange(enabled)
               }
@@ -96,7 +97,7 @@ export default function FeaturesPage() {
           </SettingsRow>
           {courtListenerEnabled && (
             <ApiKeyField
-              label="CourtListener API Key"
+              label={tr("pages.settings.features.page.courtlistenerApiKey")}
               hasSavedKey={profile?.apiKeys.courtlistener.source === "user"}
               onSave={(value) =>
                 updateApiKey("courtlistener", value.trim() || null)

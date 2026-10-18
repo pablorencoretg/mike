@@ -9,6 +9,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { useT } from "@/shared/i18n/I18nContext";
+import { tr } from "@/shared/i18n/runtime";
 
 const GOOGLE_ERROR_MESSAGES = {
     provider_disabled:
@@ -46,10 +47,10 @@ export function GoogleAuthButton({
             // never shown; the caller renders the classified text instead.
             onError(
                 describeError(error, {
-                    action: "continue with Google",
+                    action: tr("auth.googleAuthButton.continueGoogle"),
                     codeMessages: GOOGLE_ERROR_MESSAGES,
                     fallback:
-                        "Unable to continue with Google. Try again, or log in with your email and password.",
+                        tr("auth.googleAuthButton.unableContinueGoogleTryAgain"),
                 }),
             );
             setLoading(false);

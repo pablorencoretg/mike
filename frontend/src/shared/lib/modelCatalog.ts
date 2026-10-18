@@ -13,6 +13,7 @@
 //   unavailable model.
 
 import type { ModelToggleOption } from "../ui/ModelToggleUI";
+import { tr } from "../i18n/runtime";
 
 export type ModelOption = ModelToggleOption;
 
@@ -27,24 +28,50 @@ const direct = (option: Omit<ModelOption, "source">): ModelOption => ({
 
 /** The direct-provider models every picker offers. */
 export const MODELS: readonly ModelOption[] = [
-  direct({ id: "claude-fable-5-1", label: "Claude Fable 5.1", group: "Anthropic" }),
-  direct({ id: "claude-opus-5-5", label: "Claude Opus 5.5", group: "Anthropic" }),
-  direct({ id: "claude-sonnet-5-5", label: "Claude Sonnet 5.5", group: "Anthropic" }),
-  direct({ id: "gemini-3.8-flash", label: "Gemini 3.8 Flash", group: "Google" }),
-  direct({ id: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro (Preview)", group: "Google" }),
-  direct({ id: "gpt-6-astra", label: "GPT-6 Astra", group: "OpenAI" }),
-  direct({ id: "gpt-6.1-sol", label: "GPT-6.1 Sol", group: "OpenAI" }),
-  direct({ id: "gpt-6-luna", label: "GPT-6 Luna", group: "OpenAI" }),
-  direct({ id: "mistral-large-4", label: "Mistral Large 4 (Preview)", group: "Mistral AI" }),
-  direct({ id: "mistral-medium-3-5", label: "Mistral Medium 3.5", group: "Mistral AI" }),
-  direct({ id: "mistral-small-2603", label: "Mistral Small 4", group: "Mistral AI" }),
+  direct({ id: "claude-fable-5-1", get label() {
+        return tr("shared.lib.modelCatalog.claudeFable51");
+    }, group: "Anthropic" }),
+  direct({ id: "claude-opus-5-5", get label() {
+        return tr("shared.lib.modelCatalog.claudeOpus55");
+    }, group: "Anthropic" }),
+  direct({ id: "claude-sonnet-5-5", get label() {
+        return tr("shared.lib.modelCatalog.claudeSonnet55");
+    }, group: "Anthropic" }),
+  direct({ id: "gemini-3.8-flash", get label() {
+        return tr("shared.lib.modelCatalog.gemini38Flash");
+    }, group: "Google" }),
+  direct({ id: "gemini-3.1-pro-preview", get label() {
+        return tr("shared.lib.modelCatalog.gemini31ProPreview");
+    }, group: "Google" }),
+  direct({ id: "gpt-6-astra", get label() {
+        return tr("shared.lib.modelCatalog.gpt6Astra");
+    }, group: "OpenAI" }),
+  direct({ id: "gpt-6.1-sol", get label() {
+        return tr("shared.lib.modelCatalog.gpt61Sol");
+    }, group: "OpenAI" }),
+  direct({ id: "gpt-6-luna", get label() {
+        return tr("shared.lib.modelCatalog.gpt6Luna");
+    }, group: "OpenAI" }),
+  direct({ id: "mistral-large-4", get label() {
+        return tr("shared.lib.modelCatalog.mistralLarge4Preview");
+    }, group: "Mistral AI" }),
+  direct({ id: "mistral-medium-3-5", get label() {
+        return tr("shared.lib.modelCatalog.mistralMedium35");
+    }, group: "Mistral AI" }),
+  direct({ id: "mistral-small-2603", get label() {
+        return tr("shared.lib.modelCatalog.mistralSmall4");
+    }, group: "Mistral AI" }),
 ];
 
 /** MODELS plus the low-cost models offered only for background tasks. */
 export const SETTINGS_MODELS: readonly ModelOption[] = [
   ...MODELS,
-  direct({ id: "claude-haiku-4-5", label: "Claude Haiku 4.5", group: "Anthropic" }),
-  direct({ id: "gemini-3.5-flash-lite", label: "Gemini 3.5 Flash-Lite", group: "Google" }),
+  direct({ id: "claude-haiku-4-5", get label() {
+        return tr("shared.lib.modelCatalog.claudeHaiku45");
+    }, group: "Anthropic" }),
+  direct({ id: "gemini-3.5-flash-lite", get label() {
+        return tr("shared.lib.modelCatalog.gemini35FlashLite");
+    }, group: "Google" }),
 ];
 
 export const DEFAULT_MODEL_ID = "";
@@ -518,12 +545,12 @@ export function unavailableModelMessage(
   const provider = getModelProvider(modelId);
   const label = provider
     ? providerLabel(provider, { withProduct: false })
-    : "model provider";
+    : tr("shared.lib.modelCatalog.modelProvider");
   if (provider && keys[provider]?.enabled === false) {
-    return `${label} is turned off. Turn it back on in Bring Your Own Keys before using this model.`;
+    return tr("shared.lib.modelCatalog.turnedOffTurnBackBring", { label });
   }
   const article = /^[aeiou]/i.test(label) ? "an" : "a";
-  return `Add ${article} ${label} API key before using this model.`;
+  return tr("shared.lib.modelCatalog.addApiKeyBeforeUsing", { article, label });
 }
 
 // ---------------------------------------------------------------------------

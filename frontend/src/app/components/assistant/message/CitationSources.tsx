@@ -11,6 +11,7 @@ import {
     citationVerificationDescription,
     citationVerificationPillClassName,
 } from "./citationVerification";
+import { tr } from "@/shared/i18n/runtime";
 
 type CitationSourceRow = {
     key: string;
@@ -31,7 +32,7 @@ function citationSourceLabel(annotation: Citation): string {
         const caseName = annotation.case_name?.trim();
         const citation = annotation.citation?.trim();
         if (caseName && citation) return `${caseName}, ${citation}`;
-        return caseName || citation || `Case ${annotation.cluster_id}`;
+        return caseName || citation || tr("assistant.message.citationSources.case", { cluster_id: annotation.cluster_id });
     }
     return annotation.filename;
 }
@@ -100,7 +101,7 @@ export function buildCitationAppendix(citations: Citation[]) {
         const sourceKey = citationSourceKey(annotation);
         const label =
             sourceKey === previousSourceKey
-                ? "Id."
+                ? tr("assistant.message.citationSources.id")
                 : citationSourceLabel(annotation);
         previousSourceKey = sourceKey;
         return {
@@ -157,7 +158,7 @@ export function CitationsBlock({
             <div className={`overflow-hidden ${RESPONSE_GLASS_SURFACE}`}>
                 <div className="flex items-center justify-between gap-3 bg-white/25 px-3 py-2">
                     <h3 className="text-base font-serif text-gray-900">
-                        Citations
+                        {tr("assistant.message.citationSources.citations")}
                     </h3>
                     {isLoading && (
                         <Loader2 className="h-3.5 w-3.5 animate-spin text-gray-400" />

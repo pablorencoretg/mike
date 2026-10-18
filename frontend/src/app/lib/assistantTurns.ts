@@ -9,6 +9,7 @@ import {
   isAbortError,
   readAssistantTurn,
 } from "./assistantTurnStream";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * In-flight assistant turns, keyed by chat id, that survive same-tab
@@ -268,7 +269,7 @@ export function resumeAssistantTurn(
       sink.endStreamingAfterFailure();
       handle.update((message) => ({
         ...message,
-        error: "Sorry, something went wrong.",
+        error: tr("app.lib.assistantTurns.sorrySomethingWentWrong"),
       }));
     })
     .finally(() => handle.finish());

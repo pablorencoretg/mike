@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { GlassCardUI } from "./GlassCardUI";
+import { tr } from "../i18n/runtime";
 
 export interface PreResponseWrapperUIProps {
     children: ReactNode;
@@ -56,7 +57,7 @@ function ActivityList({ children }: { children: ReactNode }) {
             <div
                 ref={viewportRef}
                 role="region"
-                aria-label="Assistant activity"
+                aria-label={tr("shared.ui.preResponseWrapperUI.assistantActivity")}
                 tabIndex={0}
                 className="max-h-80 overflow-y-auto overscroll-contain rounded-b-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
             >
@@ -106,8 +107,8 @@ export function PreResponseWrapperUI({
 
     const stepWord = `step${stepCount === 1 ? "" : "s"}`;
     const label = isStreaming
-        ? "Working"
-        : `Completed in ${stepCount} ${stepWord}`;
+        ? tr("shared.ui.preResponseWrapperUI.working")
+        : tr("shared.ui.preResponseWrapperUI.completed", { stepCount, stepWord });
 
     return (
         <GlassCardUI>

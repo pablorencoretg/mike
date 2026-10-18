@@ -4,10 +4,15 @@ import { useId } from "react";
 import type { ContentVisibility } from "@/app/components/shared/types";
 import { FieldLabel } from "@/app/components/ui/form-field";
 import { ModalSegmentedToggle } from "./ModalSegmentedToggle";
+import { tr } from "@/shared/i18n/runtime";
 
 const OPTIONS: { value: ContentVisibility; label: string }[] = [
-    { value: "private", label: "Private" },
-    { value: "organization", label: "Public" },
+    { value: "private", get label() {
+        return tr("modals.accessVisibilityField.private");
+    } },
+    { value: "organization", get label() {
+        return tr("modals.accessVisibilityField.public");
+    } },
 ];
 
 /**
@@ -37,7 +42,7 @@ export function AccessVisibilityField({
 }) {
     const labelId = useId();
     const descriptionId = useId();
-    const organizationLabel = organizationName || "the organisation";
+    const organizationLabel = organizationName || tr("modals.accessVisibilityField.organisation");
 
     return (
         <div
@@ -47,7 +52,7 @@ export function AccessVisibilityField({
             aria-describedby={descriptionId}
         >
             <FieldLabel as="p" id={labelId}>
-                Organisational Access
+                {tr("modals.accessVisibilityField.organisationalAccess")}
             </FieldLabel>
             {/* The choice, and beside it what the choice means. The text takes
                 the room the toggle leaves and wraps within it; where there is
@@ -66,8 +71,8 @@ export function AccessVisibilityField({
                     className="min-w-0 flex-[1_1_8rem] text-xs leading-4 text-gray-500"
                 >
                     {visibility === "organization"
-                        ? `Everyone in ${organizationLabel} can open and edit this ${resourceNoun}.`
-                        : `Only the people you share this ${resourceNoun} with can open it.`}
+                        ? tr("modals.accessVisibilityField.everyoneCanOpenEdit", { organizationLabel, resourceNoun })
+                        : tr("modals.accessVisibilityField.onlyPeopleShareCanOpen", { resourceNoun })}
                 </p>
             </div>
         </div>

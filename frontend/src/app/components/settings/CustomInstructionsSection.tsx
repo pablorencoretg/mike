@@ -12,6 +12,7 @@ import {
   updateCustomInstructions,
 } from "@/app/lib/mikeApi";
 import { userFacingApiError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 /** Mirrors CUSTOM_INSTRUCTIONS_MAX_LENGTH in the backend user module. */
 export const CUSTOM_INSTRUCTIONS_MAX_LENGTH = 8000;
@@ -70,7 +71,7 @@ export function CustomInstructionsSection() {
       setSaveError(
         userFacingApiError(
           cause,
-          "Custom instructions could not be saved. Your draft has been kept.",
+          tr("settings.customInstructionsSection.customInstructionsCouldNotSaved"),
         ),
       );
     },
@@ -83,7 +84,7 @@ export function CustomInstructionsSection() {
     >
       <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
         <SettingsHeading id="custom-instructions-heading">
-          Custom instructions
+          {tr("settings.customInstructionsSection.customInstructions")}
         </SettingsHeading>
         {!loading && !loadError ? (
           <MemorySaveStatus
@@ -98,18 +99,18 @@ export function CustomInstructionsSection() {
         ) : null}
       </div>
       <SettingsDescription>
-        Tell Mike how you would like it to respond in chats.
+        {tr("settings.customInstructionsSection.tellMikeHowWouldLike")}
       </SettingsDescription>
 
       {loading ? (
         <div
           className="h-96 animate-pulse rounded-xl bg-app-surface"
-          aria-label="Loading custom instructions"
+          aria-label={tr("settings.customInstructionsSection.loadingCustomInstructions")}
         />
       ) : loadError ? (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-red-600" role="alert">
-            Could not load your custom instructions. Please try again.
+            {tr("settings.customInstructionsSection.couldNotLoadCustomInstructions")}
           </p>
           <PillButtonUI
             tone="white"
@@ -120,13 +121,13 @@ export function CustomInstructionsSection() {
               setLoadVersion((current) => current + 1);
             }}
           >
-            Retry
+            {tr("settings.customInstructionsSection.retry")}
           </PillButtonUI>
         </div>
       ) : (
         <>
           <textarea
-            aria-label="Custom instructions"
+            aria-label={tr("settings.customInstructionsSection.customInstructions")}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             // The same flat surface as the settings cards above it. The ring
@@ -135,9 +136,7 @@ export function CustomInstructionsSection() {
           />
           {tooLong ? (
             <p className="text-xs text-red-600" role="alert">
-              Custom instructions must be{" "}
-              {CUSTOM_INSTRUCTIONS_MAX_LENGTH.toLocaleString()} characters or
-              fewer. Shorten them to save your changes.
+              {tr("settings.customInstructionsSection.customInstructionsMustCharactersFewer", { CUSTOM_INSTRUCTIONS_MAX_LENGTH: CUSTOM_INSTRUCTIONS_MAX_LENGTH.toLocaleString() })}
             </p>
           ) : null}
         </>

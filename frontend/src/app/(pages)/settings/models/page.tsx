@@ -34,6 +34,7 @@ import { SettingsRow } from "@/app/components/settings/SettingsRow";
 import { SETTINGS_CONTROL_CLASS } from "@/app/components/settings/SettingsTextInput";
 import { useOllamaModels } from "@/app/hooks/useOllamaModels";
 import { useConfiguredModels } from "@/app/hooks/useConfiguredModels";
+import { tr } from "@/shared/i18n/runtime";
 
 type ModelPreferenceField =
   | "titleModel"
@@ -93,14 +94,13 @@ export default function ModelPreferencesPage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <SettingsHeading>Model Preferences</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.models.page.modelPreferences")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow layout="stacked">
             <div className="space-y-1">
-              <SettingsLabel>Chat title generation</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.models.page.chatTitleGeneration")}</SettingsLabel>
               <SettingsDescription>
-                By default, titles use a low cost model from the chat
-                provider. Choose a model here to override that.
+                {tr("pages.settings.models.page.byDefaultTitlesUseLow")}
               </SettingsDescription>
             </div>
             <ModelPreferenceDropdown
@@ -121,10 +121,9 @@ export default function ModelPreferencesPage() {
           </SettingsRow>
           <SettingsRow layout="stacked">
             <div className="space-y-1">
-              <SettingsLabel>Tabular review model</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.models.page.tabularReviewModel")}</SettingsLabel>
               <SettingsDescription>
-                Preselected when creating a review. Each review stores its own
-                model and can be changed separately.
+                {tr("pages.settings.models.page.preselectedWhenCreatingReviewEach")}
               </SettingsDescription>
             </div>
             <ModelPreferenceDropdown
@@ -145,11 +144,9 @@ export default function ModelPreferencesPage() {
           </SettingsRow>
           <SettingsRow layout="stacked">
             <div className="space-y-1">
-              <SettingsLabel>Memory curation model</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.models.page.memoryCurationModel")}</SettingsLabel>
               <SettingsDescription>
-                Used after conversations to identify durable information worth
-                keeping. By default, memory uses the model selected for the
-                chat.
+                {tr("pages.settings.models.page.usedAfterConversationsIdentifyDurable")}
               </SettingsDescription>
             </div>
             <ModelPreferenceDropdown
@@ -224,7 +221,7 @@ function ModelPreferenceDropdown({
             <span className="truncate text-gray-900">
               {!value
                 ? emptyOptionLabel
-                : (selected?.label ?? "Select a model")}
+                : (selected?.label ?? tr("pages.settings.models.page.selectModel"))}
             </span>
           </span>
           {isSaving ? (

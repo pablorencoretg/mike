@@ -38,6 +38,7 @@ import {
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { TextButtonUI } from "@/shared/ui/TextButtonUI";
 import { PlaybookPanels } from "./PlaybookPanels";
+import { tr } from "@/shared/i18n/runtime";
 
 const IMPORTED_ID = "imported";
 const ACCEPT =
@@ -103,7 +104,7 @@ export function PlaybookSources({
     } catch (error) {
       setSupplementary([]);
       notifyError(error, {
-        action: "load the reference documents",
+        action: tr("playbooks.playbookSources.loadReferenceDocuments"),
         onRetry: load,
         dedupeKey: `playbook-sources:${playbookId}`,
       });
@@ -200,12 +201,12 @@ export function PlaybookSources({
         </button>
         {removable && original && (
           <HeaderActionsMenu
-            title={`Actions for ${entry.filename}`}
+            title={tr("playbooks.playbookSources.actions", { filename: entry.filename })}
             // Hidden until hover only where a pointer can hover; touch keeps it.
             triggerClassName="h-6 w-6 shrink-0 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100"
             items={[
               {
-                label: "Remove",
+                label: tr("playbooks.playbookSources.remove"),
                 variant: "danger",
                 onSelect: () => setRemoving(original),
               },
@@ -221,19 +222,19 @@ export function PlaybookSources({
       resizeLabel="Resize references panel"
       sidebar={
         <section
-          aria-label="Reference documents"
+          aria-label={tr("playbooks.playbookSources.referenceDocuments")}
           className={`flex min-h-0 min-w-0 flex-col ${EDITOR_SURFACE_CLASS}`}
         >
           <div className="flex h-9 shrink-0 items-center justify-between gap-2 pl-3 pr-1.5">
-            <h2 className="text-xs text-gray-700">References</h2>
+            <h2 className="text-xs text-gray-700">{tr("playbooks.playbookSources.references")}</h2>
             {canEdit && (
               <Dropdown>
                 <DropdownTrigger asChild>
                   <TextButtonUI
                     size="icon-xs"
                     className="h-6"
-                    aria-label="Add reference document"
-                    title="Add reference document"
+                    aria-label={tr("playbooks.playbookSources.addReferenceDocument")}
+                    title={tr("playbooks.playbookSources.addReferenceDocument")}
                   >
                     <Plus aria-hidden="true" className="h-3.5 w-3.5" />
                   </TextButtonUI>
@@ -241,11 +242,11 @@ export function PlaybookSources({
                 <DropdownContent align="end" className="w-56">
                   <DropdownItem onSelect={() => fileInput.current?.click()}>
                     <Upload aria-hidden="true" className="h-4 w-4" />
-                    Upload a file
+                    {tr("playbooks.playbookSources.uploadFile")}
                   </DropdownItem>
                   <DropdownItem onSelect={() => setPickerOpen(true)}>
                     <Cloud aria-hidden="true" className="h-4 w-4" />
-                    Choose from documents
+                    {tr("playbooks.playbookSources.chooseFromDocuments")}
                   </DropdownItem>
                 </DropdownContent>
               </Dropdown>
@@ -274,7 +275,7 @@ export function PlaybookSources({
                     className="mt-px h-3.5 w-3.5 shrink-0 animate-spin"
                   />
                   <span className="min-w-0 [overflow-wrap:anywhere]">
-                    Adding {name}
+                    {tr("playbooks.playbookSources.adding", { name })}
                   </span>
                 </p>
               ))}
@@ -282,7 +283,7 @@ export function PlaybookSources({
                 supplementary?.length === 0 &&
                 pending.length === 0 && (
                   <p className="px-2 py-1.5 text-xs text-gray-500">
-                    None yet.
+                    {tr("playbooks.playbookSources.noneYet")}
                   </p>
                 )}
             </div>
@@ -304,7 +305,7 @@ export function PlaybookSources({
       }
     >
       <section
-        aria-label="Reference document"
+        aria-label={tr("playbooks.playbookSources.referenceDocument")}
         className={`flex min-h-[24rem] min-w-0 flex-col overflow-hidden @[48rem]:min-h-0 ${EDITOR_SURFACE_CLASS}`}
       >
         {selected && (
@@ -342,11 +343,11 @@ export function PlaybookSources({
           />
         ) : (
           <EmptyState
-            title="No reference documents"
+            title={tr("playbooks.playbookSources.noReferenceDocuments")}
             description={
               canEdit
-                ? "Add documents the rules can refer to, such as policies or templates."
-                : "This playbook has no reference documents."
+                ? tr("playbooks.playbookSources.addDocumentsRulesCanRefer")
+                : tr("playbooks.playbookSources.playbookHasNoReferenceDocuments")
             }
             action={
               canEdit && (
@@ -356,11 +357,11 @@ export function PlaybookSources({
                     onClick={() => fileInput.current?.click()}
                   >
                     <Upload aria-hidden="true" className="h-3.5 w-3.5" />
-                    Upload a file
+                    {tr("playbooks.playbookSources.uploadFile")}
                   </PillButtonUI>
                   <PillButtonUI tone="white" onClick={() => setPickerOpen(true)}>
                     <Cloud aria-hidden="true" className="h-3.5 w-3.5" />
-                    Choose from documents
+                    {tr("playbooks.playbookSources.chooseFromDocuments")}
                   </PillButtonUI>
                 </div>
               )
@@ -373,7 +374,7 @@ export function PlaybookSources({
         <AddDocumentsModal
           open={pickerOpen}
           onClose={() => setPickerOpen(false)}
-          breadcrumb={["Playbooks", "References"]}
+          breadcrumb={[tr("playbooks.playbookSources.playbooks"), tr("playbooks.playbookSources.references")]}
           uploadStateId={`playbook-sources:${playbookId}`}
           onSelect={(documents) => {
             setPickerOpen(false);
@@ -391,9 +392,9 @@ export function PlaybookSources({
       )}
       <ConfirmPopup
         open={!!removing}
-        title={removing ? `Remove ${removing.filename}?` : undefined}
-        message="Reviews will no longer be able to read it. The original, if it is in your documents, is not affected."
-        confirmLabel="Remove"
+        title={removing ? tr("playbooks.playbookSources.remove2", { filename: removing.filename }) : undefined}
+        message={tr("playbooks.playbookSources.reviewsWillNoLongerAble")}
+        confirmLabel={tr("playbooks.playbookSources.remove")}
         confirmVariant="danger"
         confirmStatus={removeStatus}
         onConfirm={() => removing && void remove(removing)}
@@ -406,7 +407,7 @@ export function PlaybookSources({
 function rejectOtherTypes() {
   showToast({
     tone: "error",
-    title: "Some files were not added",
-    message: "References must be .docx or .pdf files.",
+    title: tr("playbooks.playbookSources.someFilesWereNotAdded"),
+    message: tr("playbooks.playbookSources.referencesMustDocxPdfFiles"),
   });
 }

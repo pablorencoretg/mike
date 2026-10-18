@@ -34,6 +34,7 @@ import {
     notifyBulkReviewDeleteOutcome,
 } from "@/app/lib/deleteTabularReviewsWithConcurrency";
 import { restoreOptimisticallyDeletedRows } from "@/app/lib/optimisticRows";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -104,7 +105,7 @@ export default function ProjectTabularReviewsPage({ params }: Props) {
         // list must refuse with the member sentence the review page uses.
         if (!can(roleFrom(review), "content.edit")) {
             setOwnerOnlyAction({
-                action: "edit tabular review details",
+                action: tr("pages.projects.id.tabularReviews.page.editTabularReviewDetails"),
                 requiredRole: "editor",
             });
             return;
@@ -119,7 +120,7 @@ export default function ProjectTabularReviewsPage({ params }: Props) {
         if (!detailsReview) return;
         if (!can(roleFrom(detailsReview), "content.edit")) {
             setOwnerOnlyAction({
-                action: "edit tabular review details",
+                action: tr("pages.projects.id.tabularReviews.page.editTabularReviewDetails"),
                 requiredRole: "editor",
             });
             return;
@@ -242,7 +243,7 @@ export default function ProjectTabularReviewsPage({ params }: Props) {
                 reviews={visibleReviews}
                 selectedReviewIds={selectedReviewIds}
                 createDisabled={workspace.creatingReview || docs.length === 0}
-                emptyDescription="Extract data from project documents into tables using AI."
+                emptyDescription={tr("pages.projects.id.tabularReviews.page.extractDataFromProjectDocuments")}
                 loading={effectiveLoading}
                 loadingMore={loadingMore}
                 hasMore={hasMore}

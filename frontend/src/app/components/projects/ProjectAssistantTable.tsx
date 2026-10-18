@@ -49,10 +49,11 @@ import type { Chat } from "@/app/components/shared/types";
 import { can, roleFrom } from "@/app/lib/permissions";
 import type { OwnerGate } from "./ProjectWorkspace";
 import { formatDate } from "./ProjectPageParts";
+import { tr } from "@/shared/i18n/runtime";
 
 function creatorLabel(chat: Chat, currentUserId?: string | null) {
-    if (currentUserId && chat.user_id === currentUserId) return "Me";
-    return chat.creator_display_name?.trim() || "Shared";
+    if (currentUserId && chat.user_id === currentUserId) return tr("projects.projectAssistantTable.me");
+    return chat.creator_display_name?.trim() || tr("projects.projectAssistantTable.shared");
 }
 
 type ProjectChatSortKey = "name" | "created";
@@ -128,7 +129,7 @@ export function ProjectAssistantTable({
 
     function requestRenameChat(chat: Chat) {
         if (!can(roleFrom(chat), "access.manage")) {
-            onOwnerOnlyAction({ action: "rename this chat", requiredRole: "owner" });
+            onOwnerOnlyAction({ action: tr("projects.projectAssistantTable.renameChat"), requiredRole: "owner" });
             return;
         }
         setRenameChatValue(chat.title ?? "Untitled Chat");
@@ -155,7 +156,7 @@ export function ProjectAssistantTable({
                         : requestDeleteChat(chat)
                     : undefined
                 }
-                deleteLabel={appliesToSelection ? `Delete ${actionIds.length} chats` : undefined}
+                deleteLabel={appliesToSelection ? tr("projects.projectAssistantTable.deleteChats", { actionIdsCount: actionIds.length }) : undefined}
             />
         );
     }
@@ -223,7 +224,7 @@ export function ProjectAssistantTable({
         sort?.key === "created" ? sort.direction : null;
     const nameFilterButton = (
         <TableSortFilter
-            label="Sort by chat name"
+            label={tr("projects.projectAssistantTable.sortByChatName")}
             value={nameSortDirection}
             align="right"
             onChange={(direction) => handleSortChange("name", direction)}
@@ -231,8 +232,8 @@ export function ProjectAssistantTable({
     );
     const creatorFilterButton = (
         <PersonFilter
-            label="Filter by creator"
-            selectedTitle={(name) => `Created by ${name}`}
+            label={tr("projects.projectAssistantTable.filterByCreator")}
+            selectedTitle={(name) => tr("projects.projectAssistantTable.createdBy", { name })}
             value={
                 creatorPeople.find(
                     (person) => person.user_id === creatorFilter,
@@ -246,7 +247,7 @@ export function ProjectAssistantTable({
     );
     const createdFilterButton = (
         <TableSortFilter
-            label="Sort by created date"
+            label={tr("projects.projectAssistantTable.sortByCreatedDate")}
             value={createdSortDirection}
             onChange={(direction) => handleSortChange("created", direction)}
         />
@@ -286,18 +287,18 @@ export function ProjectAssistantTable({
                                 className={TABLE_CHECKBOX_CLASS}
                             />
                         )}
-                        <span className="mr-1">Chats</span>
+                        <span className="mr-1">{tr("projects.projectAssistantTable.chats")}</span>
                         {!loading && nameFilterButton}
                     </TableStickyCell>
                     <TableHeaderCell className="ml-auto w-32">
                         <div className="flex items-center gap-1">
-                            <span>Creator</span>
+                            <span>{tr("projects.projectAssistantTable.creator")}</span>
                             {!loading && creatorFilterButton}
                         </div>
                     </TableHeaderCell>
                     <TableHeaderCell className="w-32">
                         <div className="flex items-center gap-1">
-                            <span>Created</span>
+                            <span>{tr("projects.projectAssistantTable.created")}</span>
                             {!loading && createdFilterButton}
                         </div>
                     </TableHeaderCell>
@@ -311,8 +312,8 @@ export function ProjectAssistantTable({
                 <TableEmptyState>
                     <EmptyState
                         icon={<ChatSkeuoIcon />}
-                        title="Assistant"
-                        description="Ask questions and get answers grounded in the documents in this project."
+                        title={tr("projects.projectAssistantTable.assistant")}
+                        description={tr("projects.projectAssistantTable.askQuestionsGetAnswersGrounded")}
                         action={
                             <PillButtonUI
                                 tone="black"
@@ -320,7 +321,7 @@ export function ProjectAssistantTable({
                                 onClick={onCreateChat}
                                 disabled={!canCreateChat}
                             >
-                                Create
+                                {tr("projects.projectAssistantTable.create")}
                             </PillButtonUI>
                         }
                     />
@@ -378,7 +379,7 @@ export function ProjectAssistantTable({
                                             : [...prev, chat.id];
                                     })
                                 }
-                                label={chat.title ?? "Untitled Chat"}
+                                label={chat.title ?? tr("projects.projectAssistantTable.untitledChat")}
                                 editing={renamingChatId === chat.id}
                                 editValue={renameChatValue}
                                 onEditValueChange={setRenameChatValue}
@@ -415,9 +416,9 @@ export function ProjectAssistantTable({
         </TableScrollArea>
         <ConfirmPopup
             open={chatPendingDelete !== null}
-            title="Delete chat?"
-            message="This cannot be undone."
-            confirmLabel="Delete"
+            title={tr("projects.projectAssistantTable.deleteChat")}
+            message={tr("projects.projectAssistantTable.cannotUndone")}
+            confirmLabel={tr("projects.projectAssistantTable.delete")}
             confirmVariant="danger"
             onCancel={() => setChatPendingDelete(null)}
             onConfirm={() => {

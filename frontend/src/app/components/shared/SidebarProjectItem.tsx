@@ -19,6 +19,7 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     LIQUID_GLASS_SELECTED_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 /** How many more of a project's chats and reviews each "See more" shows. */
 export const PROJECT_RECENT_ITEM_PAGE_SIZE = 5;
@@ -49,7 +50,7 @@ export function mergeProjectRecentItems(
             (chat): ProjectRecentItem => ({
                 kind: "chat",
                 id: chat.id,
-                title: chat.title?.trim() || "Untitled chat",
+                title: chat.title?.trim() || tr("shared.sidebarProjectItem.untitledChat"),
                 href: `/projects/${projectId}/assistant/chat/${chat.id}`,
                 activityAt: chat.updated_at ?? chat.created_at,
             }),
@@ -58,7 +59,7 @@ export function mergeProjectRecentItems(
             (review): ProjectRecentItem => ({
                 kind: "review",
                 id: review.id,
-                title: review.title?.trim() || "Untitled review",
+                title: review.title?.trim() || tr("shared.sidebarProjectItem.untitledReview"),
                 href: `/projects/${projectId}/tabular-reviews/${review.id}`,
                 activityAt: review.updated_at ?? review.created_at,
             }),
@@ -232,7 +233,7 @@ export function SidebarProjectItem({
                 }}
                 className="font-medium text-gray-700 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             >
-                Retry
+                {tr("shared.sidebarProjectItem.retry")}
             </button>
         </li>
     );
@@ -332,7 +333,7 @@ export function SidebarProjectItem({
                         )
                     ) : items && items.length === 0 ? (
                         <li className="flex min-h-7 items-center pl-2 pr-2 text-xs text-gray-500">
-                            No chats or reviews yet
+                            {tr("shared.sidebarProjectItem.noChatsReviewsYet")}
                         </li>
                     ) : (
                         <>
@@ -390,7 +391,7 @@ export function SidebarProjectItem({
                                         aria-controls={listId}
                                         className="flex h-7 w-full items-center rounded-md pl-2 pr-2 text-left text-xs text-gray-500 transition-colors hover:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500/40 disabled:cursor-default"
                                     >
-                                        {loadingMore ? "Loading..." : "See more"}
+                                        {loadingMore ? tr("shared.sidebarProjectItem.loading") : tr("shared.sidebarProjectItem.seeMore")}
                                     </button>
                                 </li>
                             )}

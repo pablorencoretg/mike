@@ -12,6 +12,7 @@ import type {
   AskInputResponseItem as SharedAskInputResponseItem,
   AskInputsEvent as SharedAskInputsEvent,
 } from "@mike/contracts";
+import { tr } from "@/shared/i18n/runtime";
 
 export interface Folder {
   id: string;
@@ -511,10 +512,10 @@ export function panelDocumentFromCitation(
       .join(", ");
     return {
       document_id: `case:${citation.cluster_id}`,
-      title: title || "Case",
+      title: title || tr("shared.types.case"),
       type: "case",
       metadata: citation.dateFiled
-        ? [{ label: "Date", value: citation.dateFiled, format: "date" }]
+        ? [{ label: tr("shared.types.date"), value: citation.dateFiled, format: "date" }]
         : [],
       actions: [
         ...(citation.pdfUrl
@@ -522,7 +523,7 @@ export function panelDocumentFromCitation(
               {
                 type: "download" as const,
                 url: citation.pdfUrl,
-                label: "Download",
+                label: tr("shared.types.download"),
               },
             ]
           : []),
@@ -531,8 +532,8 @@ export function panelDocumentFromCitation(
               {
                 type: "link" as const,
                 url: citation.url,
-                label: "Link",
-                title: "Link",
+                label: tr("shared.types.link"),
+                title: tr("shared.types.link"),
               },
             ]
           : []),

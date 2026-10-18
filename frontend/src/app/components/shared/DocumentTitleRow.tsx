@@ -17,6 +17,7 @@ import { VersionChip } from "./VersionChip";
 import type { PanelDocument } from "./types";
 import type { DocxSaveState } from "./views/DocxRenderer.types";
 import { DocxSaveErrorPopup } from "./views/DocxSaveErrorPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 type ExternalSourceLink = {
     href: string;
@@ -112,14 +113,14 @@ export function DocumentTitleRow({
                     {onToggleToolbar && (
                         <TextButtonUI
                             size="icon-xs"
-                            aria-label="Edit"
+                            aria-label={tr("shared.documentTitleRow.edit")}
                             aria-expanded={toolbarVisible}
                             aria-pressed={toolbarVisible}
                             className={toolbarVisible ? "text-foreground" : undefined}
                             title={
                                 toolbarVisible
-                                    ? "Stop editing"
-                                    : "Enable editing"
+                                    ? tr("shared.documentTitleRow.stopEditing")
+                                    : tr("shared.documentTitleRow.enableEditing")
                             }
                             onClick={onToggleToolbar}
                         >
@@ -186,11 +187,11 @@ function DocxSaveStatus({ state }: { state: DocxSaveState }) {
         return () => clearTimeout(timer);
     }, [saved, state]);
     const label = state.error
-        ? "Not saved"
+        ? tr("shared.documentTitleRow.notSaved")
         : state.dirty || state.status === "saving"
-          ? "Saving…"
+          ? tr("shared.documentTitleRow.saving")
           : saved && expired !== state
-            ? "Saved"
+            ? tr("shared.documentTitleRow.saved")
             : null;
     return (
         <span
@@ -233,8 +234,8 @@ function UrlDownloadButton({
             target="_blank"
             rel="noopener noreferrer"
             download
-            aria-label="Download"
-            title="Download"
+            aria-label={tr("shared.documentTitleRow.download")}
+            title={tr("shared.documentTitleRow.download")}
             className={textButtonUIClassName({
                 size: "icon-xs",
             })}
@@ -301,7 +302,7 @@ function DownloadButton({
             setError(
                 userFacingApiError(
                     cause,
-                    "This file could not be downloaded. Please try again.",
+                    tr("shared.documentTitleRow.fileCouldNotDownloadedPlease"),
                 ),
             );
         } finally {
@@ -314,14 +315,14 @@ function DownloadButton({
         <>
             <WarningPopup
                 open={!!error}
-                title="Download failed"
+                title={tr("shared.documentTitleRow.downloadFailed")}
                 message={error}
                 onClose={() => setError(null)}
             />
             <TextButtonUI
                 size="icon-xs"
-                aria-label="Download"
-                title="Download"
+                aria-label={tr("shared.documentTitleRow.download")}
+                title={tr("shared.documentTitleRow.download")}
                 onClick={handleClick}
                 loading={!!spinning}
             >

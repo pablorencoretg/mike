@@ -33,6 +33,7 @@ import {
 } from "@/shared/ui/dropdown";
 import { TextButtonUI } from "@/shared/ui/TextButtonUI";
 import { cn } from "@/app/lib/utils";
+import { tr } from "@/shared/i18n/runtime";
 
 export function localDateValue(date: Date): string {
   const offset = date.getTimezoneOffset() * 60_000;
@@ -137,8 +138,8 @@ export function HistoryDatePicker({
                 YearsDropdown: CalendarYearDropdown,
               }}
               labels={{
-                labelMonthDropdown: () => "Month",
-                labelYearDropdown: () => "Year",
+                labelMonthDropdown: () => tr("history.historyDatePicker.month"),
+                labelYearDropdown: () => tr("history.historyDatePicker.year"),
               }}
               style={CALENDAR_STYLE}
               classNames={CALENDAR_CLASSES}

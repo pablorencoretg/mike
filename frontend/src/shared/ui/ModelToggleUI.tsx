@@ -24,6 +24,7 @@ import {
   LIQUID_GLASS_SELECTED_CLASS,
   LIQUID_GLASS_SUBTLE_CLASS,
 } from "./LiquidGlassUI";
+import { tr } from "../i18n/runtime";
 
 export type ModelToggleGroup = string;
 
@@ -209,7 +210,7 @@ export function ModelToggleUI({
   const label =
     selectedLabel ??
     selected?.label ??
-    (models.length > 0 ? "Select model" : emptyLabel);
+    (models.length > 0 ? tr("shared.ui.modelToggleUI.selectModel") : emptyLabel);
   const reasoningIndex = reasoningLevel
     ? Math.max(0, reasoningLevels.indexOf(reasoningLevel))
     : 0;
@@ -227,8 +228,8 @@ export function ModelToggleUI({
     return (
       <TriggerButton
         type="button"
-        aria-label="No models available"
-        title="Configure models"
+        aria-label={tr("shared.ui.modelToggleUI.noModelsAvailable")}
+        title={tr("shared.ui.modelToggleUI.configureModels")}
         onClick={onEmptyClick}
         disabled={!onEmptyClick}
         className={
@@ -252,15 +253,15 @@ export function ModelToggleUI({
       <DropdownTrigger asChild>
         <TriggerButton
           type="button"
-          aria-label="Choose model"
+          aria-label={tr("shared.ui.modelToggleUI.chooseModel")}
           title={
             loading
-              ? "Checking API keys"
+              ? tr("shared.ui.modelToggleUI.checkingApiKeys")
               : models.length === 0
-                ? "No API key configured"
+                ? tr("shared.ui.modelToggleUI.noApiKeyConfigured")
                 : selectedAvailable
-                  ? `Choose model — ${label}`
-                  : "API key missing for selected model"
+                  ? tr("shared.ui.modelToggleUI.chooseModel2", { label })
+                  : tr("shared.ui.modelToggleUI.apiKeyMissingSelectedModel")
           }
           disabled={loading}
           className={
@@ -362,7 +363,7 @@ export function ModelToggleUI({
           <div className="shrink-0">
             <DropdownSeparator />
             <DropdownItem
-              aria-label={`Reasoning level: ${REASONING_LEVEL_LABELS[reasoningLevel]}`}
+              aria-label={tr("shared.ui.modelToggleUI.reasoningLevel", { REASONING_LEVEL_LABELS: REASONING_LEVEL_LABELS[reasoningLevel] })}
               onSelect={(event) => event.preventDefault()}
               onFocus={(event) => {
                 if (event.target === event.currentTarget) {
@@ -373,7 +374,7 @@ export function ModelToggleUI({
             >
               <div>
                 <div className="mb-1.5 flex items-center gap-2 text-xs text-gray-700">
-                  <span className="font-medium">Reasoning</span>
+                  <span className="font-medium">{tr("shared.ui.modelToggleUI.reasoning")}</span>
                   <span className="ml-auto text-[10px] text-gray-500">
                     {REASONING_LEVEL_LABELS[reasoningLevel]}
                   </span>
@@ -397,7 +398,7 @@ export function ModelToggleUI({
                   <input
                     ref={reasoningInputRef}
                     type="range"
-                    aria-label="Reasoning level"
+                    aria-label={tr("shared.ui.modelToggleUI.reasoningLevel2")}
                     aria-valuetext={REASONING_LEVEL_LABELS[reasoningLevel]}
                     min={0}
                     max={reasoningLevels.length - 1}

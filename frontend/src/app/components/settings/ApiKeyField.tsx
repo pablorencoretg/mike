@@ -19,6 +19,7 @@ import {
 } from "@/app/lib/userFacingError";
 import { useLatestRef } from "@/app/hooks/useLatestRef";
 import { settingsGlassIconButtonClassName } from "@/app/(pages)/settings/settingsStyles";
+import { tr } from "@/shared/i18n/runtime";
 
 // The backend never returns saved keys, so the mask is a fixed-length stand-in.
 const SAVED_KEY_MASK = "x".repeat(24);
@@ -129,9 +130,9 @@ export function ApiKeyField({
     }
     notifyInfo(
       valueRef.current.trim().length > 0
-        ? `Your ${label} has changed since that attempt. Press Save to store the key now in the field.`
-        : `The ${label} field is empty, so there is nothing to retry. Enter the key again and press Save.`,
-      "Nothing was sent",
+        ? tr("settings.apiKeyField.hasChangedSinceAttemptPress", { label })
+        : tr("settings.apiKeyField.fieldEmptySoThereNothing", { label }),
+      tr("settings.apiKeyField.nothingWasSent"),
     );
   };
 
@@ -174,7 +175,7 @@ export function ApiKeyField({
             { retryable: true },
           ),
           {
-            action: `save your ${label}`,
+            action: tr("settings.apiKeyField.save", { label }),
             onRetry: () => retrySave(attempted, attemptedSetting),
           },
         );
@@ -187,7 +188,7 @@ export function ApiKeyField({
         // shown as written, with no Retry (the same value would be refused
         // again); a transient failure offers one.
         notifyError(error, {
-          action: `save your ${label}`,
+          action: tr("settings.apiKeyField.save", { label }),
           onRetry: () => retrySave(attempted, attemptedSetting),
         });
       }
@@ -213,7 +214,7 @@ export function ApiKeyField({
             { retryable: true },
           ),
           {
-            action: `remove your ${label}`,
+            action: tr("settings.apiKeyField.remove", { label }),
             onRetry: () => void handleRemove(),
           },
         );
@@ -223,7 +224,7 @@ export function ApiKeyField({
         setPendingMfaAction("remove");
       } else {
         notifyError(error, {
-          action: `remove your ${label}`,
+          action: tr("settings.apiKeyField.remove", { label }),
           onRetry: () => void handleRemove(),
         });
       }
@@ -243,12 +244,12 @@ export function ApiKeyField({
   };
 
   const saveAction = {
-    label: isSaving ? "Saving..." : saved ? "Saved" : "Save",
+    label: isSaving ? tr("settings.apiKeyField.saving") : saved ? tr("settings.apiKeyField.saved") : tr("settings.apiKeyField.save2"),
     onClick: handleSave,
     disabled: isSaving || !dirty || saved,
   };
   const removeAction = hasSavedKey ? {
-    label: "Remove",
+    label: tr("settings.apiKeyField.remove2"),
     onClick: handleRemove,
     disabled: isSaving,
   } : undefined;
@@ -296,7 +297,7 @@ export function ApiKeyField({
                 type="button"
                 onClick={() => setReveal((current) => !current)}
                 className={`absolute inset-y-1 right-1.5 flex items-center ${settingsGlassIconButtonClassName}`}
-                aria-label={reveal ? "Hide key" : "Show key"}
+                aria-label={reveal ? tr("settings.apiKeyField.hideKey") : tr("settings.apiKeyField.showKey")}
               >
                 {reveal ? (
                   <EyeOff className="h-4 w-4" />

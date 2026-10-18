@@ -7,6 +7,7 @@ import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { CloseButton } from "@/shared/ui/CloseButton";
 import { cn } from "@/app/lib/utils";
 import { LIQUID_GLASS_FLOAT_CLASS } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 type ConfirmStatus = "idle" | "loading" | "complete";
 
@@ -73,7 +74,7 @@ export function ConfirmPopup({
   const confirmBusy = confirmStatus === "loading";
   const resolvedConfirmDisabled = confirmDisabled || confirmStatus !== "idle";
   const normalizedConfirmLabel =
-    typeof confirmLabel === "string" ? confirmLabel : "Confirm";
+    typeof confirmLabel === "string" ? confirmLabel : tr("popups.confirmPopup.confirm");
   const isDangerAction = confirmVariant === "danger";
   const resolvedConfirmLabel =
     confirmStatus === "loading" ? (
@@ -89,7 +90,7 @@ export function ConfirmPopup({
       <div
         role="dialog"
         aria-labelledby={title ? titleId : undefined}
-        aria-label={title ? undefined : "Confirm action"}
+        aria-label={title ? undefined : tr("popups.confirmPopup.confirmAction")}
         className={cn(
           `pointer-events-auto relative w-[min(92vw,520px)] rounded-2xl p-2.5 pl-3 text-sm ${LIQUID_GLASS_FLOAT_CLASS}`,
           className,
@@ -97,7 +98,7 @@ export function ConfirmPopup({
       >
         <CloseButton
           onClick={onCancel}
-          label="Close confirmation"
+          label={tr("popups.confirmPopup.closeConfirmation")}
           size="sm"
           className="absolute right-2.5 top-2.5"
         />

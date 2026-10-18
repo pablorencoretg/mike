@@ -31,6 +31,7 @@ import {
     authMessages,
 } from "@/app/lib/authMessages";
 import { useT } from "@/shared/i18n/I18nContext";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * The shared auth table (`@/app/lib/authMessages`) with this screen's
@@ -53,9 +54,9 @@ const LOGIN_ERROR_MESSAGES = authMessages({
 /** Classify a login failure into text a person can act on. */
 function describeLoginError(error: unknown): UserFacingError {
     const described = describeError(error, {
-        action: "log in",
+        action: tr("app.login.page.log"),
         codeMessages: LOGIN_ERROR_MESSAGES,
-        fallback: "Unable to log in right now. Try again.",
+        fallback: tr("app.login.page.unableLogRightNowTry"),
     });
     // A 429 without a GoTrue code still means "you tried too often".
     return described.kind === "rate_limited"
@@ -157,8 +158,8 @@ export default function LoginPage() {
             // session error look permanent; say so instead.
             setSessionError(
                 describeError(caught, {
-                    action: "restore your session",
-                    fallback: "Unable to restore your session. Try again.",
+                    action: tr("app.login.page.restoreSession"),
+                    fallback: tr("app.login.page.unableRestoreSessionTryAgain"),
                 }),
             );
             setSessionWarningDismissed(false);
@@ -210,9 +211,9 @@ export default function LoginPage() {
         } catch (error: unknown) {
             setError(
                 describeError(error, {
-                    action: "open your local workspace",
+                    action: tr("app.login.page.openLocalWorkspace"),
                     codeMessages: LOGIN_ERROR_MESSAGES,
-                    fallback: "Unable to continue as guest right now. Please try again.",
+                    fallback: tr("app.login.page.unableContinueAsGuestRight"),
                 }),
             );
         } finally {

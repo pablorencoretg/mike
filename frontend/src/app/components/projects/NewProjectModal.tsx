@@ -32,6 +32,7 @@ import {
     type PendingOrgOverride,
 } from "../modals/CreateAccessStep";
 import { AccessVisibilityField } from "../modals/AccessVisibilityField";
+import { tr } from "@/shared/i18n/runtime";
 
 const PERSONAL_WORKSPACE = "__personal__";
 
@@ -267,7 +268,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                 } catch (err: unknown) {
                     grantFailures.push({
                         email: entry.email,
-                        detail: userFacingApiError(err, "the request failed"),
+                        detail: userFacingApiError(err, tr("projects.newProjectModal.requestFailed")),
                     });
                 }
             }
@@ -373,7 +374,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                             ? failedUploadMessage(uploadError.outcomes)
                             : userFacingApiError(
                                   uploadError,
-                                  "The attached files could not be uploaded. Please try again.",
+                                  tr("projects.newProjectModal.attachedFilesCouldNotUploaded"),
                               );
                 }
             }
@@ -437,7 +438,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
 
             finishCreation({ ...stamped, document_count: attachedCount });
         } catch (err: unknown) {
-            setError(userFacingApiError(err, "Failed to create project"));
+            setError(userFacingApiError(err, tr("projects.newProjectModal.failedCreateProject")));
         } finally {
             setLoading(false);
         }
@@ -481,15 +482,15 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
             open={open}
             onClose={handleClose}
             breadcrumbs={[
-                "Projects",
-                "New project",
+                tr("projects.newProjectModal.projects"),
+                tr("projects.newProjectModal.newProject"),
                 step === "details"
-                    ? "Details"
+                    ? tr("projects.newProjectModal.details")
                     : step === "access"
                       ? orgId === PERSONAL_WORKSPACE
-                          ? "Access"
-                          : "People"
-                      : "Add Documents",
+                          ? tr("projects.newProjectModal.access")
+                          : tr("projects.newProjectModal.people")
+                      : tr("projects.newProjectModal.addDocuments"),
             ]}
             secondaryAction={
                 step === "documents"
@@ -501,7 +502,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                       }
                     : step === "access"
                       ? {
-                            label: "Back",
+                            label: tr("projects.newProjectModal.back"),
                             type: "button",
                             onClick: () => setStep("details"),
                             disabled: loading,
@@ -511,7 +512,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
             cancelAction={
                 step === "documents"
                     ? {
-                          label: "Back",
+                          label: tr("projects.newProjectModal.back"),
                           onClick: () => setStep("access"),
                           // Back stays open once the project exists: a retry
                           // persists a changed memory choice before anything
@@ -523,7 +524,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                       }
                     : step === "access"
                       ? {
-                            label: "Skip",
+                            label: tr("projects.newProjectModal.skip"),
                             type: "button",
                             onClick: () => {
                                 setSharedUsers([]);
@@ -537,24 +538,24 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
             primaryAction={
                 step === "details"
                     ? {
-                          label: "Next",
+                          label: tr("projects.newProjectModal.next"),
                           type: "button",
                           onClick: () => setStep("access"),
                           disabled: !name.trim() || loading,
                       }
                     : step === "access"
                       ? {
-                            label: "Next",
+                            label: tr("projects.newProjectModal.next"),
                             type: "button",
                             onClick: () => setStep("documents"),
                             disabled: loading,
                         }
                       : {
                             label: loading
-                                ? "Creating…"
+                                ? tr("projects.newProjectModal.creating")
                                 : pendingProject
-                                  ? "Continue"
-                                  : "Create project",
+                                  ? tr("projects.newProjectModal.continue")
+                                  : tr("projects.newProjectModal.createProject"),
                             type: "button",
                             onClick: () => void createProjectFromDocuments(),
                             disabled: !name.trim() || loading,
@@ -577,14 +578,14 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                     <div className="space-y-6">
                         <div>
                             <FieldLabel htmlFor="new-project-name">
-                                Project name
+                                {tr("projects.newProjectModal.projectName")}
                             </FieldLabel>
                             <FormTextInput
                                 id="new-project-name"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Add project name"
+                                placeholder={tr("projects.newProjectModal.addProjectName")}
                                 variant="minimal"
                                 // Once the project EXISTS the retry reuses
                                 // `createdProjectRef` and never reads these
@@ -599,14 +600,14 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
 
                         <div>
                             <FieldLabel htmlFor="new-project-cm-number">
-                                CM number
+                                {tr("projects.newProjectModal.cmNumber")}
                             </FieldLabel>
                             <FormTextInput
                                 id="new-project-cm-number"
                                 type="text"
                                 value={cmNumber}
                                 onChange={(e) => setCmNumber(e.target.value)}
-                                placeholder="Add a CM number..."
+                                placeholder={tr("projects.newProjectModal.addCmNumber")}
                                 variant="minimal"
                                 className="text-xl text-gray-600"
                                 disabled={projectExists}
@@ -615,7 +616,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
 
                         <div>
                             <FieldLabel htmlFor="new-project-practice">
-                                Practice
+                                {tr("projects.newProjectModal.practice")}
                             </FieldLabel>
                             <ProjectPracticeField
                                 id="new-project-practice"
@@ -646,24 +647,21 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                         ) : null}
                         {projectExists && (
                             <p className="text-sm text-gray-500">
-                                The project has been created, so its name, CM
-                                number and practice can no longer be changed
-                                here. Edit them from the project once this
-                                finishes.
+                                {tr("projects.newProjectModal.projectHasBeenCreatedSo")}
                             </p>
                         )}
 
                         <div>
-                            <FieldLabel as="p">Project memory</FieldLabel>
+                            <FieldLabel as="p">{tr("projects.newProjectModal.projectMemory")}</FieldLabel>
                             <ToggleSwitchUI
                                 checked={memoryEnabled}
                                 onCheckedChange={(enabled) => {
                                     memoryEditedRef.current = true;
                                     setMemoryEnabled(enabled);
                                 }}
-                                aria-label="Enable project memory"
+                                aria-label={tr("projects.newProjectModal.enableProjectMemory")}
                             >
-                                {memoryEnabled ? "On" : "Off"}
+                                {memoryEnabled ? tr("projects.newProjectModal.text") : tr("projects.newProjectModal.off")}
                             </ToggleSwitchUI>
                         </div>
                     </div>
@@ -678,7 +676,7 @@ export function NewProjectModal({ open, onClose, onCreated }: Props) {
                         onDirectGrantsChange={setSharedUsers}
                         orgOverrides={orgOverrides}
                         onOrgOverridesChange={setOrgOverrides}
-                        ownerLabel="Project owners"
+                        ownerLabel={tr("projects.newProjectModal.projectOwners")}
                         visibility={visibility}
                     />
                 ) : (

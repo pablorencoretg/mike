@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactElement } from "react";
 import { useChatHistoryContext } from "@/app/contexts/ChatHistoryContext";
 import { buildChatHistoryItems } from "@/app/components/shared/ChatPanelHeader";
 import { ChatHistoryDropdownUI } from "@/shared/ui/ChatHistoryDropdownUI";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * The assistant's chat history, as a menu on one of a chat's header buttons.
@@ -51,7 +52,7 @@ export function AssistantChatHistoryMenu({
             query={query}
             onQueryChange={setQuery}
             loading={chats === null}
-            emptyLabel={chats?.length ? "No matches." : "No chats yet."}
+            emptyLabel={chats?.length ? tr("assistant.assistantChatHistoryMenu.noMatches") : tr("assistant.assistantChatHistoryMenu.noChatsYet")}
             items={buildChatHistoryItems({
                 chats: chats ?? [],
                 currentChatId,

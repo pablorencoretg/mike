@@ -13,6 +13,7 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     LIQUID_GLASS_SUBTLE_CLASS,
 } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 interface InitialViewProps {
     onSubmit: (message: Message) => void;
@@ -110,7 +111,7 @@ export function InitialView({
                                 "transform 900ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 800ms ease-in-out 300ms",
                         }}
                     >
-                        Hi, {username}
+                        {tr("assistant.initialView.hi", { username })}
                     </h1>
                 </div>
             </div>
@@ -128,7 +129,7 @@ export function InitialView({
             <div className="min-h-0 w-full max-w-4xl justify-self-center px-0 pt-1 xl:px-8">
                 <div className="text-center">
                     <p className="text-xs py-2 mb-12 text-gray-500">
-                        AI can make mistakes. Answers are not legal advice.
+                        {tr("assistant.initialView.aiCanMakeMistakesAnswers")}
                     </p>
                 </div>
 
@@ -143,12 +144,12 @@ export function InitialView({
                                     aria-hidden="true"
                                     className="h-3.5 w-3.5 shrink-0"
                                 />
-                                Quick actions
+                                {tr("assistant.initialView.quickActions")}
                             </span>
                             <button
                                 type="button"
                                 onClick={onEditQuickActions}
-                                aria-label="Configure quick actions"
+                                aria-label={tr("assistant.initialView.configureQuickActions")}
                                 className="absolute left-full ml-1.5 flex h-5 w-5 items-center justify-center text-gray-400 opacity-0 transition-all hover:text-gray-700 group-hover:opacity-100 focus:opacity-100"
                             >
                                 <MoreHorizontal className="h-3.5 w-3.5" />

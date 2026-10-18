@@ -1,5 +1,6 @@
 import { settleWithConcurrency } from "../lib/settleWithConcurrency";
 import { createSecureUuid } from "../lib/secureUuid";
+import { tr } from "../i18n/runtime";
 
 export type UploadSessionPurpose =
     | "document_create"
@@ -96,9 +97,9 @@ export function failedUploadMessage<T>(
     }
     const filenames = failures.map((outcome) => outcome.filename);
     if (filenames.length === 1) {
-        return `${filenames[0]} could not be uploaded. Please try again.`;
+        return tr("shared.api.uploadSessionClient.couldNotUploadedPleaseTry", { filenames: filenames[0] });
     }
-    return `${filenames.join(", ")} could not be uploaded. Please try again.`;
+    return tr("shared.api.uploadSessionClient.couldNotUploadedPleaseTry2", { join: filenames.join(", ") });
 }
 
 /**

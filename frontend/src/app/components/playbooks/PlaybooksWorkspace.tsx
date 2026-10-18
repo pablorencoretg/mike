@@ -96,6 +96,7 @@ import { AccessModal } from "@/app/components/modals/AccessModal";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import type { Document } from "@/app/components/shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 function isWordDocument(filename: string) {
   return filename.toLowerCase().endsWith(".docx");
@@ -122,7 +123,7 @@ async function extractReviewText(file: File): Promise<string> {
       );
     }
     return pages
-      .map((text, index) => `[Page ${index + 1}]\n${text}`)
+      .map((text, index) => tr("playbooks.playbooksWorkspace.page", { value: index + 1, text }))
       .join("\n\n");
   }
   return file.text();
@@ -336,7 +337,7 @@ function PlaybooksWorkspace() {
       setSharesError(
         userFacingApiError(
           error,
-          "The change was saved, but this list could not be reloaded. Reopen People to see the current one.",
+          tr("playbooks.playbooksWorkspace.changeWasSavedButList"),
         ),
       );
     }
@@ -388,7 +389,7 @@ function PlaybooksWorkspace() {
         current && items.some((item) => item.id === current) ? current : null,
       );
     } catch (err) {
-      setError(describeError(err, { action: "load playbooks" }).message);
+      setError(describeError(err, { action: tr("playbooks.playbooksWorkspace.loadPlaybooks") }).message);
     } finally {
       setLoading(false);
     }
@@ -452,7 +453,7 @@ function PlaybooksWorkspace() {
       setPlaybooks((current) => [created, ...current]);
       openPlaybook(created.id, { tab: "overview" });
     } catch (err) {
-      notifyError(err, { action: "create the playbook" });
+      notifyError(err, { action: tr("playbooks.playbooksWorkspace.createPlaybook") });
     } finally {
       setBusy(null);
     }
@@ -489,7 +490,7 @@ function PlaybooksWorkspace() {
       setImportTargetId(null);
     } catch (err) {
       setImportError(
-        describeError(err, { action: "import the playbook" }).message,
+        describeError(err, { action: tr("playbooks.playbooksWorkspace.importPlaybook") }).message,
       );
     } finally {
       setBusy(null);
@@ -553,7 +554,7 @@ function PlaybooksWorkspace() {
       setDeleteOpen(false);
       setDeleteTargetId(null);
     } catch (err) {
-      notifyError(err, { action: "delete the playbook" });
+      notifyError(err, { action: tr("playbooks.playbooksWorkspace.deletePlaybook") });
     } finally {
       setBusy(null);
     }
@@ -570,7 +571,7 @@ function PlaybooksWorkspace() {
     );
     setReviewError(
       supported.length < candidates.length
-        ? "Some files weren’t added. Choose PDF, DOCX, or TXT documents."
+        ? tr("playbooks.playbooksWorkspace.someFilesWerenTAdded")
         : null,
     );
     setReviewDocuments((current) => {
@@ -662,7 +663,7 @@ function PlaybooksWorkspace() {
         } catch (err) {
           failed = true;
           const error = describeError(err, {
-            action: "review the document",
+            action: tr("playbooks.playbooksWorkspace.reviewDocument"),
           }).message;
           setReviewDocuments((items) =>
             items.map((document) =>
@@ -690,13 +691,13 @@ function PlaybooksWorkspace() {
         breadcrumbs={
           linkedPlaybookLoading
             ? [
-                { label: "Playbooks", onClick: () => openPlaybook(null) },
+                { label: tr("playbooks.playbooksWorkspace.playbooks"), onClick: () => openPlaybook(null) },
                 { loading: true, skeletonClassName: "w-40" },
               ]
             : selected
               ? [
                   {
-                    label: "Playbooks",
+                    label: tr("playbooks.playbooksWorkspace.playbooks"),
                     onClick: () => void backToList(),
                   },
                   {
@@ -704,7 +705,7 @@ function PlaybooksWorkspace() {
                     title: content?.name || selected.name,
                   },
                 ]
-              : [{ label: "Playbooks" }]
+              : [{ label: tr("playbooks.playbooksWorkspace.playbooks") }]
         }
         actionGroups={
           linkedPlaybookLoading
@@ -727,10 +728,10 @@ function PlaybooksWorkspace() {
                                 />
                               )}
                               {autosave.status === "saving"
-                                ? "Saving…"
+                                ? tr("playbooks.playbooksWorkspace.saving")
                                 : autosave.status === "error"
-                                  ? "Couldn’t save"
-                                  : "Saved"}
+                                  ? tr("playbooks.playbooksWorkspace.couldnTSave")
+                                  : tr("playbooks.playbooksWorkspace.saved")}
                             </span>
                           ),
                         },
@@ -739,7 +740,7 @@ function PlaybooksWorkspace() {
                   [
                     {
                       onClick: () => openAccess(selected),
-                      title: "Playbook people",
+                      title: tr("playbooks.playbooksWorkspace.playbookPeople"),
                       iconOnly: true,
                       icon: <Users aria-hidden="true" className="h-4 w-4" />,
                     },
@@ -750,7 +751,7 @@ function PlaybooksWorkspace() {
                           <DropdownTrigger asChild>
                             <HeaderButtonUI
                               iconOnly
-                              aria-label="Playbook actions"
+                              aria-label={tr("playbooks.playbooksWorkspace.playbookActions")}
                               disabled={!!busy || !canEdit}
                             >
                               <MoreHorizontal
@@ -767,7 +768,7 @@ function PlaybooksWorkspace() {
                                 aria-hidden="true"
                                 className="h-4 w-4"
                               />
-                              Replace from Word
+                              {tr("playbooks.playbooksWorkspace.replaceFromWord")}
                             </DropdownItem>
                             {canManageAccess && (
                               <DropdownItem
@@ -778,7 +779,7 @@ function PlaybooksWorkspace() {
                                   aria-hidden="true"
                                   className="h-4 w-4"
                                 />
-                                Delete playbook
+                                {tr("playbooks.playbooksWorkspace.deletePlaybook2")}
                               </DropdownItem>
                             )}
                           </DropdownContent>
@@ -789,7 +790,7 @@ function PlaybooksWorkspace() {
                   [
                     {
                       icon: <Play aria-hidden="true" className="h-3.5 w-3.5" />,
-                      label: "Run",
+                      label: tr("playbooks.playbooksWorkspace.run"),
                       disabled: !!busy,
                       onClick: () => setReviewOpen(true),
                     },
@@ -802,7 +803,7 @@ function PlaybooksWorkspace() {
                       value: search,
                       onChange: setSearch,
                       placeholder:
-                        tab === "runs" ? "Search runs…" : "Search playbooks…",
+                        tab === "runs" ? tr("playbooks.playbooksWorkspace.searchRuns") : tr("playbooks.playbooksWorkspace.searchPlaybooks"),
                     },
                     {
                       type: "custom",
@@ -846,21 +847,21 @@ function PlaybooksWorkspace() {
                 disabled={!canEdit || !!busy}
                 className="grid min-w-0 gap-4 @[32rem]:grid-cols-2"
               >
-                <legend className="sr-only">Playbook details</legend>
+                <legend className="sr-only">{tr("playbooks.playbooksWorkspace.playbookDetails")}</legend>
                 <PlaybookField
-                  label="Playbook name"
+                  label={tr("playbooks.playbooksWorkspace.playbookName")}
                   value={content.name}
                   onChange={(name) => changeContent({ ...content, name })}
                 />
                 <PlaybookField
-                  label="Represented party"
+                  label={tr("playbooks.playbooksWorkspace.representedParty")}
                   value={content.representedParty}
                   onChange={(representedParty) =>
                     changeContent({ ...content, representedParty })
                   }
                 />
                 <PlaybookListField
-                  label="Document types"
+                  label={tr("playbooks.playbooksWorkspace.documentTypes")}
                   value={content.documentTypes}
                   placeholder="NDA, MSA"
                   onChange={(documentTypes) =>
@@ -868,16 +869,16 @@ function PlaybooksWorkspace() {
                   }
                 />
                 <PlaybookListField
-                  label="Jurisdictions"
+                  label={tr("playbooks.playbooksWorkspace.jurisdictions")}
                   value={content.jurisdictions}
-                  placeholder="England and Wales, New York"
+                  placeholder={tr("playbooks.playbooksWorkspace.englandWalesNewYork")}
                   onChange={(jurisdictions) =>
                     changeContent({ ...content, jurisdictions })
                   }
                 />
                 <div className="@[32rem]:col-span-2">
                   <PlaybookField
-                    label="Description"
+                    label={tr("playbooks.playbooksWorkspace.description")}
                     value={content.description}
                     onChange={(description) =>
                       changeContent({ ...content, description })
@@ -887,7 +888,7 @@ function PlaybooksWorkspace() {
                 </div>
                 <div className="@[32rem]:col-span-2">
                   <PlaybookField
-                    label="Global guidance"
+                    label={tr("playbooks.playbooksWorkspace.globalGuidance")}
                     value={content.globalGuidance}
                     onChange={(globalGuidance) =>
                       changeContent({ ...content, globalGuidance })
@@ -899,7 +900,7 @@ function PlaybooksWorkspace() {
               {isOrganization && (
                 <div>
                   <ModalFieldLabel htmlFor="playbook-visibility">
-                    Access
+                    {tr("playbooks.playbooksWorkspace.access")}
                   </ModalFieldLabel>
                   <ModalSelect
                     id="playbook-visibility"
@@ -907,8 +908,8 @@ function PlaybooksWorkspace() {
                     value={selected.visibility ?? "private"}
                     disabled={!canManageAccess || !!busy}
                     options={[
-                      { value: "private", label: "Private" },
-                      { value: "organization", label: "Public" },
+                      { value: "private", label: tr("playbooks.playbooksWorkspace.private") },
+                      { value: "organization", label: tr("playbooks.playbooksWorkspace.public") },
                     ]}
                     onChange={(visibility) =>
                       changeAccess({
@@ -917,8 +918,7 @@ function PlaybooksWorkspace() {
                     }
                   />
                   <p className="mt-2 text-xs text-gray-500">
-                    Members can view and run a public playbook. Choose who can
-                    edit it from People.
+                    {tr("playbooks.playbooksWorkspace.membersCanViewRunPublic")}
                   </p>
                 </div>
               )}
@@ -958,16 +958,16 @@ function PlaybooksWorkspace() {
             items={
               isOrganization
                 ? [
-                    { id: "all", label: "All" },
-                    { id: "mine", label: "Private" },
-                    { id: "shared", label: "Public" },
-                    { id: "runs", label: "Runs" },
+                    { id: "all", label: tr("playbooks.playbooksWorkspace.all") },
+                    { id: "mine", label: tr("playbooks.playbooksWorkspace.private") },
+                    { id: "shared", label: tr("playbooks.playbooksWorkspace.public") },
+                    { id: "runs", label: tr("playbooks.playbooksWorkspace.runs") },
                   ]
                 : [
-                    { id: "all", label: "All" },
-                    { id: "mine", label: "My playbooks" },
-                    { id: "shared", label: "Shared with me" },
-                    { id: "runs", label: "Runs" },
+                    { id: "all", label: tr("playbooks.playbooksWorkspace.all") },
+                    { id: "mine", label: tr("playbooks.playbooksWorkspace.myPlaybooks") },
+                    { id: "shared", label: tr("playbooks.playbooksWorkspace.sharedMe") },
+                    { id: "runs", label: tr("playbooks.playbooksWorkspace.runs") },
                   ]
             }
             active={tab}
@@ -1039,9 +1039,9 @@ function PlaybooksWorkspace() {
           currentUserEmail={user?.email ?? null}
           currentUserId={user?.id ?? null}
           breadcrumb={[
-            "Playbooks",
-            accessPlaybook.name || "Untitled playbook",
-            "Access",
+            tr("playbooks.playbooksWorkspace.playbooks"),
+            accessPlaybook.name || tr("playbooks.playbooksWorkspace.untitledPlaybook"),
+            tr("playbooks.playbooksWorkspace.access"),
           ]}
           access={{
             grants: shares.map((share) => ({
@@ -1049,7 +1049,7 @@ function PlaybooksWorkspace() {
               role: share.role,
             })),
             orgId: accessPlaybook.orgId,
-            ownerLabel: "Playbook owners",
+            ownerLabel: tr("playbooks.playbooksWorkspace.playbookOwners"),
             resourceNoun: "playbook",
             canManage: accessPlaybook.canManageAccess,
             visibility: accessPlaybook.visibility,
@@ -1076,7 +1076,7 @@ function PlaybooksWorkspace() {
       <AddDocumentsModal
         open={savedFilesOpen}
         onClose={() => setSavedFilesOpen(false)}
-        breadcrumb={["Playbooks", "Saved files"]}
+        breadcrumb={[tr("playbooks.playbooksWorkspace.playbooks"), tr("playbooks.playbooksWorkspace.savedFiles")]}
         uploadStateId="playbook-review"
         onSelect={(documents) => {
           setSavedFilesOpen(false);
@@ -1098,14 +1098,14 @@ function PlaybooksWorkspace() {
       <ConfirmPopup
         open={deleteOpen}
         title={
-          deleteTargets.length === 1 ? "Delete playbook?" : "Delete playbooks?"
+          deleteTargets.length === 1 ? tr("playbooks.playbooksWorkspace.deletePlaybook3") : tr("playbooks.playbooksWorkspace.deletePlaybooks")
         }
         message={
           deleteTargets.length === 1
-            ? `“${deleteTargets[0].name}” and its rules will be deleted.`
-            : `${deleteTargets.length} selected playbooks and their rules will be deleted.`
+            ? tr("playbooks.playbooksWorkspace.itsRulesWillDeleted", { name: deleteTargets[0].name })
+            : tr("playbooks.playbooksWorkspace.selectedPlaybooksTheirRulesWill", { deleteTargetsCount: deleteTargets.length })
         }
-        confirmLabel="Delete"
+        confirmLabel={tr("playbooks.playbooksWorkspace.delete")}
         confirmVariant="danger"
         confirmStatus={busy === "delete" ? "loading" : "idle"}
         onConfirm={() => void remove()}
@@ -1127,23 +1127,23 @@ function PlaybooksWorkspace() {
         }}
         size="sm"
         breadcrumbs={[
-          "Playbooks",
-          importTargetId ? "Replace from Word" : "Import Word playbook",
+          tr("playbooks.playbooksWorkspace.playbooks"),
+          importTargetId ? tr("playbooks.playbooksWorkspace.replaceFromWord") : tr("playbooks.playbooksWorkspace.importWordPlaybook"),
         ]}
         footerStatus={
           busy === "import" ? (
             <span className="text-xs text-gray-500">
-              Long files can take several minutes
+              {tr("playbooks.playbooksWorkspace.longFilesCanTakeSeveral")}
             </span>
           ) : null
         }
         primaryAction={{
           label:
             busy === "import"
-              ? "Compiling…"
+              ? tr("playbooks.playbooksWorkspace.compiling")
               : importTargetId
-                ? "Replace and compile"
-                : "Import and compile",
+                ? tr("playbooks.playbooksWorkspace.replaceCompile")
+                : tr("playbooks.playbooksWorkspace.importCompile"),
           icon:
             busy === "import" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -1155,7 +1155,7 @@ function PlaybooksWorkspace() {
           onClick: () => void doImport(),
         }}
         cancelAction={{
-          label: "Cancel",
+          label: tr("playbooks.playbooksWorkspace.cancel"),
           onClick: () => {
             setImportOpen(false);
             setImportError(null);
@@ -1170,8 +1170,8 @@ function PlaybooksWorkspace() {
         >
           <p className="text-sm text-gray-600">
             {importTargetId
-              ? "The imported concepts, positions, and sample clauses replace the current rules. Completed reviews keep the rules they used."
-              : "Import concepts, positions, and sample clauses, then refine the rules in the editor. Changes save automatically."}
+              ? tr("playbooks.playbooksWorkspace.importedConceptsPositionsSampleClauses")
+              : tr("playbooks.playbooksWorkspace.importConceptsPositionsSampleClauses")}
           </p>
           {busy === "import" && (
             <div
@@ -1180,8 +1180,7 @@ function PlaybooksWorkspace() {
             >
               <Loader2 className="mt-0.5 h-4 w-4 shrink-0 animate-spin" />
               <span>
-                Compiling your playbook. Keep this window open until the rules
-                are ready.
+                {tr("playbooks.playbooksWorkspace.compilingPlaybookKeepWindowOpen")}
               </span>
             </div>
           )}
@@ -1197,7 +1196,7 @@ function PlaybooksWorkspace() {
           {!importTargetId && (
             <div>
               <ModalFieldLabel htmlFor="playbook-import-name">
-                Playbook name (optional)
+                {tr("playbooks.playbooksWorkspace.playbookNameOptional")}
               </ModalFieldLabel>
               <ModalTextInput
                 id="playbook-import-name"
@@ -1208,7 +1207,7 @@ function PlaybooksWorkspace() {
           )}
           <div>
             <ModalFieldLabel htmlFor="playbook-import-file">
-              Word playbook
+              {tr("playbooks.playbooksWorkspace.wordPlaybook")}
             </ModalFieldLabel>
             <input
               id="playbook-import-file"
@@ -1223,7 +1222,7 @@ function PlaybooksWorkspace() {
           </div>
           <div>
             <ModalFieldLabel htmlFor="playbook-import-model">
-              Compilation model
+              {tr("playbooks.playbooksWorkspace.compilationModel")}
             </ModalFieldLabel>
             {models.length > 0 ? (
               <ModalSelect
@@ -1238,11 +1237,10 @@ function PlaybooksWorkspace() {
               />
             ) : (
               <p className="text-sm text-amber-700">
-                No compilation model is available.{" "}
+                {tr("playbooks.playbooksWorkspace.noCompilationModelAvailable")}{" "}
                 <a href="/account/api-keys" className="underline">
-                  Configure an API key
-                </a>{" "}
-                or enable a local model.
+                  {tr("playbooks.playbooksWorkspace.configureApiKey")}
+                </a>{" "}{tr("playbooks.playbooksWorkspace.enableLocalModel")}
               </p>
             )}
           </div>
@@ -1258,13 +1256,13 @@ function PlaybooksWorkspace() {
         }}
         size="lg"
         className="h-[min(720px,calc(100dvh-2rem))] [&_footer]:flex-wrap [&_footer>div:last-child]:ml-auto [&_footer_button]:whitespace-nowrap"
-        breadcrumbs={["Playbooks", "Run playbook"]}
+        breadcrumbs={[tr("playbooks.playbooksWorkspace.playbooks"), tr("playbooks.playbooksWorkspace.runPlaybook")]}
         footerLeading={
           <Dropdown>
             <DropdownTrigger asChild>
               <PillButton tone="white" size="normal" disabled={!!busy}>
                 <Plus className="h-4 w-4" />
-                Add document
+                {tr("playbooks.playbooksWorkspace.addDocument")}
               </PillButton>
             </DropdownTrigger>
             <DropdownContent
@@ -1282,7 +1280,7 @@ function PlaybooksWorkspace() {
                 }}
               >
                 <Upload className="h-4 w-4" />
-                Upload documents
+                {tr("playbooks.playbooksWorkspace.uploadDocuments")}
               </DropdownItem>
               <DropdownItem
                 onSelect={() => {
@@ -1291,7 +1289,7 @@ function PlaybooksWorkspace() {
                 }}
               >
                 <Cloud className="h-4 w-4" />
-                Saved files
+                {tr("playbooks.playbooksWorkspace.savedFiles")}
               </DropdownItem>
             </DropdownContent>
           </Dropdown>
@@ -1299,15 +1297,15 @@ function PlaybooksWorkspace() {
         primaryAction={{
           label:
             busy === "review"
-              ? "Reviewing…"
+              ? tr("playbooks.playbooksWorkspace.reviewing")
               : pendingReviewDocuments.length > 0 &&
                   pendingReviewDocuments.every(
                     (item) => item.status === "failed",
                   )
-                ? "Retry failed documents"
+                ? tr("playbooks.playbooksWorkspace.retryFailedDocuments")
                 : pendingReviewDocuments.length > 1
-                  ? `Start ${pendingReviewDocuments.length} reviews`
-                  : "Start review",
+                  ? tr("playbooks.playbooksWorkspace.startReviews", { pendingReviewDocumentsCount: pendingReviewDocuments.length })
+                  : tr("playbooks.playbooksWorkspace.startReview"),
           icon:
             busy === "review" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -1319,7 +1317,7 @@ function PlaybooksWorkspace() {
           onClick: () => void review(),
         }}
         cancelAction={{
-          label: "Cancel",
+          label: tr("playbooks.playbooksWorkspace.cancel"),
           onClick: () => {
             setReviewOpen(false);
             setReviewError(null);
@@ -1343,7 +1341,7 @@ function PlaybooksWorkspace() {
           <input
             ref={reviewFileRef}
             id="playbook-review-file"
-            aria-label="Upload review document"
+            aria-label={tr("playbooks.playbooksWorkspace.uploadReviewDocument")}
             type="file"
             accept=".pdf,.docx,.txt"
             multiple
@@ -1366,12 +1364,11 @@ function PlaybooksWorkspace() {
             }
           />
           <p className="text-xs text-gray-500">
-            Uploaded files are saved to Library Files. Word documents get the
-            recommended changes as tracked changes you can accept or reject.
+            {tr("playbooks.playbooksWorkspace.uploadedFilesSavedLibraryFiles")}
           </p>
           <div>
             <ModalFieldLabel htmlFor="playbook-review-instructions">
-              Review instructions
+              {tr("playbooks.playbooksWorkspace.reviewInstructions")}
             </ModalFieldLabel>
             <ModalTextarea
               id="playbook-review-instructions"
@@ -1382,7 +1379,7 @@ function PlaybooksWorkspace() {
             />
             <div
               className="mt-2 flex flex-wrap gap-2"
-              aria-label="Suggested review prompts"
+              aria-label={tr("playbooks.playbooksWorkspace.suggestedReviewPrompts")}
             >
               {[
                 "Run a complete playbook review. Prioritize unacceptable and missing-required terms, quote exact contract language, and provide complete replacement language for issues that need revision.",
@@ -1397,17 +1394,17 @@ function PlaybooksWorkspace() {
                   onClick={() => setReviewInstructions(suggestion)}
                 >
                   {suggestion.startsWith("Run a complete")
-                    ? "Complete review"
+                    ? tr("playbooks.playbooksWorkspace.completeReview")
                     : suggestion.startsWith("Show only")
-                      ? "Unacceptable and missing terms"
-                      : "Highest-risk deviations"}
+                      ? tr("playbooks.playbooksWorkspace.unacceptableMissingTerms")
+                      : tr("playbooks.playbooksWorkspace.highestRiskDeviations")}
                 </PillButton>
               ))}
             </div>
           </div>
           <div>
             <ModalFieldLabel htmlFor="playbook-review-model">
-              Review model
+              {tr("playbooks.playbooksWorkspace.reviewModel")}
             </ModalFieldLabel>
             {models.length > 0 ? (
               <ModalSelect
@@ -1423,17 +1420,16 @@ function PlaybooksWorkspace() {
               />
             ) : (
               <p className="text-sm text-amber-700">
-                No review model is available.{" "}
+                {tr("playbooks.playbooksWorkspace.noReviewModelAvailable")}{" "}
                 <a href="/account/api-keys" className="underline">
-                  Configure an API key
-                </a>{" "}
-                or enable a local model.
+                  {tr("playbooks.playbooksWorkspace.configureApiKey")}
+                </a>{" "}{tr("playbooks.playbooksWorkspace.enableLocalModel")}
               </p>
             )}
           </div>
           <div>
             <ModalFieldLabel htmlFor="playbook-review-mode">
-              Review posture
+              {tr("playbooks.playbooksWorkspace.reviewPosture")}
             </ModalFieldLabel>
             <ModalSelect
               id="playbook-review-mode"
@@ -1443,8 +1439,8 @@ function PlaybooksWorkspace() {
                 setReviewMode(value as "strict" | "permissive")
               }
               options={[
-                { value: "strict", label: "Strict — push standard positions" },
-                { value: "permissive", label: "Permissive — allow fallbacks" },
+                { value: "strict", label: tr("playbooks.playbooksWorkspace.strictPushStandardPositions") },
+                { value: "permissive", label: tr("playbooks.playbooksWorkspace.permissiveAllowFallbacks") },
               ]}
             />
           </div>
@@ -1469,8 +1465,8 @@ function NewPlaybookMenu({
         <HeaderButtonUI
           iconOnly
           disabled={disabled}
-          title="New playbook"
-          aria-label="New playbook"
+          title={tr("playbooks.playbooksWorkspace.newPlaybook")}
+          aria-label={tr("playbooks.playbooksWorkspace.newPlaybook")}
         >
           <Plus aria-hidden="true" className="h-4 w-4" />
         </HeaderButtonUI>
@@ -1479,18 +1475,18 @@ function NewPlaybookMenu({
         <DropdownItem onSelect={onImport}>
           <Upload className="h-4 w-4" />
           <span className="flex flex-col">
-            <span>Import Word playbook</span>
+            <span>{tr("playbooks.playbooksWorkspace.importWordPlaybook")}</span>
             <span className="text-xs text-gray-500">
-              Compile a .docx into rules
+              {tr("playbooks.playbooksWorkspace.compileDocxIntoRules")}
             </span>
           </span>
         </DropdownItem>
         <DropdownItem onSelect={onBlank}>
           <FilePlus2 className="h-4 w-4" />
           <span className="flex flex-col">
-            <span>Start from scratch</span>
+            <span>{tr("playbooks.playbooksWorkspace.startFromScratch")}</span>
             <span className="text-xs text-gray-500">
-              Write the rules yourself
+              {tr("playbooks.playbooksWorkspace.writeRulesYourself")}
             </span>
           </span>
         </DropdownItem>

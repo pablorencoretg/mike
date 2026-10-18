@@ -22,6 +22,7 @@ import { AUTH_SESSION_INVALIDATED_EVENT } from "@/app/lib/authEvents";
 import { setReportingUser } from "@/app/lib/errorReporting";
 import { isOnAuthRoute, notifyError } from "@/app/lib/userFacingError";
 import { clearToasts } from "@/shared/ui/ToastUI";
+import { tr } from "@/shared/i18n/runtime";
 
 type User = AuthUser;
 
@@ -119,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // form's next error.
             if (isOnAuthRoute()) return;
             notifyError(error, {
-                action: "check your session",
+                action: tr("app.contexts.authContext.checkSession"),
                 dedupeKey: SESSION_TOAST_KEY,
                 onRetry: () => {
                     void fetchAndApplySession().catch((retryError: unknown) =>
@@ -238,7 +239,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setAuthError(null);
             broadcastAuthState("signed-out");
         } catch (error) {
-            setAuthError("Unable to sign out. Please try again.");
+            setAuthError(tr("app.contexts.authContext.unableSignOutPleaseTry"));
             throw error;
         }
     }, [applySessionUser, broadcastAuthState]);

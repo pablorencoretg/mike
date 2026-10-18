@@ -28,7 +28,7 @@ import {
 function localSignupError(message: string): UserFacingError {
     return describeError(
         new UserVisibleError(message, { kind: "validation" }),
-        { action: "create your account" },
+        { action: tr("app.signup.page.createAccount") },
     );
 }
 
@@ -48,9 +48,9 @@ const SIGNUP_ERROR_MESSAGES = authMessages({
 /** Classify a signup failure into text a person can act on. */
 function describeSignupError(error: unknown): UserFacingError {
     const described = describeError(error, {
-        action: "create your account",
+        action: tr("app.signup.page.createAccount"),
         codeMessages: SIGNUP_ERROR_MESSAGES,
-        fallback: "Unable to create your account right now. Try again.",
+        fallback: tr("app.signup.page.unableCreateAccountRightNow"),
     });
     return described.kind === "rate_limited"
         ? { ...described, message: TOO_MANY_ATTEMPTS_MESSAGE }
@@ -67,6 +67,7 @@ import { AuthDividerUI } from "@/shared/ui/AuthDividerUI";
 import { GoogleAuthButton } from "@/app/components/auth/GoogleAuthButton";
 import { FieldLabel } from "@/app/components/ui/form-field";
 import { useT } from "@/shared/i18n/I18nContext";
+import { tr } from "@/shared/i18n/runtime";
 
 function SignupContent() {
     const t = useT();

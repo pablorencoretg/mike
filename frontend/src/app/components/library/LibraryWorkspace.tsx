@@ -55,6 +55,7 @@ import type { Document } from "@/app/components/shared/types";
 import { useDebouncedValue } from "@/app/hooks/useDebouncedValue";
 import { notifyError } from "@/app/lib/userFacingError";
 import { useAssignLatest } from "@/app/hooks/useLatestRef";
+import { tr } from "@/shared/i18n/runtime";
 
 type LibraryViewCollection = {
     documents: Document[];
@@ -89,8 +90,12 @@ type LibraryWorkspaceContextValue = {
 };
 
 const LIBRARY_TABS: { id: LibraryKind; label: string }[] = [
-    { id: "files", label: "Documents" },
-    { id: "templates", label: "Templates" },
+    { id: "files", get label() {
+        return tr("library.libraryWorkspace.documents");
+    } },
+    { id: "templates", get label() {
+        return tr("library.libraryWorkspace.templates");
+    } },
 ];
 
 const EMPTY_COLLECTION: LibraryViewCollection = {
@@ -277,7 +282,7 @@ export function LibraryWorkspaceProvider({
                 // is indistinguishable from "you have no files", so the user
                 // has to be told which one it is.
                 notifyError(error, {
-                    action: `load your ${kind}`,
+                    action: tr("library.libraryWorkspace.load", { kind }),
                     dedupeKey: `library:${kind}`,
                     onRetry: () => retryRef.current?.loadLibrary(kind),
                 });
@@ -353,7 +358,7 @@ export function LibraryWorkspaceProvider({
                     }));
                 } catch (error) {
                     notifyError(error, {
-                        action: "open the folder",
+                        action: tr("library.libraryWorkspace.openFolder"),
                         dedupeKey: `library-folder:${kind}:${folderId}`,
                         onRetry: () =>
                             retryRef.current?.loadFolderChildren(
@@ -438,7 +443,7 @@ export function LibraryWorkspaceProvider({
                     }));
                 } catch (error) {
                     notifyError(error, {
-                        action: `load more ${kind}`,
+                        action: tr("library.libraryWorkspace.loadMore", { kind }),
                         dedupeKey: `library-more:${kind}:${levelKey}`,
                         onRetry: () =>
                             retryRef.current?.loadMoreDocuments(kind, parentId),
@@ -584,7 +589,7 @@ export function LibraryCollectionPage({
     const search = searchByKind[kind];
     const collectionRootPath = kind === "files" ? "/library" : "/library/templates";
   const debouncedSearch = useDebouncedValue(search, 250);
-    const title = kind === "files" ? "Documents" : "Templates";
+    const title = kind === "files" ? tr("library.libraryWorkspace.documents") : tr("library.libraryWorkspace.templates");
     const [selectionActions, setSelectionActions] = useState<DocTableSelectionActions | null>(null);
   const [documentTypeOptions, setDocumentTypeOptions] = useState<string[]>([]);
   const [tableQuery, setTableQuery] = useState<DocTableQuery>({
@@ -666,7 +671,7 @@ export function LibraryCollectionPage({
                 // The user asked for a folder and landed at the root
                 // instead; say why, and let Retry navigate back into it.
                 notifyError(error, {
-                    action: "open the folder",
+                    action: tr("library.libraryWorkspace.openFolder"),
                     dedupeKey: `library-route:${kind}:${folderId}`,
                     onRetry: () =>
                         router.push(
@@ -709,7 +714,7 @@ export function LibraryCollectionPage({
         );
     }, [collectionRootPath, folderId, router]);
     const presetsEmptyStateAction = useMemo(
-        () => ({ label: "Presets", onClick: openPresets }),
+        () => ({ label: tr("library.libraryWorkspace.presets"), onClick: openPresets }),
         [openPresets],
     );
 
@@ -818,7 +823,7 @@ export function LibraryCollectionPage({
         // so the user is told the list is missing rather than wrong.
         setDocumentTypeOptions([]);
         notifyError(error, {
-          action: "load the file type filter",
+          action: tr("library.libraryWorkspace.loadFileTypeFilter"),
           dedupeKey: `library-filter-options:${kind}`,
           onRetry: () => setFilterOptionsAttempt((attempt) => attempt + 1),
         });
@@ -869,7 +874,7 @@ export function LibraryCollectionPage({
           setServerQueryHasMore(false);
           // No results and a failed search look identical in the table.
           notifyError(error, {
-            action: "search this library",
+            action: tr("library.libraryWorkspace.searchLibrary"),
             dedupeKey: `library-search:${kind}`,
             onRetry: () =>
               setServerQueryRefreshVersion((version) => version + 1),
@@ -931,7 +936,7 @@ export function LibraryCollectionPage({
     } catch (error) {
       if (requestVersion === serverQueryRequestRef.current) {
         notifyError(error, {
-          action: "load more search results",
+          action: tr("library.libraryWorkspace.loadMoreSearchResults"),
           dedupeKey: `library-search-more:${kind}`,
           onRetry: () => loadMoreServerDocumentsRef.current?.(),
         });
@@ -1015,7 +1020,7 @@ export function LibraryCollectionPage({
             <PageHeader
                 breadcrumbs={[
                     {
-                        label: "Library",
+                        label: tr("library.libraryWorkspace.library"),
                         onClick: () => router.push("/library"),
                     },
                     {
@@ -1031,16 +1036,16 @@ export function LibraryCollectionPage({
                                 type: "search",
                                 value: search,
                 onChange: (value) => setSearchForKind(kind, value),
-                                placeholder: `Search ${title.toLowerCase()}...`,
+                                placeholder: tr("library.libraryWorkspace.search", { title: title.toLowerCase() }),
                             },
                             kind === "templates" && {
                                 type: "custom",
                                 render: (
                                     <HeaderActionsMenu
-                                        title="More actions"
+                                        title={tr("library.libraryWorkspace.moreActions")}
                                         items={[
                                             {
-                                                label: "Add preset templates",
+                                                label: tr("library.libraryWorkspace.addPresetTemplates"),
                                                 icon: BookOpen,
                                                 onSelect: openPresets,
                                             },
@@ -1080,7 +1085,7 @@ export function LibraryCollectionPage({
                         folderBackAction ? (
                             <TabPillButtonUI onClick={folderBackAction} className="pl-2">
                                 <ChevronLeft className="h-3.5 w-3.5" />
-                                Back
+                                {tr("library.libraryWorkspace.back")}
                             </TabPillButtonUI>
                         ) : undefined
                     }
@@ -1094,7 +1099,7 @@ export function LibraryCollectionPage({
                                 disabled={!createFolderAction || loading}
                             >
                                 <Plus className="h-3.5 w-3.5" />
-                                <span className="hidden sm:inline">Folder</span>
+                                <span className="hidden sm:inline">{tr("library.libraryWorkspace.folder")}</span>
                             </TabPillButtonUI>
                         </>
                     }

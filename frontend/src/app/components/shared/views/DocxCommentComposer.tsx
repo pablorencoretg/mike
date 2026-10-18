@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/app/components/ui/popover";
 import { openReviewPane } from "./docxReviewPane";
+import { tr } from "@/shared/i18n/runtime";
 
 /** Mike-owned comment UI, using only the public open-source Editor contract. */
 export function DocxCommentComposer({
@@ -103,12 +104,12 @@ export function DocxCommentComposer({
     // when a selected page is virtualized, even though the range is valid.
     const range = editor.query({ type: "selection" });
     if (!range || editor.snapshot().selectionCollapsed) {
-      setError("Select text in the document, then choose New comment.");
+      setError(tr("shared.views.docxCommentComposer.selectTextDocumentThenChoose"));
       return;
     }
     const retained = editor.retainSelection();
     if (!retained) {
-      setError("Select the passage again, then choose New comment.");
+      setError(tr("shared.views.docxCommentComposer.selectPassageAgainThenChoose"));
       return;
     }
     pin.current = retained;
@@ -125,7 +126,7 @@ export function DocxCommentComposer({
       JSON.stringify(editor.query({ type: "selection" }))
     ) {
       setError(
-        "The selected passage changed. Your draft is still here; cancel and select the passage again before adding the comment.",
+        tr("shared.views.docxCommentComposer.selectedPassageChangedDraftStill"),
       );
       return;
     }
@@ -135,7 +136,7 @@ export function DocxCommentComposer({
       const result = editor.addComment(draft.trim(), author);
       if (!result.ok) {
         setError(
-          "This comment could not be added. Your draft is still here; try again or cancel to choose another passage.",
+          tr("shared.views.docxCommentComposer.commentCouldNotAddedDraft"),
         );
         return;
       }
@@ -144,11 +145,11 @@ export function DocxCommentComposer({
       setComposing(false);
       setError(null);
       setAnchorBox(null);
-      setStatus("Comment added.");
+      setStatus(tr("shared.views.docxCommentComposer.commentAdded"));
       openReviewPane(editor);
     } catch {
       setError(
-        "This comment could not be added. Your draft is still here; please try again.",
+        tr("shared.views.docxCommentComposer.commentCouldNotAddedDraft2"),
       );
     }
   };
@@ -171,8 +172,8 @@ export function DocxCommentComposer({
                 <TextButtonUI
                   ref={button}
                   size="icon-xs"
-                  aria-label="New comment"
-                  title={unavailable ?? "New comment"}
+                  aria-label={tr("shared.views.docxCommentComposer.newComment")}
+                  title={unavailable ?? tr("shared.views.docxCommentComposer.newComment")}
                   disabled={!composing && !!unavailable}
                   className="h-6"
                   onPointerDown={(event) => event.preventDefault()}
@@ -196,7 +197,7 @@ export function DocxCommentComposer({
                             the trigger, which would reorder the toolbar. */}
               <PopoverAnchor virtualRef={anchor} />
               <PopoverContent
-                aria-label="New comment"
+                aria-label={tr("shared.views.docxCommentComposer.newComment")}
                 align={composing && anchorBox ? "start" : "end"}
                 // The selection anchor moves with page scroll and zoom.
                 updatePositionStrategy={
@@ -223,7 +224,7 @@ export function DocxCommentComposer({
                     }}
                   >
                     <label htmlFor={id} className="block font-medium">
-                      New comment
+                      {tr("shared.views.docxCommentComposer.newComment")}
                     </label>
                     <textarea
                       id={id}
@@ -231,7 +232,7 @@ export function DocxCommentComposer({
                       rows={3}
                       value={draft}
                       className="keyboard-focus-ring w-full min-h-24 max-h-48 resize-y rounded-xl bg-[var(--dropdown-input-background)] px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2"
-                      placeholder="Write a comment…"
+                      placeholder={tr("shared.views.docxCommentComposer.writeComment")}
                       onChange={(event) => setDraft(event.target.value)}
                       onKeyDown={(event) => {
                         if (
@@ -245,19 +246,18 @@ export function DocxCommentComposer({
                     />
                     {!editable && (
                       <p className="text-muted-foreground">
-                        This document is read-only. Your draft is kept until you
-                        cancel.
+                        {tr("shared.views.docxCommentComposer.documentReadOnlyDraftKept")}
                       </p>
                     )}
                     <div className="flex items-center justify-end gap-2">
-                      <TextButtonUI onClick={dismiss}>Cancel</TextButtonUI>
+                      <TextButtonUI onClick={dismiss}>{tr("shared.views.docxCommentComposer.cancel")}</TextButtonUI>
                       <PillButtonUI
                         type="submit"
                         tone="black"
                         size="xs"
                         disabled={!draft.trim() || !editable || !hasAuthor}
                       >
-                        Add comment
+                        {tr("shared.views.docxCommentComposer.addComment")}
                       </PillButtonUI>
                     </div>
                   </form>

@@ -26,6 +26,7 @@ describe("interpolate", () => {
             "2 of 5",
         );
         expect(interpolate("Hi {name}", {})).toBe("Hi {name}");
+        expect(interpolate("Hi {name}", { name: undefined })).toBe("Hi ");
     });
 });
 

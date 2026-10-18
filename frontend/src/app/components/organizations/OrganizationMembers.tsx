@@ -72,6 +72,7 @@ import {
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { OrganizationDepartedMembers } from "./OrganizationDepartedMembers";
 import { InviteOrganizationMemberModal } from "./OrganizationModals";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The roster's fixed order: who decides, who runs it, everybody else. */
 const ROLE_ORDER: Record<OrgRole, number> = { owner: 0, admin: 1, member: 2 };
@@ -106,14 +107,24 @@ const ROLE_FILTER_OPTIONS: TableFilterOption<OrgRole>[] = [
 type RosterTab = "all" | OrgRole | "departed";
 
 const ROSTER_TABS: { id: RosterTab; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "owner", label: "Owners" },
-  { id: "admin", label: "Admins" },
-  { id: "member", label: "Members" },
+  { id: "all", get label() {
+        return tr("organizations.organizationMembers.all");
+    } },
+  { id: "owner", get label() {
+        return tr("organizations.organizationMembers.owners");
+    } },
+  { id: "admin", get label() {
+        return tr("organizations.organizationMembers.admins");
+    } },
+  { id: "member", get label() {
+        return tr("organizations.organizationMembers.members");
+    } },
 ];
 const OWNER_TABS: { id: RosterTab; label: string }[] = [
   ...ROSTER_TABS,
-  { id: "departed", label: "Departed" },
+  { id: "departed", get label() {
+        return tr("organizations.organizationMembers.departed");
+    } },
 ];
 
 function formatDate(value?: string | null) {
@@ -221,7 +232,7 @@ export function OrganizationMembers({
     } catch (error) {
       console.error("Failed to load organization", error);
       setLoadError(
-        userFacingApiError(error, "Could not load this organization."),
+        userFacingApiError(error, tr("organizations.organizationMembers.couldNotLoadOrganization")),
       );
     } finally {
       setLoading(false);
@@ -268,7 +279,7 @@ export function OrganizationMembers({
     setActionError(
       userFacingApiError(
         failure.reason,
-        "This organization's people could not be refreshed. Reload to see the current list.",
+        tr("organizations.organizationMembers.organizationSPeopleCouldNot"),
       ),
     );
   }, [refreshInvitations, refreshMembers]);
@@ -349,7 +360,7 @@ export function OrganizationMembers({
         void refreshOrganizations();
       }
     } catch (error) {
-      setActionError(userFacingApiError(error, "Could not change that role."));
+      setActionError(userFacingApiError(error, tr("organizations.organizationMembers.couldNotChangeRole")));
     } finally {
       setBusyMemberId(null);
     }
@@ -363,7 +374,7 @@ export function OrganizationMembers({
     if (!member) return;
     if (!result.removedUserIds.includes(member.user_id)) {
       setActionError(
-        userFacingApiError(result.error, "Could not remove that member."),
+        userFacingApiError(result.error, tr("organizations.organizationMembers.couldNotRemoveMember")),
       );
       return;
     }
@@ -386,7 +397,7 @@ export function OrganizationMembers({
       selectedMemberIds.includes(member.id),
     );
     if (selectedMembers.some((member) => member.user_id === user?.id)) {
-      setActionError("Use Leave organization to remove yourself.");
+      setActionError(tr("organizations.organizationMembers.useLeaveOrganizationRemoveYourself"));
       return;
     }
     if (
@@ -395,7 +406,7 @@ export function OrganizationMembers({
       )
     ) {
       setActionError(
-        "Only an organization owner can remove admins and other owners.",
+        tr("organizations.organizationMembers.onlyOrganizationOwnerCanRemove"),
       );
       return;
     }
@@ -416,7 +427,7 @@ export function OrganizationMembers({
       setActionError(
         userFacingApiError(
           result.error,
-          "Could not remove all selected members.",
+          tr("organizations.organizationMembers.couldNotRemoveAllSelected"),
         ),
       );
     }
@@ -444,10 +455,10 @@ export function OrganizationMembers({
       >
         <Trash2 className="h-3.5 w-3.5" />
         {appliesToSelection
-          ? "Remove all selected"
+          ? tr("organizations.organizationMembers.removeAllSelected")
           : member?.user_id === user?.id
-            ? "Leave organization"
-            : "Remove member"}
+            ? tr("organizations.organizationMembers.leaveOrganization")
+            : tr("organizations.organizationMembers.removeMember")}
       </DropdownItem>
     );
   }
@@ -463,11 +474,11 @@ export function OrganizationMembers({
         loading={loading}
         breadcrumbs={[
           {
-            label: "Organization",
+            label: tr("organizations.organizationMembers.organization"),
             onClick: () => router.push(`/organizations/${orgId}/settings`),
-            title: "Back to Organization",
+            title: tr("organizations.organizationMembers.backOrganization"),
           },
-          { label: "Members", cursor: "text" },
+          { label: tr("organizations.organizationMembers.members"), cursor: "text" },
         ]}
         actions={[
           {
@@ -480,13 +491,13 @@ export function OrganizationMembers({
               setSelectedMemberIds([]);
             },
             placeholder:
-              tab === "departed" ? "Search departed members…" : "Search members…",
+              tab === "departed" ? tr("organizations.organizationMembers.searchDepartedMembers") : tr("organizations.organizationMembers.searchMembers"),
           },
           {
             type: "new",
             title: isAdmin
-              ? "Add member"
-              : "Only organization admins can add members",
+              ? tr("organizations.organizationMembers.addMember")
+              : tr("organizations.organizationMembers.onlyOrganizationAdminsCanAdd"),
             disabled: !isAdmin,
             onClick: () => {
               setInviteOpen(true);
@@ -574,15 +585,15 @@ export function OrganizationMembers({
         open={pendingSelfRoleChange !== null}
         title={
           pendingSelfRoleChange?.role === "admin"
-            ? "Step down to admin?"
-            : "Give up owner access?"
+            ? tr("organizations.organizationMembers.stepDownAdmin")
+            : tr("organizations.organizationMembers.giveUpOwnerAccess")
         }
         message={
           pendingSelfRoleChange?.role === "admin"
-            ? "You will stay an admin, but can no longer delete this organization or appoint and remove its admins and owners."
-            : "You will lose owner access to this organization and can no longer manage its people, settings or invitations."
+            ? tr("organizations.organizationMembers.willStayAdminButCan")
+            : tr("organizations.organizationMembers.willLoseOwnerAccessOrganization")
         }
-        confirmLabel="Continue"
+        confirmLabel={tr("organizations.organizationMembers.continue")}
         confirmStatus={busyMemberId ? "loading" : "idle"}
         onCancel={() => {
           if (busyMemberId) return;
@@ -613,7 +624,7 @@ export function OrganizationMembers({
       ) : null}
       <WarningPopup
         open={actionError !== null}
-        title="Organization action failed"
+        title={tr("organizations.organizationMembers.organizationActionFailed")}
         message={actionError}
         onClose={() => setActionError(null)}
       />
@@ -758,13 +769,13 @@ function PeopleTable({
                 }}
                 onChange={toggleAllVisible}
                 className={TABLE_CHECKBOX_CLASS}
-                aria-label="Select all people"
+                aria-label={tr("organizations.organizationMembers.selectAllPeople")}
               />
             )}
             {/* How many people the open tab and the search come to, drawn
                 or not. Plain text beside the column's name. */}
             <span className="mr-1">
-              Name
+              {tr("organizations.organizationMembers.name")}
               {!loading && !error ? (
                 <>
                   {" "}
@@ -776,35 +787,35 @@ function PeopleTable({
             </span>
             {!loading ? (
               <TableSortFilter
-                label="Sort by name"
+                label={tr("organizations.organizationMembers.sortByName")}
                 value={sort?.key === "name" ? sort.direction : null}
-                allLabel="Default order"
+                allLabel={tr("organizations.organizationMembers.defaultOrder")}
                 align="right"
                 onChange={(direction) => setSortFor("name", direction)}
               />
             ) : null}
           </TableStickyCell>
           <TableHeaderCell className="ml-auto w-64">
-            <span className="mr-1">Email</span>
+            <span className="mr-1">{tr("organizations.organizationMembers.email")}</span>
             {!loading ? (
               <TableSortFilter
-                label="Sort by email"
+                label={tr("organizations.organizationMembers.sortByEmail")}
                 value={sort?.key === "email" ? sort.direction : null}
-                allLabel="Default order"
+                allLabel={tr("organizations.organizationMembers.defaultOrder")}
                 onChange={(direction) => setSortFor("email", direction)}
               />
             ) : null}
           </TableHeaderCell>
           <TableHeaderCell className="w-32">
-            <span className="mr-1">Role</span>
+            <span className="mr-1">{tr("organizations.organizationMembers.role")}</span>
           </TableHeaderCell>
           <TableHeaderCell className="w-36">
-            <span className="mr-1">Added</span>
+            <span className="mr-1">{tr("organizations.organizationMembers.added")}</span>
             {!loading ? (
               <TableSortFilter
-                label="Sort by date added"
+                label={tr("organizations.organizationMembers.sortByDateAdded")}
                 value={sort?.key === "added" ? sort.direction : null}
-                allLabel="Default order"
+                allLabel={tr("organizations.organizationMembers.defaultOrder")}
                 onChange={(direction) => setSortFor("added", direction)}
               />
             ) : null}
@@ -821,15 +832,15 @@ function PeopleTable({
         <TableEmptyState>
           <EmptyState
             icon={<OrganizationSkeuoIcon />}
-            title="People"
-            description="This organization has no members."
+            title={tr("organizations.organizationMembers.people")}
+            description={tr("organizations.organizationMembers.organizationHasNoMembers")}
           />
         </TableEmptyState>
       ) : visibleMembers.length === 0 ? (
         <TableEmptyState>
           <p className="text-sm text-gray-400">
             {search.trim()
-              ? "No people match this search."
+              ? tr("organizations.organizationMembers.noPeopleMatchSearch")
               : `This organization has no ${
                   roleFilter === "owner"
                     ? "owners"
@@ -864,7 +875,7 @@ function PeopleTable({
                 <TablePrimaryCell
                   selected={isSelected}
                   onSelectionChange={() => toggleMember(member.id)}
-                  checkboxTitle={`Select ${label}`}
+                  checkboxTitle={tr("organizations.organizationMembers.select", { label })}
                 >
                   <UserAvatar photo={member.profile_photo} name={member.display_name} email={member.email} size="sm" className="mr-2" />
                   <span className="min-w-0 flex-1 text-xs text-gray-800 [overflow-wrap:anywhere]">
@@ -894,13 +905,13 @@ function PeopleTable({
                 <TableCell className="flex w-10 justify-end overflow-visible">
                   {canRemove ? (
                     <HeaderActionsMenu
-                      title={`Actions for ${label}`}
+                      title={tr("organizations.organizationMembers.actions", { label })}
                       items={[
                         {
                           label:
                             member.user_id === currentUserId
-                              ? "Leave organization"
-                              : "Remove member",
+                              ? tr("organizations.organizationMembers.leaveOrganization")
+                              : tr("organizations.organizationMembers.removeMember"),
                           icon: Trash2,
                           variant: "danger",
                           onSelect: () => onRemove(member),
@@ -958,7 +969,7 @@ function OrganizationRoleTab({
       <DropdownTrigger asChild>
         <button
           type="button"
-          aria-label={`Change role for ${label}`}
+          aria-label={tr("organizations.organizationMembers.changeRole", { label })}
           disabled={disabled}
           className={`${className} transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:cursor-wait disabled:opacity-50`}
         >
@@ -1027,7 +1038,7 @@ function ErrorState({
     <TableEmptyState>
       <EmptyState
         icon={<OrganizationSkeuoIcon />}
-        title="Organization"
+        title={tr("organizations.organizationMembers.organization")}
         description={error}
         tone="error"
         action={
@@ -1037,7 +1048,7 @@ function ErrorState({
             className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
           >
             <Loader2 className="h-3.5 w-3.5" />
-            Try again
+            {tr("organizations.organizationMembers.tryAgain")}
           </button>
         }
       />

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { pillButtonUIClassName } from "@/shared/ui/PillButtonUI.styles";
 import { CrashScreen } from "@/app/components/shared/CrashScreen";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function Error({
     error,
@@ -21,7 +22,7 @@ export default function Error({
                     href="/"
                     className={pillButtonUIClassName({ tone, size: "normal" })}
                 >
-                    Home
+                    {tr("app.error.home")}
                 </Link>
             )}
         />

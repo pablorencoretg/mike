@@ -29,6 +29,7 @@ import {
     HeaderButtonsUI,
     headerButtonClassName,
 } from "@/shared/ui/HeaderButtonsUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export interface PageHeaderBreadcrumb {
     label?: ReactNode;
@@ -271,7 +272,7 @@ function PageHeaderNewActionControl({
     action: PageHeaderNewAction;
     disabled: boolean;
 }) {
-    const title = action.title ?? "New";
+    const title = action.title ?? tr("shared.pageHeader.new");
     return (
         <HeaderButtonUI
             onClick={action.onClick}
@@ -298,7 +299,7 @@ function PageHeaderSearchActionControl({
 }) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-    const placeholder = action.placeholder ?? "Search…";
+    const placeholder = action.placeholder ?? tr("shared.pageHeader.search");
     const hasValue = action.value.length > 0;
     const expanded = open || hasValue;
 
@@ -342,7 +343,7 @@ function PageHeaderSearchActionControl({
                                 setOpen(false);
                             }}
                             disabled={disabled}
-                            aria-label="Clear search"
+                            aria-label={tr("shared.pageHeader.clearSearch")}
                             className="shrink-0 rounded-full p-0.5 text-gray-400 transition-colors hover:bg-black/5 hover:text-gray-600"
                         >
                             <X className="h-3.5 w-3.5" />
@@ -439,8 +440,8 @@ function PageHeaderBreadcrumbs({ items }: { items: PageHeaderBreadcrumb[] }) {
                 <button
                     onClick={parent.onClick}
                     className="shrink-0 text-gray-400 transition-colors hover:text-gray-600 sm:hidden"
-                    title={parent.title ?? "Back"}
-                    aria-label={parent.title ?? "Back"}
+                    title={parent.title ?? tr("shared.pageHeader.back")}
+                    aria-label={parent.title ?? tr("shared.pageHeader.back")}
                 >
                     <ChevronLeft className="h-5 w-5" />
                 </button>
@@ -593,8 +594,8 @@ function CollapsedBreadcrumbGroup({
                     <button
                         type="button"
                         className="text-gray-500 transition-colors hover:text-gray-700"
-                        aria-label="Show collapsed breadcrumbs"
-                        title="Show path"
+                        aria-label={tr("shared.pageHeader.showCollapsedBreadcrumbs")}
+                        title={tr("shared.pageHeader.showPath")}
                     >
                         …
                     </button>

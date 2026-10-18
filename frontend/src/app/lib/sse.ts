@@ -1,3 +1,4 @@
+import { tr } from "@/shared/i18n/runtime";
 /**
  * Server-Sent Events framing, shared by every streaming call site.
  *
@@ -115,7 +116,7 @@ export async function* readSseFrames(
                 try {
                     parsed = JSON.parse(payload) as unknown;
                 } catch (error) {
-                    console.warn("[sse] skipping malformed frame:", {
+                    console.warn(tr("app.lib.sse.sseSkippingMalformedFrame"), {
                         line: trimmed,
                         error,
                     });

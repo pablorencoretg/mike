@@ -20,6 +20,7 @@ import {
   validateOrgLogoFile,
   type OrgLogoFrame,
 } from "@/app/lib/orgLogoImage";
+import { tr } from "@/shared/i18n/runtime";
 
 // Shared image framing for organization logos and user profile photos.
 //
@@ -226,11 +227,11 @@ export function ImageCropModal({
       onClose={() => {
         if (!busy) onCancel();
       }}
-      breadcrumbs={[isPhoto ? "Account" : name, isPhoto ? "Profile photo" : "Logo"]}
+      breadcrumbs={[isPhoto ? tr("modals.imageCropModal.account") : name, isPhoto ? tr("modals.imageCropModal.profilePhoto") : tr("modals.imageCropModal.logo")]}
       size="sm"
       className="h-auto max-h-[calc(100vh-2rem)]"
       primaryAction={{
-        label: saving ? "Saving..." : "Save",
+        label: saving ? tr("modals.imageCropModal.saving") : tr("modals.imageCropModal.save"),
         variant: "blue",
         disabled: !frame || !changed || busy,
         onClick: () => {
@@ -244,7 +245,7 @@ export function ImageCropModal({
         },
       }}
       secondaryAction={onRemove ? {
-        label: removing ? "Removing..." : "Remove",
+        label: removing ? tr("modals.imageCropModal.removing") : tr("modals.imageCropModal.remove"),
         variant: "danger",
         disabled: busy,
         onClick: onRemove,
@@ -255,15 +256,15 @@ export function ImageCropModal({
         className="min-h-0 min-w-0 space-y-5 overflow-y-auto pb-4"
       >
         {error ? <p role="alert" className="text-sm text-red-600">{error}</p> : null}
-        {saveError ? <p role="alert" className="text-sm text-red-600">That image could not be prepared. Choose another.</p> : null}
+        {saveError ? <p role="alert" className="text-sm text-red-600">{tr("modals.imageCropModal.imageCouldNotPreparedChoose")}</p> : null}
         {unreadable ? (
           <p role="alert" className="text-sm text-red-600">
-            That file could not be read as an image. Choose another.
+            {tr("modals.imageCropModal.fileCouldNotReadAs")}
           </p>
         ) : (
           <>
             <div className="space-y-2">
-              <FieldLabel as="p">Position</FieldLabel>
+              <FieldLabel as="p">{tr("modals.imageCropModal.position")}</FieldLabel>
               <div className="flex justify-center">
                 <div
                   role="group"
@@ -294,7 +295,7 @@ export function ImageCropModal({
             </div>
 
             <div className="space-y-2">
-              <FieldLabel htmlFor="organization-logo-zoom">Zoom</FieldLabel>
+              <FieldLabel htmlFor="organization-logo-zoom">{tr("modals.imageCropModal.zoom")}</FieldLabel>
               <input
                 id="organization-logo-zoom"
                 type="range"
@@ -310,12 +311,12 @@ export function ImageCropModal({
                 className="block w-full accent-blue-600 disabled:opacity-40"
               />
               <p className="text-xs text-gray-500">
-                {isPhoto ? "Drag to position your photo and zoom to frame your face." : "Zoom out to keep the whole image, or in on the part that reads best small."}
+                {isPhoto ? tr("modals.imageCropModal.dragPositionPhotoZoomFrame") : tr("modals.imageCropModal.zoomOutKeepWholeImage")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <FieldLabel as="p">{isPhoto ? "Preview" : "In the sidebar"}</FieldLabel>
+              <FieldLabel as="p">{isPhoto ? tr("modals.imageCropModal.preview") : tr("modals.imageCropModal.sidebar")}</FieldLabel>
               {/* The sidebar's own heading: the mark at its size, then the
                   name in the sidebar's face. */}
               <div
@@ -342,7 +343,7 @@ export function ImageCropModal({
             </div>
 
             <p className="text-xs text-gray-500">
-              PNG, JPEG or WebP, up to 10 MB.
+              {tr("modals.imageCropModal.pngJpegWebpUp10")}
             </p>
           </>
         )}

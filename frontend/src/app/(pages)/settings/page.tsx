@@ -29,6 +29,7 @@ import {
 import { GlassCardUI } from "@/shared/ui/GlassCardUI";
 import { SettingsHeading } from "@/app/components/settings/SettingsHeading";
 import { SettingsRow } from "@/app/components/settings/SettingsRow";
+import { tr } from "@/shared/i18n/runtime";
 
 const isDev = process.env.NODE_ENV !== "production";
 const devLog = (...args: Parameters<typeof console.log>) => {
@@ -99,8 +100,8 @@ export default function SettingsPage() {
     }
     setEmailStatus(
       user.pendingEmail
-        ? "One confirmation was accepted. Confirm the email change from both your current and new addresses to finish."
-        : "Email updated.",
+        ? tr("pages.settings.page.oneConfirmationWasAcceptedConfirm")
+        : tr("pages.settings.page.emailUpdated"),
     );
     window.history.replaceState({}, "", "/settings");
   }, [user]);
@@ -131,7 +132,7 @@ export default function SettingsPage() {
       }
       setDeleteConfirm(false);
       notifyError(error, {
-        action: "delete your account",
+        action: tr("pages.settings.page.deleteAccount"),
         // Retry re-opens the confirmation instead of deleting outright: a
         // button in a notice must never be the only thing between a stray
         // click and an irreversible account deletion.
@@ -165,8 +166,8 @@ export default function SettingsPage() {
       setEmailSaved(true);
       setEmailStatus(
         pendingEmail
-          ? `Confirmation sent to your current address and ${pendingEmail}. Confirm both messages to finish the change. Your current email remains ${updatedUser.email} until then.`
-          : "Email updated.",
+          ? tr("pages.settings.page.confirmationSentCurrentAddressConfirm", { pendingEmail, email: updatedUser.email })
+          : tr("pages.settings.page.emailUpdated"),
       );
       setTimeout(() => setEmailSaved(false), 2000);
     } catch (error: unknown) {
@@ -174,16 +175,16 @@ export default function SettingsPage() {
       // The backend passes GoTrue's `code` through, so the outcome is decided
       // by that code rather than by matching English in the message.
       const described = describeError(error, {
-        action: "update your email",
+        action: tr("pages.settings.page.updateEmail"),
         codeMessages: EMAIL_ERROR_MESSAGES,
-        fallback: "Unable to update your email. Try again.",
+        fallback: tr("pages.settings.page.unableUpdateEmailTryAgain"),
       });
 
       if (described.code && EMAIL_TAKEN_CODES.has(described.code)) {
         setEmail(user?.pendingEmail || user?.email || "");
         setEmailWarning({
-          title: "Email already registered",
-          message: "An account with this email already exists.",
+          title: tr("pages.settings.page.emailAlreadyRegistered"),
+          message: tr("pages.settings.page.accountEmailAlreadyExists"),
         });
         return;
       }
@@ -194,9 +195,9 @@ export default function SettingsPage() {
       ) {
         setEmail(user?.pendingEmail || user?.email || "");
         setEmailWarning({
-          title: "Email change unavailable",
+          title: tr("pages.settings.page.emailChangeUnavailable"),
           message:
-            "You can’t change your email this often. Wait a few minutes before trying again.",
+            tr("pages.settings.page.canTChangeEmailOften"),
         });
         return;
       }
@@ -228,20 +229,20 @@ export default function SettingsPage() {
     <div className="space-y-8">
       {/* Profile Settings */}
       <section className="space-y-3">
-        <SettingsHeading>Profile</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.page.profile")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow layout="stacked">
             <div>
               <div className="flex items-start justify-between gap-3">
-                <FieldLabel htmlFor="display-name">Display Name</FieldLabel>
+                <FieldLabel htmlFor="display-name">{tr("pages.settings.page.displayName")}</FieldLabel>
                 <span
                   className="text-xs text-gray-400"
                   aria-live="polite"
                 >
                   {isSavingName
-                    ? "Saving..."
+                    ? tr("pages.settings.page.saving")
                     : saved
-                      ? "Saved"
+                      ? tr("pages.settings.page.saved")
                       : ""}
                 </span>
               </div>
@@ -254,7 +255,7 @@ export default function SettingsPage() {
                   setSaved(false);
                 }}
                 onBlur={() => void handleSaveDisplayName()}
-                placeholder="Enter your name"
+                placeholder={tr("pages.settings.page.enterName")}
               />
             </div>
           </SettingsRow>
@@ -264,12 +265,12 @@ export default function SettingsPage() {
 
       {/* Email */}
       <section className="space-y-3">
-        <SettingsHeading>Email</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.page.email")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow layout="stacked">
             <div className="space-y-2">
               <SettingsTextInput
-                aria-label="Email address"
+                aria-label={tr("pages.settings.page.emailAddress")}
                 type="email"
                 value={email}
                 disabled={requiresPasswordForEmailChange}
@@ -279,18 +280,18 @@ export default function SettingsPage() {
                   setEmailWarning(null);
                   setEmailSaved(false);
                 }}
-                placeholder="Enter your email"
+                placeholder={tr("pages.settings.page.enterEmail")}
               />
               {emailStatus ? (
                 <p className="text-xs text-gray-500">{emailStatus}</p>
               ) : user.pendingEmail ? (
                 <p className="text-xs text-gray-500">
-                  Pending confirmation: {user.pendingEmail}
+                  {tr("pages.settings.page.pendingConfirmation", { pendingEmail: user.pendingEmail })}
                 </p>
               ) : null}
               {emailStatus && (
                 <p className="text-xs text-gray-400">
-                  Current email: {user.email}
+                  {tr("pages.settings.page.currentEmail", { email: user.email })}
                 </p>
               )}
               <div className="flex justify-end">
@@ -308,12 +309,12 @@ export default function SettingsPage() {
                   className="text-xs font-medium text-gray-700 transition-colors hover:text-gray-950 disabled:cursor-not-allowed disabled:text-gray-400"
                 >
                   {requiresPasswordForEmailChange
-                    ? "Update"
+                    ? tr("pages.settings.page.update")
                     : isSavingEmail
-                      ? "Saving..."
+                      ? tr("pages.settings.page.saving")
                       : emailSaved
-                        ? "Saved"
-                        : "Save"}
+                        ? tr("pages.settings.page.saved")
+                        : tr("pages.settings.page.save")}
                 </button>
               </div>
             </div>
@@ -323,11 +324,11 @@ export default function SettingsPage() {
 
       {/* Plan */}
       <section className="space-y-3">
-        <SettingsHeading>Usage Plan</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.page.usagePlan")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow layout="stacked">
             <p className="text-base font-medium text-gray-500 capitalize">
-              {profile?.tier || "Free"}
+              {profile?.tier || tr("pages.settings.page.free")}
             </p>
           </SettingsRow>
         </GlassCardUI>
@@ -335,13 +336,13 @@ export default function SettingsPage() {
 
       {/* Danger Zone */}
       <section className="space-y-3">
-        <SettingsHeading tone="danger">Danger Zone</SettingsHeading>
+        <SettingsHeading tone="danger">{tr("pages.settings.page.dangerZone")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow>
             <div className="min-w-0 space-y-1">
-              <SettingsLabel>Delete account</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.page.deleteAccount2")}</SettingsLabel>
               <SettingsDescription>
-                Permanently delete your account and personal workspace. Organization work follows the member removal policy.
+                {tr("pages.settings.page.permanentlyDeleteAccountPersonalWorkspac")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -353,19 +354,19 @@ export default function SettingsPage() {
               className="w-full shrink-0 sm:w-auto"
             >
               <Trash2 className="h-4 w-4 shrink-0" />
-              Delete account
+              {tr("pages.settings.page.deleteAccount2")}
             </PillButtonUI>
           </SettingsRow>
         </GlassCardUI>
       </section>
       <ConfirmPopup
         open={deleteConfirm}
-        title="Delete account?"
-        message="This permanently deletes your account and personal workspace. In each organization, shared work without another owner transfers to a remaining organization owner. Unshared private work is retained for 30 days for organization owners to recover or delete. You must appoint another owner or delete any organization you solely own first."
-        confirmLabel="Delete"
+        title={tr("pages.settings.page.deleteAccount3")}
+        message={tr("pages.settings.page.permanentlyDeletesAccountPersonalWorkspa")}
+        confirmLabel={tr("pages.settings.page.delete")}
         confirmVariant="danger"
         confirmStatus={isDeleting ? "loading" : "idle"}
-        cancelLabel="Cancel"
+        cancelLabel={tr("pages.settings.page.cancel")}
         onCancel={() => {
           if (isDeleting) return;
           setDeleteConfirm(false);
@@ -381,11 +382,11 @@ export default function SettingsPage() {
       <Modal
         open={googleEmailModalOpen}
         onClose={() => setGoogleEmailModalOpen(false)}
-        breadcrumbs={["Account", "Change email"]}
+        breadcrumbs={[tr("pages.settings.page.account"), tr("pages.settings.page.changeEmail")]}
         size="sm"
         className="h-auto"
         primaryAction={{
-          label: "Go to Security",
+          label: tr("pages.settings.page.goSecurity"),
           onClick: () => {
             setGoogleEmailModalOpen(false);
             router.push("/settings/security");
@@ -393,8 +394,7 @@ export default function SettingsPage() {
         }}
       >
         <p className="pb-5 text-sm leading-relaxed text-gray-600">
-          Your account was created with Google. To change your email, first add
-          a password in Settings &gt; Security &gt; Password.
+          {tr("pages.settings.page.accountWasCreatedGoogleChange")}
         </p>
       </Modal>
       <MfaVerificationPopup
@@ -405,8 +405,8 @@ export default function SettingsPage() {
           setAccountDeleteMfaOpen(false);
           void handleDeleteAccount();
         }}
-        title="Two-factor verification required"
-        message="Account deletion is sensitive. Enter a code from your authenticator app to continue."
+        title={tr("pages.settings.page.twoFactorVerificationRequired")}
+        message={tr("pages.settings.page.accountDeletionSensitiveEnterCode")}
       />
       <MfaVerificationPopup
         open={emailMfaOpen}
@@ -416,8 +416,8 @@ export default function SettingsPage() {
           setEmailMfaOpen(false);
           void handleSaveEmail();
         }}
-        title="Two-factor verification required"
-        message="Email changes are sensitive. Enter a code from your authenticator app to continue."
+        title={tr("pages.settings.page.twoFactorVerificationRequired")}
+        message={tr("pages.settings.page.emailChangesSensitiveEnterCode")}
       />
     </div>
   );

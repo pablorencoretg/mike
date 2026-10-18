@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Plug, type LucideIcon } from "lucide-react";
 import type { ApiKeyProvider } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 // The model providers a key can be saved for, in the order they are listed.
 // Shared by a person's Bring Your Own Keys page and an organization's Model
@@ -22,80 +23,108 @@ export const MODEL_API_KEY_FIELDS: readonly ModelApiKeyField[] = [
         provider: "claude",
         name: "Anthropic (Claude)",
         logo: "anthropic",
-        label: "Anthropic (Claude) API Key",
+        get label() {
+        return tr("settings.modelProviders.anthropicClaudeApiKey");
+    },
     },
     {
         provider: "gemini",
         name: "Google (Gemini)",
         logo: "gemini-color",
-        label: "Google (Gemini) API Key",
+        get label() {
+        return tr("settings.modelProviders.googleGeminiApiKey");
+    },
     },
     {
         provider: "openai",
         name: "OpenAI",
         logo: "openai",
-        label: "OpenAI API Key",
+        get label() {
+        return tr("settings.modelProviders.openaiApiKey");
+    },
     },
     {
         provider: "mistral",
         name: "Mistral AI",
         logo: "mistral-color",
-        label: "Mistral AI API Key",
+        get label() {
+        return tr("settings.modelProviders.mistralAiApiKey");
+    },
     },
     {
         provider: "xai",
         name: "xAI",
         logo: "xai",
-        label: "xAI API Key",
+        get label() {
+        return tr("settings.modelProviders.xaiApiKey");
+    },
     },
     {
         provider: "bedrock",
         name: "Amazon Bedrock",
         logo: "bedrock-color",
-        label: "Amazon Bedrock API Key",
+        get label() {
+        return tr("settings.modelProviders.amazonBedrockApiKey");
+    },
     },
     {
         provider: "azure",
         name: "Azure OpenAI",
         logo: "azure-color",
-        label: "Azure OpenAI API Key",
+        get label() {
+        return tr("settings.modelProviders.azureOpenaiApiKey");
+    },
     },
     {
         provider: "azure-foundry",
         name: "Azure AI Foundry",
         logo: "azureai-color",
-        label: "Azure AI Foundry API Key",
+        get label() {
+        return tr("settings.modelProviders.azureAiFoundryApiKey");
+    },
     },
     {
         provider: "vertex",
         name: "Google Vertex AI",
         logo: "vertexai-color",
-        label: "Google Vertex AI service-account key",
-        keyLabel: "Service-account key (JSON)",
+        get label() {
+        return tr("settings.modelProviders.googleVertexAiServiceAccount");
+    },
+        get keyLabel() {
+        return tr("settings.modelProviders.serviceAccountKeyJson");
+    },
     },
     {
         provider: "openrouter",
         name: "OpenRouter",
         logo: "openrouter-color",
-        label: "OpenRouter API Key",
+        get label() {
+        return tr("settings.modelProviders.openrouterApiKey");
+    },
     },
     {
         provider: "vercel",
         name: "Vercel AI Gateway",
         logo: "vercel",
-        label: "Vercel AI Gateway API Key",
+        get label() {
+        return tr("settings.modelProviders.vercelAiGatewayApiKey");
+    },
     },
     {
         provider: "opencode-go",
         name: "OpenCode Go",
         logo: "opencode",
-        label: "OpenCode Go API Key",
+        get label() {
+        return tr("settings.modelProviders.opencodeGoApiKey");
+    },
     },
     {
         provider: "custom",
         name: "OpenAI-compatible endpoint",
         icon: Plug,
-        label: "OpenAI-compatible endpoint API Key",
+        get label() {
+        return tr("settings.modelProviders.openaiCompatibleEndpointApiKey");
+    },
     },
 ];
 

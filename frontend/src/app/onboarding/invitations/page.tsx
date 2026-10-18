@@ -9,6 +9,7 @@ import { FullScreenLoader } from "@/app/components/shared/FullScreenLoader";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useUserProfile } from "@/app/contexts/UserProfileContext";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function OnboardingInvitationsPage() {
     const router = useRouter();
@@ -49,7 +50,7 @@ function InvitationStep({ userId }: { userId: string }) {
     return (
         <OnboardingShell
             step="Step 3 of 3"
-            title="Organization invitations"
+            title={tr("app.onboarding.invitations.page.organizationInvitations")}
         >
             <OnboardingInvitations
                 userId={userId}
@@ -59,8 +60,8 @@ function InvitationStep({ userId }: { userId: string }) {
             <WarningPopup
                 open={error}
                 onClose={() => setError(false)}
-                title="Unable to finish setup"
-                message="Please try again."
+                title={tr("app.onboarding.invitations.page.unableFinishSetup")}
+                message={tr("app.onboarding.invitations.page.pleaseTryAgain")}
             />
             <div className="flex items-center justify-between gap-3 pt-6">
                 <PillButtonUI
@@ -70,7 +71,7 @@ function InvitationStep({ userId }: { userId: string }) {
                     disabled={invitationsBusy || submitting}
                     onClick={() => router.push("/onboarding/practice")}
                 >
-                    Back
+                    {tr("app.onboarding.invitations.page.back")}
                 </PillButtonUI>
                 <PillButtonUI
                     type="button"
@@ -79,7 +80,7 @@ function InvitationStep({ userId }: { userId: string }) {
                     disabled={invitationsBusy || submitting}
                     onClick={() => void finish()}
                 >
-                    {submitting ? "Finishing..." : "Finish"}
+                    {submitting ? tr("app.onboarding.invitations.page.finishing") : tr("app.onboarding.invitations.page.finish")}
                 </PillButtonUI>
             </div>
         </OnboardingShell>

@@ -49,6 +49,7 @@ import {
   uncertainDeliveryError,
 } from "@/app/lib/chatTurnFailure";
 import type { AssistantEvent, Message } from "@/app/components/shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 interface UseAssistantChatOptions {
   initialMessages?: Message[];
@@ -312,7 +313,7 @@ export function useAssistantChat({
    */
   const retryTurn = async (turn: TurnSnapshot): Promise<string | null> => {
     if (!mountedRef.current) {
-      notifyInfo("Open this chat and wait for its current answer before retrying.");
+      notifyInfo(tr("app.hooks.useAssistantChat.openChatWaitItsCurrent"));
       return null;
     }
     const transcript = messagesRef.current;
@@ -327,7 +328,7 @@ export function useAssistantChat({
       // A newer turn owns the thread. Re-sending would abort a healthy
       // stream and answer a question the user has already moved past.
       notifyInfo(
-        "A newer message has replaced this one. Send it again if you still need an answer.",
+        tr("app.hooks.useAssistantChat.newerMessageHasReplacedOne"),
       );
       return null;
     }
@@ -342,7 +343,7 @@ export function useAssistantChat({
       return null;
     }
     if (hasAssistantTurn(chatIdRef.current)) {
-      notifyInfo("Wait for this chat's current answer before retrying.");
+      notifyInfo(tr("app.hooks.useAssistantChat.waitChatSCurrentAnswer"));
       return null;
     }
     if (turn.recoveryChatId) return recoverServerTurn(turn, turn.recoveryChatId);
@@ -392,7 +393,7 @@ export function useAssistantChat({
       return serverChatId;
     } catch (error) {
       notifyError(error, {
-        action: "load this chat",
+        action: tr("app.hooks.useAssistantChat.loadChat"),
         dedupeKey: "assistant-chat",
           support: true,
         onRetry: async () => {
@@ -634,7 +635,7 @@ export function useAssistantChat({
             notifyError(
               errorFrameFailure(frameMessage, safeToDisplay),
               {
-                action: "get a response",
+                action: tr("app.hooks.useAssistantChat.getResponse"),
                 dedupeKey: "assistant-chat",
           support: true,
                 onRetry: async () => {
@@ -692,7 +693,7 @@ export function useAssistantChat({
           retrySnapshot.recoveryChatId = cursor.chatId;
         }
         const described = describeError(error, {
-          action: "get a response",
+          action: tr("app.hooks.useAssistantChat.getResponse"),
           fallback: TURN_FAILED_MESSAGE,
         });
         const uncertain = isUncertainDelivery(
@@ -708,7 +709,7 @@ export function useAssistantChat({
           error: uncertain ? (failure as UserVisibleError).message : described.message,
         }));
         notifyError(failure, {
-          action: "get a response",
+          action: tr("app.hooks.useAssistantChat.getResponse"),
           fallback: TURN_FAILED_MESSAGE,
           dedupeKey: "assistant-chat",
           support: true,

@@ -15,14 +15,15 @@ import { SettingsPersonalisationFields } from "@/app/components/settings/Setting
 import { SettingsRow } from "@/app/components/settings/SettingsRow";
 import { useUserProfile } from "@/app/contexts/UserProfileContext";
 import type { PersonalisationDetails } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 function fieldStatus(
   field: PersonalisationField,
   savingField: PersonalisationField | null,
   savedField: PersonalisationField | null,
 ) {
-  if (savingField === field) return "Saving...";
-  if (savedField === field) return "Saved";
+  if (savingField === field) return tr("pages.settings.personalisation.page.saving");
+  if (savedField === field) return tr("pages.settings.personalisation.page.saved");
   return null;
 }
 
@@ -139,10 +140,9 @@ function PersonalisationForm({
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <SettingsHeading>Your background</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.personalisation.page.background")}</SettingsHeading>
         <SettingsDescription>
-          Tell Mike about your role and practice so responses can be tailored to
-          your professional context.
+          {tr("pages.settings.personalisation.page.tellMikeAboutRolePractice")}
         </SettingsDescription>
         <GlassCardUI>
           <SettingsPersonalisationFields

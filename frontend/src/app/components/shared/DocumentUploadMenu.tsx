@@ -9,6 +9,7 @@ import {
 } from "@/shared/ui/dropdown";
 import { HeaderButtonUI } from "@/shared/ui/HeaderButtonsUI";
 import { TabPillButtonUI } from "@/shared/ui/TabPillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 interface DocumentUploadMenuProps {
     onSavedFiles?: (() => void) | null;
@@ -34,12 +35,12 @@ export function DocumentUploadMenu({
             <DropdownTrigger asChild>
                 <TriggerButton
                     disabled={triggerDisabled}
-                    title="Upload"
-                    aria-label="Upload"
+                    title={tr("shared.documentUploadMenu.upload")}
+                    aria-label={tr("shared.documentUploadMenu.upload")}
                     {...(toolbar ? { className: "pl-2" } : { iconOnly: true })}
                 >
                     <Upload aria-hidden="true" className="h-3.5 w-3.5" />
-                    {toolbar && "Upload"}
+                    {toolbar && tr("shared.documentUploadMenu.upload")}
                 </TriggerButton>
             </DropdownTrigger>
             <DropdownContent
@@ -53,7 +54,7 @@ export function DocumentUploadMenu({
                         className="flex items-center px-3 py-2"
                     >
                         <Cloud className="mr-2 h-3.5 w-3.5" />
-                        Saved Documents
+                        {tr("shared.documentUploadMenu.savedDocuments")}
                     </DropdownItem>
                 )}
                 <DropdownItem
@@ -62,7 +63,7 @@ export function DocumentUploadMenu({
                     className="flex items-center px-3 py-2"
                 >
                     <Upload className="mr-2 h-3.5 w-3.5" />
-                    Upload Documents
+                    {tr("shared.documentUploadMenu.uploadDocuments")}
                 </DropdownItem>
                 {onUploadFolder !== undefined && (
                     <DropdownItem
@@ -71,7 +72,7 @@ export function DocumentUploadMenu({
                         className="flex items-center px-3 py-2"
                     >
                         <FolderUp className="mr-2 h-3.5 w-3.5" />
-                        Upload folder
+                        {tr("shared.documentUploadMenu.uploadFolder")}
                     </DropdownItem>
                 )}
             </DropdownContent>

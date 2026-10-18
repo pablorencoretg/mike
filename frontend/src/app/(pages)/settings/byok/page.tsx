@@ -17,6 +17,7 @@ import { SettingsHeading } from "@/app/components/settings/SettingsHeading";
 import { SettingsDescription } from "@/app/components/settings/SettingsText";
 import { useUserProfile } from "@/app/contexts/UserProfileContext";
 import { isMfaRequiredError, type ApiKeyProvider } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 /**
  * A provider is listed as saved once the user has saved their own key for it. It
  * stays there while switched off, so the switch does not move under the
@@ -54,10 +55,10 @@ export default function ByokPage() {
         setToggleError(null);
         try {
             const saved = await updateApiKeyEnabled(provider, enabled);
-            if (!saved) setToggleError("The provider could not be updated. Please try again.");
+            if (!saved) setToggleError(tr("pages.settings.byok.page.providerCouldNotUpdatedPlease"));
         } catch (error) {
             if (isMfaRequiredError(error)) setPendingToggle({ provider, enabled });
-            else setToggleError("The provider could not be updated. Please try again.");
+            else setToggleError(tr("pages.settings.byok.page.providerCouldNotUpdatedPlease"));
         } finally {
             setBusyProvider(null);
         }
@@ -99,11 +100,11 @@ export default function ByokPage() {
                             tone="blue"
                             size="sm"
                             disabled={blocked}
-                            aria-label={`Add ${field.name}`}
+                            aria-label={tr("pages.settings.byok.page.add2", { name: field.name })}
                             aria-haspopup="dialog"
                             onClick={open}
                         >
-                            Add
+                            {tr("pages.settings.byok.page.add")}
                         </PillButtonUI>
                     )
                 }
@@ -122,7 +123,7 @@ export default function ByokPage() {
                             profile?.apiKeys[field.provider]?.source ===
                                 "user") === section.active,
                 );
-                const headingId = `byok-${section.id}-providers`;
+                const headingId = tr("pages.settings.byok.page.byokProviders", { id: section.id });
                 return (
                     <section
                         key={section.id}
@@ -171,7 +172,7 @@ export default function ByokPage() {
             />
             <WarningPopup
                 open={toggleError !== null}
-                title="Provider update failed"
+                title={tr("pages.settings.byok.page.providerUpdateFailed")}
                 message={toggleError}
                 onClose={() => setToggleError(null)}
             />

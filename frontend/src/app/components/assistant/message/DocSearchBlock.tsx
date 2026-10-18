@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { DocumentSearchEvent } from "@mike/contracts";
 import { EventBlock } from "./EventBlocks";
 import { EventDisclosureButton } from "./EventDisclosure";
+import { tr } from "@/shared/i18n/runtime";
 
 /** A document search uses the timeline's disclosure and reveals only its match count. */
 export function DocSearchBlock({ event, isStreaming, showConnector }: {
@@ -23,8 +24,7 @@ export function DocSearchBlock({ event, isStreaming, showConnector }: {
                 open={open}
                 onToggle={() => setOpen(value => !value)}
                 label={<span className="[overflow-wrap:anywhere]">
-                    {isStreaming ? "Searching" : event.error ? "Search failed in" : "Searched"}{" "}
-                    {scope} for &ldquo;{event.query}&rdquo;
+                    {isStreaming ? tr("assistant.message.docSearchBlock.searching") : event.error ? tr("assistant.message.docSearchBlock.searchFailed") : tr("assistant.message.docSearchBlock.searched")}{" "}{tr("assistant.message.docSearchBlock.text", { scope, query: event.query })}
                 </span>}
                 isStreaming={isStreaming}
             />

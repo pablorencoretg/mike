@@ -21,6 +21,7 @@ import { RowActions } from "@/app/components/shared/RowActions";
 import { HeaderActionsMenu } from "@/app/components/shared/HeaderActionsMenu";
 import { DocumentUploadMenu } from "@/app/components/shared/DocumentUploadMenu";
 import { tableTreeCellStyle } from "@/app/components/shared/TablePrimitive";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ProjectWorkspaceSection =
     | "documents"
@@ -202,7 +203,7 @@ export function DocVersionHistory({
                     className={`sticky left-0 z-[60] ${DOC_NAME_COL_W} bg-gray-50/80 py-2 pl-3 pr-2`}
                     style={treeNameCellStyle(depth)}
                 >
-                    <div>No version history.</div>
+                    <div>{tr("projects.projectPageParts.noVersionHistory")}</div>
                 </div>
             </div>
         );
@@ -222,7 +223,7 @@ export function DocVersionHistory({
                     v.version_number >= 1
                         ? `${v.version_number}`
                         : v.source === "upload"
-                          ? "Original"
+                          ? tr("projects.projectPageParts.original")
                           : "—";
                 const displayLabel = v.filename?.trim() || numberLabel;
                 const downloadFilename = v.filename?.trim() || filename;
@@ -459,8 +460,8 @@ export function ProjectPageHeader({
                     onClick: onNewChat,
                     disabled: !roleKnown,
                     icon: <Plus className="h-4 w-4" />,
-                    label: <span className="hidden sm:inline">Chat</span>,
-                    title: "Create chat",
+                    label: <span className="hidden sm:inline">{tr("projects.projectPageParts.chat")}</span>,
+                    title: tr("projects.projectPageParts.createChat"),
                 }
               : activeSection === "reviews"
                 ? {
@@ -471,8 +472,8 @@ export function ProjectPageHeader({
                     ) : (
                         <Plus className="h-4 w-4" />
                     ),
-                    label: <span className="hidden sm:inline">Review</span>,
-                    title: "Create review",
+                    label: <span className="hidden sm:inline">{tr("projects.projectPageParts.review")}</span>,
+                    title: tr("projects.projectPageParts.createReview"),
                   }
                 : null;
 
@@ -480,16 +481,16 @@ export function ProjectPageHeader({
         <PageHeader
             breadcrumbs={[
                 {
-                    label: "Projects",
+                    label: tr("projects.projectPageParts.projects"),
                     onClick: onBackToProjects,
-                    title: "Back to Projects",
+                    title: tr("projects.projectPageParts.backProjects"),
                 },
                 {
                     ...(project
                         ? {
                               label: project.name,
                               onClick: onProjectRoot,
-                              title: "Back to project documents",
+                              title: tr("projects.projectPageParts.backProjectDocuments"),
                           }
                         : {
                               loading: true,
@@ -497,9 +498,9 @@ export function ProjectPageHeader({
                           }),
                 },
                 ...(activeSection === "assistant"
-                    ? [{ label: "Chats" }]
+                    ? [{ label: tr("projects.projectPageParts.chats") }]
                     : activeSection === "reviews"
-                      ? [{ label: "Tabular Reviews" }]
+                      ? [{ label: tr("projects.projectPageParts.tabularReviews") }]
                       : (documentFolderBreadcrumbs ?? [])),
             ]}
             actionGroups={[
@@ -508,12 +509,12 @@ export function ProjectPageHeader({
                         type: "search",
                         value: search,
                         onChange: onSearchChange,
-                        placeholder: "Search…",
+                        placeholder: tr("projects.projectPageParts.search"),
                     },
                     {
                         onClick: onOpenAccess,
                         iconOnly: true,
-                        title: "Access",
+                        title: tr("projects.projectPageParts.access"),
                         icon: <Users className="h-4 w-4" />,
                     },
                     {
@@ -523,14 +524,14 @@ export function ProjectPageHeader({
                                 items={[
                                     {
                                         label: canManageProject
-                                            ? "Edit details"
-                                            : "View details",
+                                            ? tr("projects.projectPageParts.editDetails")
+                                            : tr("projects.projectPageParts.viewDetails"),
                                         icon: Pencil,
                                         onSelect: onOpenDetails,
                                         disabled: !roleKnown,
                                     },
                                     {
-                                        label: "Memory",
+                                        label: tr("projects.projectPageParts.memory"),
                                         icon: Brain,
                                         onSelect: onOpenMemory,
                                         disabled: !roleKnown,
@@ -540,7 +541,7 @@ export function ProjectPageHeader({
                                         // refusal can name someone who can
                                         // lift it; disabled only while the
                                         // role itself is still unknown.
-                                        label: "Delete",
+                                        label: tr("projects.projectPageParts.delete"),
                                         icon: Trash2,
                                         onSelect: onDeleteProject,
                                         variant: "danger",

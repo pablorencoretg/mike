@@ -26,6 +26,7 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     TABLE_SURFACE_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 export const CLOSE_ROW_ACTIONS_EVENT = "mike:close-row-actions";
 
@@ -220,8 +221,12 @@ export function TableFilters<T extends string>({
 }
 
 const SORT_OPTIONS: TableFilterOption<TableSortDirection>[] = [
-    { value: "asc", label: "Ascending" },
-    { value: "desc", label: "Descending" },
+    { value: "asc", get label() {
+        return tr("shared.tablePrimitive.ascending");
+    } },
+    { value: "desc", get label() {
+        return tr("shared.tablePrimitive.descending");
+    } },
 ];
 
 /** Ascending/descending sort menu for a column header. */
@@ -523,7 +528,7 @@ export function TablePrimaryCell({
                         aria-label={
                             checkboxTitle ??
                             (typeof label === "string"
-                                ? `Select ${label}`
+                                ? tr("shared.tablePrimitive.select", { label })
                                 : undefined)
                         }
                     />

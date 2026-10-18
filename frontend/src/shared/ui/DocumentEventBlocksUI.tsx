@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { tr } from "../i18n/runtime";
 
 type EventDotColor = "green" | "gray" | "red";
 
@@ -76,7 +77,7 @@ export function DocReadBlockUI({
         >
             <div className="flex min-w-0 items-center gap-1.5">
                 <span className="shrink-0 font-medium">
-                    {isStreaming ? "Reading" : "Read"}
+                    {isStreaming ? tr("shared.ui.documentEventBlocksUI.reading") : tr("shared.ui.documentEventBlocksUI.read")}
                 </span>
                 {!isStreaming && onClick ? (
                     <button
@@ -122,7 +123,7 @@ export function DocFindBlockUI({
             dotColor={totalMatches > 0 ? "green" : "gray"}
         >
             <span className="font-medium">
-                {isStreaming ? "Finding" : "Found"}
+                {isStreaming ? tr("shared.ui.documentEventBlocksUI.finding") : tr("shared.ui.documentEventBlocksUI.found")}
             </span>{" "}
             <span>
                 &ldquo;{query}&rdquo;{matchSuffix}

@@ -6,6 +6,7 @@ import { resolveDocumentEdit } from "@/app/lib/mikeApi";
 import type { EditAnnotation } from "../shared/types";
 import { RESPONSE_GLASS_SURFACE } from "./message/messageStyles";
 import { docxRevisionElements } from "../shared/views/docxRevisionElements";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * Ephemeral DOM mutation so the tracked change visually resolves the
@@ -219,8 +220,8 @@ export function EditCard({
                 versionId: annotation.version_id ?? null,
                 message:
                     verb === "accept"
-                        ? "Couldn't save accept — reverted."
-                        : "Couldn't save reject — reverted.",
+                        ? tr("assistant.editCard.couldnTSaveAcceptReverted")
+                        : tr("assistant.editCard.couldnTSaveRejectReverted"),
             });
         } finally {
             setBusyAction(null);

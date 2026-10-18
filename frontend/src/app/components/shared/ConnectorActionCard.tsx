@@ -2,6 +2,7 @@
 
 import type { ConnectorApprovalItem } from "@mike/contracts";
 import { ChevronRight } from "lucide-react";
+import { tr } from "@/shared/i18n/runtime";
 
 // Readable labels for the argument names Mike's built-in connectors use.
 // Anything else (for example an MCP server's own parameters) shows its key.
@@ -10,7 +11,9 @@ const labels: Record<string, string> = {
   cc: "Cc",
   bcc: "Bcc",
   subject: "Subject",
-  body: "Message",
+  get body() {
+        return tr("shared.connectorActionCard.message");
+    },
   calendar_id: "Calendar",
   event_id: "Event",
   file_id: "File",
@@ -21,15 +24,25 @@ const labels: Record<string, string> = {
   destination: "Destination folder",
   name: "Name",
   draft_id: "Draft",
-  message_id: "Message",
-  summary: "Title",
-  description: "Description",
+  get message_id() {
+        return tr("shared.connectorActionCard.message");
+    },
+  get summary() {
+        return tr("shared.connectorActionCard.title");
+    },
+  get description() {
+        return tr("shared.connectorActionCard.description");
+    },
   location: "Location",
   start: "Start",
   end: "End (exclusive for all-day events)",
   attendees: "Attendees",
-  add_label_ids: "Add labels",
-  remove_label_ids: "Remove labels",
+  get add_label_ids() {
+        return tr("shared.connectorActionCard.addLabels");
+    },
+  get remove_label_ids() {
+        return tr("shared.connectorActionCard.removeLabels");
+    },
   date: "Date",
   dateTime: "Date and time",
   timeZone: "Time zone",
@@ -48,18 +61,18 @@ function display(value: unknown): string {
 
 function consequenceNote(item: ConnectorApprovalItem): string | null {
   if (item.tool_name === "google_drive_replace_file_content")
-    return "This replaces all file contents with the text shown below. Existing Google Doc formatting is replaced.";
+    return tr("shared.connectorActionCard.replacesAllFileContentsText");
   if (item.tool_name === "google_drive_trash_file")
-    return "This moves the item to Google Drive Trash. Trashing a folder affects its contents.";
+    return tr("shared.connectorActionCard.movesItemGoogleDriveTrash");
   if (item.tool_name === "google_drive_move_file")
-    return "Moving this item may change access inherited from its folder.";
+    return tr("shared.connectorActionCard.movingItemMayChangeAccess");
   if (
     item.binding.type === "google" &&
     item.binding.provider === "google-calendar"
   )
-    return "Google will notify attendees of this change. Deleting an event sends cancellation notices.";
+    return tr("shared.connectorActionCard.googleWillNotifyAttendeesChange");
   if (item.tool_name === "gmail_delete_draft")
-    return "This deletes the draft. Review its contents before approving.";
+    return tr("shared.connectorActionCard.deletesDraftReviewItsContents");
   return null;
 }
 
@@ -98,7 +111,7 @@ export function ConnectorActionCard({ item }: { item: ConnectorApprovalItem }) {
           ))}
         </dl>
       ) : (
-        <p className="text-sm text-gray-500">This action takes no details.</p>
+        <p className="text-sm text-gray-500">{tr("shared.connectorActionCard.actionTakesNoDetails")}</p>
       )}
       {item.before !== undefined && (
         <details className="group/approval-details">
@@ -107,7 +120,7 @@ export function ConnectorActionCard({ item }: { item: ConnectorApprovalItem }) {
               aria-hidden="true"
               className="size-3 shrink-0 group-open/approval-details:rotate-90"
             />
-            Current item before this change
+            {tr("shared.connectorActionCard.currentItemBeforeChange")}
           </summary>
           <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap font-sans text-xs text-gray-700 [overflow-wrap:anywhere]">
             {display(item.before)}

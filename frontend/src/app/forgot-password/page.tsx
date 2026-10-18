@@ -19,6 +19,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { useT } from "@/shared/i18n/I18nContext";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * Failures that mean the request never reached Mike. Telling the user to
@@ -53,9 +54,9 @@ export default function ForgotPasswordPage() {
             setSubmitted(true);
         } catch (caught) {
             const described = describeError(caught, {
-                action: "send the reset link",
+                action: tr("app.forgotPassword.page.sendResetLink"),
                 fallback:
-                    "Mike couldn't send the reset link. Try again in a moment.",
+                    tr("app.forgotPassword.page.mikeCouldnTSendReset"),
             });
             if (DELIVERY_FAILURE_KINDS.has(described.kind)) {
                 setError(described);

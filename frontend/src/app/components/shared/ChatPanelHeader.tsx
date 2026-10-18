@@ -16,6 +16,7 @@ import {
 import { cn } from "@/app/lib/utils";
 import { formatElapsedTime } from "@/app/lib/formatElapsedTime";
 import { chatActivityAt, sortChatsByActivity } from "@/app/lib/chatActivity";
+import { tr } from "@/shared/i18n/runtime";
 
 const HEADER_PILL_CLASS = `flex shrink-0 items-center gap-1 rounded-full px-1 py-0.5 ${LIQUID_GLASS_SUBTLE_CLASS} backdrop-blur-xl`;
 const HEADER_PILL_BUTTON_CLASS = `flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 ${LIQUID_GLASS_HOVER_CLASS}`;
@@ -52,7 +53,7 @@ export function buildChatHistoryItems({
                     .includes(query.trim().toLowerCase()),
         )
         .map((chat) => {
-            const title = chat.title ?? "New Chat";
+            const title = chat.title ?? tr("shared.chatPanelHeader.newChat");
             const activityAt = chatActivityAt(chat);
             const elapsed = formatElapsedTime(activityAt, now);
             const responseStatus = responseStatuses[chat.id];
@@ -64,7 +65,7 @@ export function buildChatHistoryItems({
                     responseStatus === "loading" ? (
                         <Loader2
                             role="status"
-                            aria-label={`${title} response loading`}
+                            aria-label={tr("shared.chatPanelHeader.responseLoading", { title })}
                             className="h-3.5 w-3.5 shrink-0 animate-spin text-blue-600 motion-reduce:animate-none"
                         />
                     ) : (
@@ -175,7 +176,7 @@ export function ChatPanelHeader({
                         <FormTextInput
                             ref={titleInputRef}
                             variant="minimal"
-                            aria-label="Chat title"
+                            aria-label={tr("shared.chatPanelHeader.chatTitle")}
                             value={titleEdit.value}
                             onFocus={(event) => event.currentTarget.select()}
                             onChange={(event) =>
@@ -217,7 +218,7 @@ export function ChatPanelHeader({
                                     )}
                                 >
                                     <span className="min-w-0 truncate text-xs font-medium">
-                                        {currentTitle ?? "New Chat"}
+                                        {currentTitle ?? tr("shared.chatPanelHeader.newChat")}
                                     </span>
                                     <ChevronDown
                                         className={cn(
@@ -232,8 +233,8 @@ export function ChatPanelHeader({
                             loading={loading}
                             emptyLabel={
                                 chats.length === 0
-                                    ? "No chats yet."
-                                    : "No matches."
+                                    ? tr("shared.chatPanelHeader.noChatsYet")
+                                    : tr("shared.chatPanelHeader.noMatches")
                             }
                             items={historyItems}
                             onSelect={loadChat}
@@ -250,7 +251,7 @@ export function ChatPanelHeader({
                                 type="button"
                                 onClick={onNewChat}
                                 disabled={newChatDisabled}
-                                aria-label="New chat"
+                                aria-label={tr("shared.chatPanelHeader.newChat2")}
                                 className={cn(
                                     HEADER_PILL_BUTTON_CLASS,
                                     "disabled:cursor-not-allowed disabled:opacity-40",
@@ -267,8 +268,8 @@ export function ChatPanelHeader({
                             <button
                                 type="button"
                                 onClick={onClose}
-                                aria-label="Close chat panel"
-                                title="Close chat panel"
+                                aria-label={tr("shared.chatPanelHeader.closeChatPanel")}
+                                title={tr("shared.chatPanelHeader.closeChatPanel")}
                                 className={HEADER_PILL_BUTTON_CLASS}
                             >
                                 <X aria-hidden="true" className="h-3.5 w-3.5" />

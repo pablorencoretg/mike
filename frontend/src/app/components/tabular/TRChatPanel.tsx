@@ -65,6 +65,7 @@ import {
     providerLabel,
     type ModelProvider,
 } from "@/app/lib/modelAvailability";
+import { tr } from "@/shared/i18n/runtime";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -273,7 +274,7 @@ function TRAssistantMessage({
         if (event.type === "thinking") {
             return (
                 <EventBlock key={key} showConnector={showConnector} isStreaming>
-                    <span>Thinking...</span>
+                    <span>{tr("tabular.tRChatPanel.thinking")}</span>
                 </EventBlock>
             );
         }
@@ -604,7 +605,7 @@ export function TRChatPanel({
                     // Without this the chat menu just stays empty and the
                     // model/reasoning pickers silently fall back to defaults.
                     notifyError(error, {
-                        action: "load your chat history",
+                        action: tr("tabular.tRChatPanel.loadChatHistory"),
                         dedupeKey: `tr-chats:${reviewId}`,
                         onRetry: loadChats,
                     });
@@ -1047,7 +1048,7 @@ export function TRChatPanel({
                 setMessages(snapshot.messages);
             }
             notifyError(error, {
-                action: "delete this chat",
+                action: tr("tabular.tRChatPanel.deleteChat"),
                 onRetry: () => {
                     void handleDeleteChat(chatId);
                 },
@@ -1075,7 +1076,7 @@ export function TRChatPanel({
             );
             if (chatId === currentChatId) setCurrentChatTitle(previousTitle);
             notifyError(error, {
-                action: "rename this chat",
+                action: tr("tabular.tRChatPanel.renameChat"),
                 onRetry: () => {
                     void handleRenameChat(chatId, title);
                 },
@@ -1177,7 +1178,7 @@ export function TRChatPanel({
             const active = loaded.find((chat) => chat.id === chatId)?.active_turn;
             await recoverTurn(gen, chatId, active?.id ?? null);
         } catch (error) {
-            notifyError(error, { action: "load your chat history" });
+            notifyError(error, { action: tr("tabular.tRChatPanel.loadChatHistory") });
         }
     }
 
@@ -1900,7 +1901,7 @@ export function TRChatPanel({
                                 return updated;
                             });
                             notifyError(failure, {
-                                action: "get a response",
+                                action: tr("tabular.tRChatPanel.getResponse"),
                                 dedupeKey: `tr-chat-error:${cursor.chatId ?? reviewId}`,
                                 onRetry: retry,
                             });
@@ -1933,7 +1934,7 @@ export function TRChatPanel({
                     // part of the answer is missing from the transcript, and
                     // the stream itself keeps going.
                     notifyError(err, {
-                        action: "show part of this answer",
+                        action: tr("tabular.tRChatPanel.showPartAnswer"),
                         dedupeKey: `tr-chat-frame:${gen}`,
                     });
                 }
@@ -2113,7 +2114,7 @@ export function TRChatPanel({
                 // Offer a history check instead.
                 const chatKnown = serverChatId ?? currentChatIdRef.current;
                 notifyError(uncertainDeliveryError(err), {
-                    action: "finish this answer",
+                    action: tr("tabular.tRChatPanel.finishAnswer"),
                     dedupeKey: `tr-chat-stream:${reviewId}`,
                     actions: [
                         {
@@ -2141,8 +2142,8 @@ export function TRChatPanel({
                       }
                     : args.settings.retry;
             notifyError(err, {
-                action: "finish this answer",
-                fallback: `${TURN_INTERRUPTED_MESSAGE} Anything already shown is kept.`,
+                action: tr("tabular.tRChatPanel.finishAnswer"),
+                fallback: tr("tabular.tRChatPanel.anythingAlreadyShownKept", { TURN_INTERRUPTED_MESSAGE }),
                 dedupeKey: `tr-chat-stream:${reviewId}`,
                 onRetry: retry,
             });
@@ -2242,7 +2243,7 @@ export function TRChatPanel({
                                 }}
                                 items={[
                                     {
-                                        label: "Rename",
+                                        label: tr("tabular.tRChatPanel.rename"),
                                         icon: Pencil,
                                         onSelect: () =>
                                             setTitleDraft(
@@ -2255,7 +2256,7 @@ export function TRChatPanel({
                                             isLoading,
                                     },
                                     {
-                                        label: "Delete",
+                                        label: tr("tabular.tRChatPanel.delete"),
                                         icon: Trash2,
                                         onSelect: () => {
                                             if (currentChatId)
@@ -2355,13 +2356,13 @@ export function TRChatPanel({
             </div>
             <WarningPopup
                 open={messageLoadWarning}
-                title="Chat unavailable"
-                message="This chat’s messages could not be loaded. Please try again."
+                title={tr("tabular.tRChatPanel.chatUnavailable")}
+                message={tr("tabular.tRChatPanel.chatSMessagesCouldNot")}
                 onClose={() => setMessageLoadWarning(false)}
             />
             <ApiKeyMissingPopup
                 open={rejectedApiKey !== null}
-                title="API key rejected"
+                title={tr("tabular.tRChatPanel.apiKeyRejected")}
                 message={`${
                     rejectedApiKey?.provider
                         ? `The ${providerLabel(rejectedApiKey.provider)} API key`

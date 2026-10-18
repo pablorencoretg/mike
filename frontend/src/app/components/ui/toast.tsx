@@ -17,6 +17,7 @@ import {
     useToasts,
 } from "@/shared/ui/ToastUI";
 import { WarningPopup } from "@/app/components/popups/WarningPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 export {
     ToastViewportUI,
@@ -39,9 +40,9 @@ export function useOfflineNotice() {
         const onOffline = () => {
             offlineToastId = showToast({
                 tone: "error",
-                title: "You're offline",
+                title: tr("ui.toast.reOffline"),
                 message:
-                    "Changes can't be saved until your connection is back.",
+                    tr("ui.toast.changesCanTSavedUntil"),
                 durationMs: null,
                 dedupeKey: OFFLINE_TOAST_KEY,
             });
@@ -52,7 +53,7 @@ export function useOfflineNotice() {
                 offlineToastId = null;
                 showToast({
                     tone: "success",
-                    message: "You're back online.",
+                    message: tr("ui.toast.reBackOnline"),
                     dedupeKey: OFFLINE_TOAST_KEY,
                 });
             }

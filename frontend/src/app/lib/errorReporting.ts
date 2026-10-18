@@ -16,6 +16,7 @@ import {
     releaseName,
     resolveDsn,
 } from "@/shared/lib/sentryEvent";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ReportLevel = "fatal" | "error" | "warning";
 
@@ -297,7 +298,7 @@ export function reportNetworkFailure(
             // may reach the grouping hash. The hint still carries the error
             // so the scrubber derives failure_code (fetch_failed) from it.
             return Sentry.captureEvent(
-                { message: "API unreachable", level: "warning" },
+                { message: tr("app.lib.errorReporting.apiUnreachable"), level: "warning" },
                 { originalException: error },
             );
         });

@@ -10,6 +10,7 @@ import {
     LIQUID_GLASS_MODAL_ROW_HOVER_CLASS,
     LIQUID_GLASS_MODAL_ROW_SELECTED_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 type PrimaryAction = Omit<
     ButtonHTMLAttributes<HTMLButtonElement>,
@@ -57,7 +58,7 @@ export function ProjectPickerModal({
                 <SearchBar
                     value={search}
                     onValueChange={setSearch}
-                    placeholder="Search projects..."
+                    placeholder={tr("modals.projectPickerModal.searchProjects")}
                     autoFocus
                 />
             </div>
@@ -83,13 +84,13 @@ export function ProjectPickerModal({
                     </div>
                 ) : filtered.length === 0 ? (
                     <p className="text-center text-sm text-gray-400 py-8">
-                        {q ? "No matches found" : "No projects yet"}
+                        {q ? tr("modals.projectPickerModal.noMatchesFound") : tr("modals.projectPickerModal.noProjectsYet")}
                     </p>
                 ) : (
                     <div className="rounded-sm overflow-hidden">
                         <div className="flex items-center justify-between px-2 py-2">
                             <p className="text-xs font-medium text-gray-400">
-                                Projects
+                                {tr("modals.projectPickerModal.projects")}
                             </p>
                         </div>
                         <div className="space-y-px">
@@ -106,7 +107,7 @@ export function ProjectPickerModal({
                                     >
                                         <SelectionCheckbox
                                             checked={isSelected}
-                                            label={`Select ${project.name}`}
+                                            label={tr("modals.projectPickerModal.select", { name: project.name })}
                                             onChange={() => onSelect(isSelected ? null : project.id)}
                                         />
                                         <ClosedProjectSvgIcon className="h-3.5 w-3.5 shrink-0" />

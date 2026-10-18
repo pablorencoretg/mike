@@ -3,10 +3,11 @@
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import type { MemoryAutosaveStatus } from "./useMemoryAutosave";
 import type { MemoryCurrent } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 export function memoryActivityLabel(memory: MemoryCurrent) {
-  if (memory.status === "scheduled") return "Memory review scheduled";
-  if (memory.status === "processing") return "Updating memory…";
+  if (memory.status === "scheduled") return tr("memory.memoryEditorState.memoryReviewScheduled");
+  if (memory.status === "processing") return tr("memory.memoryEditorState.updatingMemory");
   return null;
 }
 
@@ -25,18 +26,17 @@ export function MemoryConflictNotice({
       role="alert"
     >
       <p className="font-medium">
-        {project ? "Project memory" : "Memory"} changed while you were editing
+        {project ? tr("memory.memoryEditorState.projectMemory") : tr("memory.memoryEditorState.memory")} {" "}{tr("memory.memoryEditorState.changedWhileWereEditing")}
       </p>
       <p className="mt-1 text-xs text-amber-800">
-        Reload what is saved now, or keep your draft and let it save over the
-        change.
+        {tr("memory.memoryEditorState.reloadWhatSavedNowKeep")}
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         <PillButtonUI tone="white" size="sm" onClick={onReload}>
-          Reload latest
+          {tr("memory.memoryEditorState.reloadLatest")}
         </PillButtonUI>
         <PillButtonUI tone="black" size="sm" onClick={onKeepDraft}>
-          Keep my draft
+          {tr("memory.memoryEditorState.keepMyDraft")}
         </PillButtonUI>
       </div>
     </div>
@@ -67,7 +67,7 @@ export function MemorySaveStatus({
           className="font-medium text-gray-700 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2"
           onClick={onRetry}
         >
-          Retry
+          {tr("memory.memoryEditorState.retry")}
         </button>
       </span>
     );
@@ -75,7 +75,7 @@ export function MemorySaveStatus({
   if (status === "idle") return null;
   return (
     <span className="text-xs text-gray-500" role="status" aria-live="polite">
-      {status === "saving" ? "Saving…" : "Saved"}
+      {status === "saving" ? tr("memory.memoryEditorState.saving") : tr("memory.memoryEditorState.saved")}
     </span>
   );
 }

@@ -10,6 +10,7 @@ import {
   organizationSettingsHref,
   useOrganizationSettings,
 } from "./OrganizationSettingsShell";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * The Bring Your Own Keys section of an organization's settings: its owners'
@@ -25,15 +26,15 @@ export function OrganizationProvidersSettings() {
     return (
       <EmptyState
         icon={<OrganizationSkeuoIcon />}
-        title="Bring Your Own Keys"
-        description="Only this organization's owners and admins can manage its keys."
+        title={tr("organizations.organizationProvidersSettings.bringOwnKeys")}
+        description={tr("organizations.organizationProvidersSettings.onlyOrganizationSOwnersAdmins")}
         action={
           <PillButtonUI
             tone="white"
             size="sm"
             onClick={() => router.push(organizationSettingsHref(orgId))}
           >
-            Back to General
+            {tr("organizations.organizationProvidersSettings.backGeneral")}
           </PillButtonUI>
         }
       />

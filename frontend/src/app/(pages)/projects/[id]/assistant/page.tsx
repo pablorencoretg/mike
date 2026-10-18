@@ -15,6 +15,7 @@ import { can, roleFrom } from "@/app/lib/permissions";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { ConfirmPopup } from "@/app/components/popups/ConfirmPopup";
 import { WarningPopup } from "@/app/components/popups/WarningPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -68,10 +69,10 @@ export default function ProjectAssistantPage({ params }: Props) {
             await renameChat(chatId, trimmed);
         } catch (error) {
             setActionNotice({
-                title: "The chat was not renamed",
+                title: tr("pages.projects.id.assistant.page.chatWasNotRenamed"),
                 message: userFacingApiError(
                     error,
-                    "The chat could not be renamed. Please try again.",
+                    tr("pages.projects.id.assistant.page.chatCouldNotRenamedPlease"),
                 ),
             });
             return;
@@ -101,10 +102,10 @@ export default function ProjectAssistantPage({ params }: Props) {
             await deleteChat(chat.id);
         } catch (error) {
             setActionNotice({
-                title: "The chat was not deleted",
+                title: tr("pages.projects.id.assistant.page.chatWasNotDeleted"),
                 message: userFacingApiError(
                     error,
-                    "The chat could not be deleted. Please try again.",
+                    tr("pages.projects.id.assistant.page.chatCouldNotDeletedPlease"),
                 ),
             });
             return;
@@ -159,7 +160,7 @@ export default function ProjectAssistantPage({ params }: Props) {
         ].filter((notice): notice is string => notice !== null);
         if (notices.length > 0)
             setActionNotice({
-                title: "Some chats were not deleted",
+                title: tr("pages.projects.id.assistant.page.someChatsWereNotDeleted"),
                 message: notices.join(" "),
             });
     }, [chats, selectedChatIds, setProjectChats]);
@@ -194,11 +195,11 @@ export default function ProjectAssistantPage({ params }: Props) {
                 open={confirmDeleteSelectedOpen && selectedChatIds.length > 0}
                 title={
                     selectedChatIds.length === 1
-                        ? "Delete chat?"
-                        : `Delete ${selectedChatIds.length} chats?`
+                        ? tr("pages.projects.id.assistant.page.deleteChat")
+                        : tr("pages.projects.id.assistant.page.deleteChats", { selectedChatIdsCount: selectedChatIds.length })
                 }
-                message="This cannot be undone."
-                confirmLabel="Delete"
+                message={tr("pages.projects.id.assistant.page.cannotUndone")}
+                confirmLabel={tr("pages.projects.id.assistant.page.delete")}
                 confirmVariant="danger"
                 onCancel={() => setConfirmDeleteSelectedOpen(false)}
                 onConfirm={() => void handleDeleteSelectedChats()}

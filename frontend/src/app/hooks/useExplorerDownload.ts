@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { downloadDocumentsZip, getDocumentUrl } from "@/app/lib/mikeApi";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import type { Document, Folder } from "@/app/components/shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 export function useExplorerDownload() {
     const busyRef = useRef(false);
@@ -43,7 +44,7 @@ export function useExplorerDownload() {
             setError(
                 userFacingApiError(
                     cause,
-                    "The file or folder could not be downloaded. Please try again.",
+                    tr("app.hooks.useExplorerDownload.fileFolderCouldNotDownloaded"),
                 ),
             );
         } finally {

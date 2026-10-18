@@ -38,6 +38,7 @@ import {
     WorkflowAppliedBlock,
     type CourtListenerBlockItem,
 } from "./message/EventBlocks";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     events?: AssistantEvent[];
@@ -307,9 +308,9 @@ export function AssistantMessage({
             // A clipboard refusal is a browser permission the user controls,
             // so support cannot help and a retry needs a fresh click.
             notifyError(err, {
-                action: "copy this answer",
+                action: tr("assistant.assistantMessage.copyAnswer"),
                 fallback:
-                    "Mike couldn't write to the clipboard. Check your browser's clipboard permission, then try again.",
+                    tr("assistant.assistantMessage.mikeCouldnTWriteClipboard"),
                 support: false,
             });
         }
@@ -425,7 +426,7 @@ export function AssistantMessage({
                     showConnector={showConnector}
                     isStreaming
                 >
-                    <span>Thinking...</span>
+                    <span>{tr("assistant.assistantMessage.thinking")}</span>
                 </EventBlock>
             );
         }
@@ -447,7 +448,7 @@ export function AssistantMessage({
                             className="h-3.5 w-3.5 shrink-0"
                         />
                         <span className="min-w-0 break-words">
-                            {event.isStreaming ? "Using connector..." : label}
+                            {event.isStreaming ? tr("assistant.assistantMessage.usingConnector") : label}
                         </span>
                     </span>
                     {isError && event.error && (
@@ -632,10 +633,10 @@ export function AssistantMessage({
                     key={globalIdx}
                     label={
                         event.isStreaming
-                            ? "Searching case law"
+                            ? tr("assistant.assistantMessage.searchingCaseLaw")
                             : event.error
-                              ? "Case law search failed"
-                              : "Searched case law"
+                              ? tr("assistant.assistantMessage.caseLawSearchFailed")
+                              : tr("assistant.assistantMessage.searchedCaseLaw")
                     }
                     detail={detail}
                     isStreaming={!!event.isStreaming}
@@ -669,10 +670,10 @@ export function AssistantMessage({
                     key={globalIdx}
                     label={
                         event.isStreaming
-                            ? `Fetching ${displayLabel}`
+                            ? tr("assistant.assistantMessage.fetching", { displayLabel })
                             : event.error
-                              ? "Case fetch failed"
-                              : `Fetched ${displayLabel}`
+                              ? tr("assistant.assistantMessage.caseFetchFailed")
+                              : tr("assistant.assistantMessage.fetched", { displayLabel })
                     }
                     detail={detail}
                     isStreaming={!!event.isStreaming}
@@ -726,10 +727,10 @@ export function AssistantMessage({
                         key={globalIdx}
                         label={
                             event.isStreaming
-                                ? `Running ${searchLabel}`
+                                ? tr("assistant.assistantMessage.running", { searchLabel })
                                 : event.error
-                                  ? "Case searches failed"
-                                  : `Ran ${searchLabel}`
+                                  ? tr("assistant.assistantMessage.caseSearchesFailed")
+                                  : tr("assistant.assistantMessage.ran", { searchLabel })
                         }
                         detail={detail}
                         isStreaming={!!event.isStreaming}
@@ -755,10 +756,10 @@ export function AssistantMessage({
                     key={globalIdx}
                     label={
                         event.isStreaming
-                            ? "Searching case"
+                            ? tr("assistant.assistantMessage.searchingCase")
                             : event.error
-                              ? "Case search failed"
-                              : "Searched case"
+                              ? tr("assistant.assistantMessage.caseSearchFailed")
+                              : tr("assistant.assistantMessage.searchedCase")
                     }
                     detail={detail}
                     isStreaming={!!event.isStreaming}
@@ -784,10 +785,10 @@ export function AssistantMessage({
                     key={globalIdx}
                     label={
                         event.isStreaming
-                            ? `Reading case ${caseLabel}`
+                            ? tr("assistant.assistantMessage.readingCase", { caseLabel })
                             : event.error
-                              ? `Case read failed ${caseLabel}`
-                              : `Read case ${caseLabel}`
+                              ? tr("assistant.assistantMessage.caseReadFailed", { caseLabel })
+                              : tr("assistant.assistantMessage.readCase", { caseLabel })
                     }
                     detail={detail}
                     isStreaming={!!event.isStreaming}
@@ -825,10 +826,10 @@ export function AssistantMessage({
                     key={globalIdx}
                     label={
                         event.isStreaming
-                            ? `Verifying ${citationLabel}`
+                            ? tr("assistant.assistantMessage.verifying", { citationLabel })
                             : event.error
-                              ? "Citation verification failed"
-                              : `Verified ${citationLabel}`
+                              ? tr("assistant.assistantMessage.citationVerificationFailed")
+                              : tr("assistant.assistantMessage.verified", { citationLabel })
                     }
                     detail={detail}
                     isStreaming={!!event.isStreaming}
@@ -1162,7 +1163,7 @@ export function AssistantMessage({
                         <button
                             type="button"
                             aria-label={
-                                isCopied ? "Response copied" : "Copy response"
+                                isCopied ? tr("assistant.assistantMessage.responseCopied") : tr("assistant.assistantMessage.copyResponse")
                             }
                             className="-ml-1.5 p-1.5 rounded text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                             onClick={handleCopy}

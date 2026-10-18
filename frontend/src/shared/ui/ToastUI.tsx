@@ -39,6 +39,7 @@ import {
     type ToastAction,
     type ToastRecord,
 } from "../lib/toastStore";
+import { tr } from "../i18n/runtime";
 export {
     showToast,
     dismissToast,
@@ -119,7 +120,7 @@ export function ToastActionsUI({ toast }: { toast: ToastRecord }): ReactElement 
                         noticeActionEmphasis(0, count),
                     )}
                 >
-                    {toast.supportLabel ?? "Contact support"}
+                    {toast.supportLabel ?? tr("shared.ui.toastUI.contactSupport")}
                 </a>
             )}
             {toast.actions?.map((action, index) => (
@@ -261,7 +262,7 @@ export function ToastViewportUI({
             // through its own role, and `aria-label` needs a role to be
             // exposed at all.
             role="region"
-            aria-label="Notifications"
+            aria-label={tr("shared.ui.toastUI.notifications")}
             className={twMerge(
                 clsx(
                     "pointer-events-none fixed left-1/2 top-5 z-[260] flex w-[min(92vw,520px)] -translate-x-1/2 flex-col gap-2 px-4",

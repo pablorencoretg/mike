@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { GlassCardUI } from "@/shared/ui/GlassCardUI";
 import { SettingsLabel } from "./SettingsText";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * One settings tile, shared by the connector lists (Installed and Discover)
@@ -72,7 +73,7 @@ export function ConnectorCard({
             className="cursor-pointer rounded-xl px-4 py-3 transition-colors hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
             role="button"
             tabIndex={0}
-            aria-label={`Manage ${name}`}
+            aria-label={tr("settings.connectorCard.manage", { name })}
             onClick={onOpen}
             onKeyDown={(event) => {
               if (event.target !== event.currentTarget) return;

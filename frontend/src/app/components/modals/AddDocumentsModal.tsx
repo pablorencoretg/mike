@@ -25,6 +25,7 @@ import {
 } from "@/app/lib/documentUploadValidation";
 import { useRemountPersistentState } from "@/app/hooks/useRemountPersistentState";
 import { notifyError, userFacingApiError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     open: boolean;
@@ -138,7 +139,7 @@ function AddDocumentsModalForWorkspace({
                 setProjectDocuments([]);
                 setProjectFolders([]);
                 notifyError(error, {
-                    action: "load this project's files",
+                    action: tr("modals.addDocumentsModal.loadProjectSFiles"),
                     dedupeKey: `add-documents-directory:${projectId}`,
                     onRetry: () => setDirectoryReloadKey((key) => key + 1),
                 });
@@ -257,9 +258,9 @@ function AddDocumentsModalForWorkspace({
         notifyError(firstFailure?.reason, {
             action:
                 failed.length === 1
-                    ? `add ${names} to this project`
-                    : `add ${failed.length} of ${toAssign.length} files to this project`,
-            fallback: `${names} could not be added to this project. Try again.`,
+                    ? tr("modals.addDocumentsModal.addProject", { names })
+                    : tr("modals.addDocumentsModal.addFilesProject", { failedCount: failed.length, toAssignCount: toAssign.length }),
+            fallback: tr("modals.addDocumentsModal.couldNotAddedProjectTry", { names }),
             // A second Confirm, or a Retry that fails again, replaces this
             // notice: an older one's Retry would resend its own stale sets.
             dedupeKey: `add-documents-assign:${targetProjectId}`,
@@ -378,7 +379,7 @@ function AddDocumentsModalForWorkspace({
                     ? failedUploadMessage(err.outcomes)
                     : userFacingApiError(
                           err,
-                          "Documents could not be uploaded. Please try again.",
+                          tr("modals.addDocumentsModal.documentsCouldNotUploadedPlease"),
                       ),
             );
         } finally {
@@ -437,7 +438,7 @@ function AddDocumentsModalForWorkspace({
             keepMounted={keepMounted}
             breadcrumbs={breadcrumb}
             secondaryAction={{
-                label: uploading ? "Uploading…" : "Upload",
+                label: uploading ? tr("modals.addDocumentsModal.uploading") : tr("modals.addDocumentsModal.upload"),
                 icon: uploading ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
@@ -447,7 +448,7 @@ function AddDocumentsModalForWorkspace({
                 disabled: uploading,
             }}
             primaryAction={{
-                label: uploading ? "Saving…" : "Confirm",
+                label: uploading ? tr("modals.addDocumentsModal.saving") : tr("modals.addDocumentsModal.confirm"),
                 onClick: handleConfirm,
                 disabled: selectedDocuments.length === 0 || uploading,
             }}
@@ -472,7 +473,7 @@ function AddDocumentsModalForWorkspace({
                         type="button"
                         onClick={() => setUploadWarning(null)}
                         className="shrink-0 rounded p-0.5 text-black hover:bg-gray-100"
-                        aria-label="Dismiss warning"
+                        aria-label={tr("modals.addDocumentsModal.dismissWarning")}
                     >
                         <X className="h-3.5 w-3.5" />
                     </button>

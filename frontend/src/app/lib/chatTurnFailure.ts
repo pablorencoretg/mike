@@ -1,4 +1,5 @@
 import { UserVisibleError, describeError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 // What a chat surface says, and offers, when a turn fails. The assistant chat
 // (useAssistantChat) and the tabular review chat (TRChatPanel) stream turns
@@ -60,7 +61,7 @@ export function isUncertainDelivery(
  * so a chat the request may have created shows up.
  */
 export function checkHistoryLabel(chatKnown: boolean): string {
-    return chatKnown ? "Check chat" : "Refresh history";
+    return chatKnown ? tr("app.lib.chatTurnFailure.checkChat") : tr("app.lib.chatTurnFailure.refreshHistory");
 }
 
 export function uncertainDeliveryError(cause: unknown): UserVisibleError {

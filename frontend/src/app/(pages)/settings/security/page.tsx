@@ -40,6 +40,7 @@ import {
   type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { authMessages } from "@/app/lib/authMessages";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this page's deltas, keyed by the `code` the
  *  `/api/auth/mfa/*` routes return. */
@@ -144,7 +145,7 @@ function VerificationCodeInput({
     <div
       className="flex justify-center gap-2"
       role="group"
-      aria-label="Six digit verification code"
+      aria-label={tr("pages.settings.security.page.sixDigitVerificationCode")}
     >
       {digits.map((digit, index) => (
         <input
@@ -161,7 +162,7 @@ function VerificationCodeInput({
           onPaste={handlePaste}
           onKeyDown={(event) => handleKeyDown(event, index)}
           className="h-11 w-10 rounded-lg border border-transparent bg-gray-100 text-center text-lg font-medium text-gray-950 shadow-none outline-none transition-colors focus:border-gray-200 focus:ring-2 focus:ring-gray-300/45 disabled:cursor-not-allowed disabled:opacity-45"
-          aria-label={`Verification code digit ${index + 1}`}
+          aria-label={tr("pages.settings.security.page.verificationCodeDigit", { value: index + 1 })}
           maxLength={1}
         />
       ))}
@@ -204,7 +205,7 @@ export default function SecurityPage() {
     const described = describeError(error, {
       action,
       codeMessages: MFA_ERROR_MESSAGES,
-      fallback: `Mike couldn't ${action}. Try again.`,
+      fallback: tr("pages.settings.security.page.mikeCouldnTTryAgain", { action }),
     });
     setStatus(described.message);
     setStatusError(described);
@@ -356,7 +357,7 @@ export default function SecurityPage() {
       setSetupModalOpen(false);
       setVerificationCode("");
       setSetupKeyCopied(false);
-      setStatus("MFA enabled.");
+      setStatus(tr("pages.settings.security.page.mfaEnabled"));
       await refreshMfaState();
     } catch (error) {
       failStatus(error, "verify that code");
@@ -425,7 +426,7 @@ export default function SecurityPage() {
     }
     setBusy(false);
 
-    setStatus("MFA disabled.");
+    setStatus(tr("pages.settings.security.page.mfaDisabled"));
     if (profile?.mfaOnLogin) {
       void updateMfaOnLogin(false);
     }
@@ -460,7 +461,7 @@ export default function SecurityPage() {
       if (!success) {
         // The profile context classified the failure and raised the toast
         // (message, Retry, support); this line is only the row's status.
-        setStatus("Not saved.");
+        setStatus(tr("pages.settings.security.page.notSaved"));
       }
     } catch (error) {
       if (isMfaRequiredError(error)) {
@@ -480,7 +481,7 @@ export default function SecurityPage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <SettingsHeading>Multi-Factor Authentication</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.security.page.multiFactorAuthentication")}</SettingsHeading>
         <GlassCardUI>
           {loading ? (
             <MfaSettingsSkeleton />
@@ -488,18 +489,18 @@ export default function SecurityPage() {
             <>
               <SettingsRow>
                 <div className="min-w-0 space-y-1">
-                  <SettingsLabel>Verification method</SettingsLabel>
+                  <SettingsLabel>{tr("pages.settings.security.page.verificationMethod")}</SettingsLabel>
                   <SettingsDescription>
                     {hasVerifiedFactor
                       ? sessionVerified
-                        ? "Authenticator app is saved on your account. Sensitive actions are unlocked for this session."
-                        : "Authenticator app is saved on your account. Sensitive actions require a verification code."
-                      : "Add an authenticator app to protect sensitive actions such as exporting data, deleting data, deleting your account, and changing API keys."}
+                        ? tr("pages.settings.security.page.authenticatorAppSavedAccountSensitive")
+                        : tr("pages.settings.security.page.authenticatorAppSavedAccountSensitive2")
+                      : tr("pages.settings.security.page.addAuthenticatorAppProtectSensitive")}
                   </SettingsDescription>
                 </div>
                 {hasVerifiedFactor ? (
                   <span className="shrink-0 text-xs font-medium text-green-700">
-                    Enabled
+                    {tr("pages.settings.security.page.enabled")}
                   </span>
                 ) : !enrollment ? (
                   <PillButtonUI
@@ -510,7 +511,7 @@ export default function SecurityPage() {
                     loading={busy}
                     className="shrink-0"
                   >
-                    {busy ? "Starting..." : "Set up"}
+                    {busy ? tr("pages.settings.security.page.starting") : tr("pages.settings.security.page.setUp")}
                   </PillButtonUI>
                 ) : null}
               </SettingsRow>
@@ -519,17 +520,16 @@ export default function SecurityPage() {
                 <>
                   <SettingsRow>
                     <div className="space-y-1">
-                      <SettingsLabel>Login verification</SettingsLabel>
+                      <SettingsLabel>{tr("pages.settings.security.page.loginVerification")}</SettingsLabel>
                       <SettingsDescription>
-                        Ask for an authenticator code after each new login,
-                        instead of only before sensitive actions.
+                        {tr("pages.settings.security.page.askAuthenticatorCodeAfterEach")}
                       </SettingsDescription>
                     </div>
                     <ToggleSwitchUI
                       checked={loginMfaEnabled}
                       disabled={savingLoginPreference}
                       aria-busy={savingLoginPreference}
-                      aria-label="Login verification"
+                      aria-label={tr("pages.settings.security.page.loginVerification")}
                       onCheckedChange={() => void handleLoginPreferenceToggle()}
                     />
                   </SettingsRow>
@@ -540,7 +540,7 @@ export default function SecurityPage() {
                       disabled={busy || !factors[0]?.id}
                       className="text-xs font-medium text-red-600 transition-colors hover:text-red-700 disabled:cursor-not-allowed disabled:text-red-300"
                     >
-                      Remove authenticator app
+                      {tr("pages.settings.security.page.removeAuthenticatorApp")}
                     </button>
                   </div>
                 </>
@@ -559,7 +559,7 @@ export default function SecurityPage() {
                   )}
                   className="ml-2 underline underline-offset-2"
                 >
-                  Contact support
+                  {tr("pages.settings.security.page.contactSupport")}
                 </a>
               )}
             </p>
@@ -570,9 +570,9 @@ export default function SecurityPage() {
       <Modal
         open={setupModalOpen}
         onClose={() => void closeSetupModal()}
-        breadcrumbs={["Security", "Set up authenticator app"]}
+        breadcrumbs={[tr("pages.settings.security.page.security"), tr("pages.settings.security.page.setUpAuthenticatorApp")]}
         cancelAction={{
-          label: enrollment ? "Back" : "Cancel",
+          label: enrollment ? tr("pages.settings.security.page.back") : tr("pages.settings.security.page.cancel"),
           onClick: enrollment
             ? () => void returnToSetupInstructions()
             : () => void closeSetupModal(),
@@ -581,12 +581,12 @@ export default function SecurityPage() {
         primaryAction={
           enrollment
             ? {
-                label: busy ? "Verifying..." : "Verify",
+                label: busy ? tr("pages.settings.security.page.verifying") : tr("pages.settings.security.page.verify"),
                 onClick: () => void verifyEnrollment(),
                 disabled: busy || verificationCode.trim().length !== 6,
               }
             : {
-                label: busy ? "Starting..." : "Continue",
+                label: busy ? tr("pages.settings.security.page.starting") : tr("pages.settings.security.page.continue"),
                 onClick: () => void startEnrollment(),
                 disabled: busy,
               }
@@ -602,48 +602,44 @@ export default function SecurityPage() {
           {!enrollment ? (
             <>
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                Step 1
+                {tr("pages.settings.security.page.step1")}
               </p>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-gray-700">
-                  Before you start
+                  {tr("pages.settings.security.page.beforeStart")}
                 </p>
                 <p className="text-sm text-gray-500">
-                  Download an authenticator app such as Google Authenticator,
-                  Microsoft Authenticator, Authy, 1Password, or iCloud
-                  Passwords.
+                  {tr("pages.settings.security.page.downloadAuthenticatorAppSuchAs")}
                 </p>
               </div>
               <ol className="list-decimal space-y-1 pl-4 text-sm text-gray-500">
-                <li>Download and open your authenticator app.</li>
-                <li>Choose the option to add a new account.</li>
+                <li>{tr("pages.settings.security.page.downloadOpenAuthenticatorApp")}</li>
+                <li>{tr("pages.settings.security.page.chooseOptionAddNewAccount")}</li>
               </ol>
             </>
           ) : (
             <>
               <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                Step 2
+                {tr("pages.settings.security.page.step2")}
               </p>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-gray-700">
-                  Scan this code
+                  {tr("pages.settings.security.page.scanCode")}
                 </p>
                 <p className="text-sm text-gray-500">
-                  In your authenticator app, add a new account and scan the QR
-                  code. If you cannot scan it, enter the setup key below
-                  manually.
+                  {tr("pages.settings.security.page.authenticatorAppAddNewAccount")}
                 </p>
               </div>
               <div className="min-w-0">
                 <div className="mb-1 flex items-center justify-between gap-3">
-                  <p className="text-xs font-medium text-gray-500">Setup key</p>
+                  <p className="text-xs font-medium text-gray-500">{tr("pages.settings.security.page.setupKey")}</p>
                   <button
                     type="button"
                     onClick={() => void copySetupKey()}
                     className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 transition-colors hover:text-gray-950"
                   >
                     <Copy className="h-3 w-3" />
-                    {setupKeyCopied ? "Copied" : "Copy"}
+                    {setupKeyCopied ? tr("pages.settings.security.page.copied") : tr("pages.settings.security.page.copy")}
                   </button>
                 </div>
                 <p className="break-all text-xs text-gray-700">
@@ -654,7 +650,7 @@ export default function SecurityPage() {
                 <div className="flex h-48 w-48 items-center justify-center rounded-xl bg-white p-2">
                   <img
                     src={enrollment.qrCode}
-                    alt="MFA QR code"
+                    alt={tr("pages.settings.security.page.mfaQrCode")}
                     className="h-full w-full"
                   />
                 </div>
@@ -687,8 +683,8 @@ export default function SecurityPage() {
           setPendingLoginPreference(null);
           if (enabled !== null) void saveLoginPreference(enabled);
         }}
-        title="Authenticator required"
-        message="Enter a code from your authenticator app to change login verification."
+        title={tr("pages.settings.security.page.authenticatorRequired")}
+        message={tr("pages.settings.security.page.enterCodeFromAuthenticatorApp")}
       />
     </div>
   );

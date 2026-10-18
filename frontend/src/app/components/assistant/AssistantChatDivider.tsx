@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/app/lib/utils";
+import { tr } from "@/shared/i18n/runtime";
 
 const KEYBOARD_STEP_PX = 24;
 const MIN_CHAT_WIDTH = 320;
@@ -65,7 +66,7 @@ export function AssistantChatDivider({
         <div
             role="separator"
             aria-orientation="vertical"
-            aria-label="Resize chats"
+            aria-label={tr("assistant.assistantChatDivider.resizeChats")}
             tabIndex={0}
             onMouseDown={(event) => {
                 event.preventDefault();

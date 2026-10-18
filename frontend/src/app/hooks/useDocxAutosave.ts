@@ -5,6 +5,7 @@ import { listDocumentVersions, replaceDocumentVersionFile } from "@/app/lib/mike
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { UploadBatchError } from "@/shared/api/uploadSessionClient";
 import { invalidateDocxBytes } from "./useFetchDocxBytes";
+import { tr } from "@/shared/i18n/runtime";
 
 export const DOCX_AUTOSAVE_DELAY = 1500;
 const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -95,8 +96,8 @@ export function useDocxAutosave(options: Options) {
                 conflicted.current = conflict;
                 if (mounted.current) {
                     setError(conflict
-                        ? "This document changed elsewhere. Download your edits before reopening the latest version."
-                        : userFacingApiError(reason, "Changes could not be saved. Your edits are still open. Press Cmd/Ctrl+S to retry, or download a copy."));
+                        ? tr("app.hooks.useDocxAutosave.documentChangedElsewhereDownloadEdits")
+                        : userFacingApiError(reason, tr("app.hooks.useDocxAutosave.changesCouldNotSavedEdits")));
                     setStatus("error");
                 }
             }

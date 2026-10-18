@@ -13,6 +13,7 @@ import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { FORM_CONTROL_GLASS_CLASS } from "@/app/components/ui/form-field";
 import { cn } from "@/app/lib/utils";
 import { docxEditComment } from "./docxCommentEditing";
+import { tr } from "@/shared/i18n/runtime";
 
 export function DocxCommentEdit({
     editor,
@@ -74,7 +75,7 @@ export function DocxCommentEdit({
             }}
         >
             <label htmlFor={id} className="sr-only">
-                Edit comment
+                {tr("shared.views.docxCommentEdit.editComment")}
             </label>
             <textarea
                 id={id}
@@ -93,14 +94,14 @@ export function DocxCommentEdit({
                 </p>
             )}
             <div className="flex justify-end gap-2">
-                <TextButtonUI onClick={onClose}>Cancel</TextButtonUI>
+                <TextButtonUI onClick={onClose}>{tr("shared.views.docxCommentEdit.cancel")}</TextButtonUI>
                 <PillButtonUI
                     type="submit"
                     size="xs"
                     tone="black"
                     disabled={disabled}
                 >
-                    Save
+                    {tr("shared.views.docxCommentEdit.save")}
                 </PillButtonUI>
             </div>
         </form>

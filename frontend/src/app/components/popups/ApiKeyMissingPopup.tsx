@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
 import { WarningPopup } from "../popups/WarningPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     open: boolean;
@@ -35,13 +36,13 @@ export function ApiKeyMissingPopup({
         <WarningPopup
             open={open}
             onClose={onClose}
-            title={title ?? "API key required"}
+            title={title ?? tr("popups.apiKeyMissingPopup.apiKeyRequired")}
             message={body}
             icon={
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-600" />
             }
             primaryAction={{
-                label: "Go to settings",
+                label: tr("popups.apiKeyMissingPopup.goSettings"),
                 onClick: handleGoToSettings,
             }}
         />

@@ -10,6 +10,7 @@ import {
     DropdownTrigger,
 } from "@/shared/ui/dropdown";
 import { TabPillButtonUI } from "@/shared/ui/TabPillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 function SelectionMenuContent({
     renderItems,
@@ -50,7 +51,7 @@ export function SelectionActionsMenu({
                     data-icon-position="right"
                     className={cn("pl-3 pr-2", className)}
                 >
-                    Actions
+                    {tr("shared.selectionActionsMenu.actions")}
                     <ChevronDown className="h-3.5 w-3.5" />
                 </TabPillButtonUI>
             </DropdownTrigger>

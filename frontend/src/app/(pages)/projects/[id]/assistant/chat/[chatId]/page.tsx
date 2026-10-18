@@ -129,6 +129,7 @@ import {
     formatUnsupportedDocumentWarning,
     partitionSupportedDocumentFiles,
 } from "@/app/lib/documentUploadValidation";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     params: Promise<{ id: string; chatId?: string }>;
@@ -512,8 +513,8 @@ export default function ProjectAssistantChatPage({ params }: Props) {
         if (result.status !== "resolved") {
             setDocumentDropError(
                 result.status === "denied"
-                    ? "This document is no longer available."
-                    : "This document could not be opened. Please try again.",
+                    ? tr("pages.projects.id.assistant.chat.chatId.page.documentNoLongerAvailable")
+                    : tr("pages.projects.id.assistant.chat.chatId.page.documentCouldNotOpenedPlease"),
             );
             return;
         }
@@ -854,7 +855,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                         ? failedUploadMessage(err.outcomes)
                         : userFacingApiError(
                               err,
-                              "Files could not be uploaded. Please try again.",
+                              tr("pages.projects.id.assistant.chat.chatId.page.filesCouldNotUploadedPlease"),
                           ),
                 ),
             );
@@ -912,7 +913,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             setDocumentDropError(
                 userFacingApiError(
                     error,
-                    "These files could not be opened. Please try again.",
+                    tr("pages.projects.id.assistant.chat.chatId.page.theseFilesCouldNotOpened"),
                 ),
             );
         }
@@ -1144,7 +1145,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
         try {
             const document = await getDocument(docId);
             if (document.can_delete !== true) {
-                setDocumentDropError("You do not have permission to delete this file.");
+                setDocumentDropError(tr("pages.projects.id.assistant.chat.chatId.page.doNotHavePermissionDelete"));
                 return;
             }
             await deleteDocument(docId);
@@ -1154,7 +1155,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             setDocumentDropError(
                 userFacingApiError(
                     err,
-                    "This file could not be deleted. Please try again.",
+                    tr("pages.projects.id.assistant.chat.chatId.page.fileCouldNotDeletedPlease"),
                 ),
             );
             return;
@@ -1370,7 +1371,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                         {/* Explorer header */}
                         <div className="flex h-12 shrink-0 items-center justify-between px-3">
                             <span className="text-xs text-gray-700">
-                                Explorer
+                                {tr("pages.projects.id.assistant.chat.chatId.page.explorer")}
                             </span>
                             <div className="flex items-center gap-1">
                                 <input
@@ -1419,24 +1420,24 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                                     disabled={!canEditContent}
                                 />
                                 <HeaderActionsMenu
-                                    title="Explorer actions"
+                                    title={tr("pages.projects.id.assistant.chat.chatId.page.explorerActions")}
                                     triggerClassName="h-6 w-6 text-gray-500 hover:text-gray-900"
                                     items={[
                                         {
-                                            label: "Select project",
+                                            label: tr("pages.projects.id.assistant.chat.chatId.page.selectProject"),
                                             icon: FolderOpen,
                                             onSelect: () =>
                                                 void projectPicker.openPicker(),
                                         },
                                         {
-                                            label: "New subfolder",
+                                            label: tr("pages.projects.id.assistant.chat.chatId.page.newSubfolder"),
                                             icon: FolderPlus,
                                             onSelect: () =>
                                                 projectExplorerRef.current?.createRootFolder(),
                                             disabled: !canEditContent,
                                         },
                                         {
-                                            label: "Go to project page",
+                                            label: tr("pages.projects.id.assistant.chat.chatId.page.goProjectPage"),
                                             icon: ArrowUpRight,
                                             onSelect: () =>
                                                 router.push(
@@ -1447,7 +1448,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                                 />
                                 <button
                                     onClick={() => setExplorerCollapsed(true)}
-                                    title="Collapse explorer"
+                                    title={tr("pages.projects.id.assistant.chat.chatId.page.collapseExplorer")}
                                     className="rounded p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
                                 >
                                     <ChevronLeft className="h-3.5 w-3.5" />
@@ -1486,7 +1487,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                             {explorerDragOver && (
                                 <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
                                     <p className="text-xs text-blue-500 font-medium">
-                                        Drop to upload
+                                        {tr("pages.projects.id.assistant.chat.chatId.page.dropUpload")}
                                     </p>
                                 </div>
                             )}
@@ -1538,7 +1539,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                     <div className="flex h-12 shrink-0 items-center justify-center px-1">
                         <button
                             onClick={() => setExplorerCollapsed(false)}
-                            title="Expand explorer"
+                            title={tr("pages.projects.id.assistant.chat.chatId.page.expandExplorer")}
                             className="p-1 rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                         >
                             <ChevronRight className="h-3.5 w-3.5" />
@@ -1553,7 +1554,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             {/* CENTER: Document Panel */}
             <div
                 role="region"
-                aria-label="Document viewer"
+                aria-label={tr("pages.projects.id.assistant.chat.chatId.page.documentViewer")}
                 style={{ minWidth: DOCUMENT_MIN }}
                 className={cn(
                     "relative flex flex-1 flex-col overflow-hidden rounded-lg",
@@ -1580,7 +1581,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                 {documentDragOver && (
                     <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center rounded-lg bg-white/50 backdrop-blur-md">
                         <p className="font-serif text-xl text-gray-900">
-                            Drop files here to open
+                            {tr("pages.projects.id.assistant.chat.chatId.page.dropFilesHereOpen")}
                         </p>
                     </div>
                 )}
@@ -1661,9 +1662,9 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             {documentViewers.confirmation}
             <ConfirmPopup
                 open={!!deleteTarget}
-                title="Delete file?"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.deleteFile")}
                 message={`Delete “${deleteTarget?.filename ?? "this file"}” and its versions, including any unsaved edits? This cannot be undone.`}
-                confirmLabel="Delete file"
+                confirmLabel={tr("pages.projects.id.assistant.chat.chatId.page.deleteFile2")}
                 confirmVariant="danger"
                 confirmStatus={deletingDocument ? "loading" : "idle"}
                 confirmDisabled={!canEditContent}
@@ -1715,12 +1716,12 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                     onClose={() => setAddDocumentsOpen(false)}
                     onSelect={(documents) => addUploadedDocuments(documents)}
                     breadcrumb={[
-                        "Projects",
+                        tr("pages.projects.id.assistant.chat.chatId.page.projects"),
                         project.name +
                             (project.cm_number
                                 ? ` (${project.cm_number})`
                                 : ""),
-                        "Add Documents",
+                        tr("pages.projects.id.assistant.chat.chatId.page.addDocuments"),
                     ]}
                     projectId={projectId}
                     uploadStateId={`project-chat:${projectId}`}
@@ -1729,19 +1730,19 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             <WarningPopup
                 open={!!projectPicker.error}
                 onClose={projectPicker.clearError}
-                title="Projects could not be loaded"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.projectsCouldNotLoaded")}
                 message={projectPicker.error ?? ""}
             />
             <WarningPopup
                 open={!!uploadWarning}
                 onClose={() => setUploadWarning(null)}
-                title="Some files were not uploaded"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.someFilesWereNotUploaded")}
                 message={uploadWarning ?? ""}
             />
             <WarningPopup
                 open={!!documentDropError}
                 onClose={() => setDocumentDropError(null)}
-                title="Files could not be opened"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.filesCouldNotOpened")}
                 message={documentDropError ?? ""}
             />
             <ProjectPickerModal
@@ -1751,9 +1752,9 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                 loading={projectPicker.loading}
                 selectedId={projectPicker.selectedId}
                 onSelect={projectPicker.setSelectedId}
-                breadcrumbs={["IDE", "Select project"]}
+                breadcrumbs={["IDE", tr("pages.projects.id.assistant.chat.chatId.page.selectProject")]}
                 primaryAction={{
-                    label: "Select project",
+                    label: tr("pages.projects.id.assistant.chat.chatId.page.selectProject"),
                     type: "button",
                     onClick: selectProject,
                     disabled: !projectPicker.selectedId,
@@ -1778,7 +1779,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             />
             <WarningPopup
                 open={!!explorerDownload.error}
-                title="Download failed"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.downloadFailed")}
                 message={explorerDownload.error}
                 onClose={explorerDownload.clearError}
             />
@@ -1803,24 +1804,24 @@ export default function ProjectAssistantChatPage({ params }: Props) {
             />
             <ConfirmPopup
                 open={!!pendingDeleteFolder}
-                title="Delete folder?"
+                title={tr("pages.projects.id.assistant.chat.chatId.page.deleteFolder")}
                 message={
                     pendingDeleteFolder ? (
                         <div className="space-y-2">
                             <p>
-                                This will permanently delete{" "}
+                                {tr("pages.projects.id.assistant.chat.chatId.page.willPermanentlyDelete")}{" "}
                                 <span className="font-medium text-gray-950">
                                     {pendingDeleteFolder.folderIds.length}{" "}
                                     {pendingDeleteFolder.folderIds.length === 1
                                         ? "folder"
                                         : "folders"}
                                 </span>
-                                , including{" "}
+                                {tr("pages.projects.id.assistant.chat.chatId.page.including")}{" "}
                                 <span className="font-medium text-gray-950">
                                     {pendingDeleteFolder.folder.name}
                                 </span>
                                 {pendingDeleteFolder.folderIds.length > 1
-                                    ? " and its nested subfolders"
+                                    ? tr("pages.projects.id.assistant.chat.chatId.page.itsNestedSubfolders")
                                     : ""}
                                 .
                             </p>
@@ -1829,18 +1830,16 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                                     {pendingDeleteFolder.documentCount}{" "}
                                     {pendingDeleteFolder.documentCount === 1
                                         ? "document"
-                                        : "documents"}{" "}
-                                    in the deleted{" "}
+                                        : "documents"}{" "}{tr("pages.projects.id.assistant.chat.chatId.page.deleted")}{" "}
                                     {pendingDeleteFolder.folderIds.length === 1
                                         ? "folder"
-                                        : "folders"}{" "}
-                                    will also be permanently deleted.
+                                        : "folders"}{" "}{tr("pages.projects.id.assistant.chat.chatId.page.willAlsoPermanentlyDeleted")}
                                 </p>
                             )}
                         </div>
                     ) : undefined
                 }
-                confirmLabel="Delete"
+                confirmLabel={tr("pages.projects.id.assistant.chat.chatId.page.delete")}
                 confirmVariant="danger"
                 confirmStatus={
                     pendingDeleteFolderStatus === "deleting"
@@ -1849,7 +1848,7 @@ export default function ProjectAssistantChatPage({ params }: Props) {
                           ? "complete"
                           : "idle"
                 }
-                cancelLabel="Cancel"
+                cancelLabel={tr("pages.projects.id.assistant.chat.chatId.page.cancel")}
                 onCancel={() => {
                     if (pendingDeleteFolderStatus === "deleting") return;
                     clearFolderDeleteDismissTimer();

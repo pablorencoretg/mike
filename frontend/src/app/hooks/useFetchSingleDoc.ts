@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { API_BASE } from "@/app/lib/mikeApi";
 import { authenticatedFetch } from "@/app/lib/authEvents";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * PdfView's loader. /display returns PDF bytes (a stored or on-demand PDF
@@ -66,7 +67,7 @@ export function useFetchSingleDoc(
                     if (!cancelled) setResult({ type: "docx" });
                 }
             } catch {
-                if (!cancelled) setError("Failed to load document.");
+                if (!cancelled) setError(tr("app.hooks.useFetchSingleDoc.failedLoadDocument"));
             } finally {
                 if (!cancelled) setLoading(false);
             }

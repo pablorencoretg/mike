@@ -28,6 +28,7 @@ import {
   type UserExportType,
 } from "@/app/lib/mikeApi";
 import { UserVisibleError, notifyError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 type DeleteDataAction = "chats" | "tabular-reviews" | "projects" | "memory";
 type ExportDataAction =
@@ -50,24 +51,36 @@ const DELETE_DATA_COPY: Record<
   }
 > = {
   chats: {
-    title: "Delete all chats?",
-    message:
-      "This will permanently delete your assistant and tabular review chat history. This action cannot be undone.",
+    get title() {
+        return tr("pages.settings.privacyData.page.deleteAllChats");
+    },
+    get message() {
+        return tr("pages.settings.privacyData.page.willPermanentlyDeleteAssistantTabular");
+    },
   },
   "tabular-reviews": {
-    title: "Delete all tabular reviews?",
-    message:
-      "This will permanently delete all tabular reviews you own, including their cells and review chats. This action cannot be undone.",
+    get title() {
+        return tr("pages.settings.privacyData.page.deleteAllTabularReviews");
+    },
+    get message() {
+        return tr("pages.settings.privacyData.page.willPermanentlyDeleteAllTabular");
+    },
   },
   projects: {
-    title: "Delete all projects?",
-    message:
-      "This will permanently delete all projects you own, including their documents, chats, and tabular reviews. This action cannot be undone.",
+    get title() {
+        return tr("pages.settings.privacyData.page.deleteAllProjects");
+    },
+    get message() {
+        return tr("pages.settings.privacyData.page.willPermanentlyDeleteAllProjects");
+    },
   },
   memory: {
-    title: "Delete all memory?",
-    message:
-      "This permanently deletes your app memory and memories for private projects you created. Project collaborators will also lose those memories. Memory remains enabled and can be rebuilt from future conversations. This action cannot be undone.",
+    get title() {
+        return tr("pages.settings.privacyData.page.deleteAllMemory");
+    },
+    get message() {
+        return tr("pages.settings.privacyData.page.permanentlyDeletesAppMemoryMemories");
+    },
   },
 };
 
@@ -156,7 +169,7 @@ export default function PrivacyDataPage() {
         return;
       }
       notifyError(error, {
-        action: "export your account data",
+        action: tr("pages.settings.privacyData.page.exportAccountData"),
         onRetry: () => void handleExportAccountData(),
       });
     } finally {
@@ -183,7 +196,7 @@ export default function PrivacyDataPage() {
         return;
       }
       notifyError(error, {
-        action: "export your chats",
+        action: tr("pages.settings.privacyData.page.exportChats"),
         onRetry: () => void handleExportChatData(),
       });
     } finally {
@@ -213,7 +226,7 @@ export default function PrivacyDataPage() {
         return;
       }
       notifyError(error, {
-        action: "export your tabular reviews",
+        action: tr("pages.settings.privacyData.page.exportTabularReviews"),
         onRetry: () => void handleExportTabularReviewsData(),
       });
     } finally {
@@ -240,7 +253,7 @@ export default function PrivacyDataPage() {
         return;
       }
       notifyError(error, {
-        action: "export your memory",
+        action: tr("pages.settings.privacyData.page.exportMemory"),
         onRetry: () => void handleExportMemoryData(),
       });
     } finally {
@@ -320,13 +333,13 @@ export default function PrivacyDataPage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <SettingsHeading>Export data</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.privacyData.page.exportData")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Export chats</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.exportChats2")}</SettingsLabel>
               <SettingsDescription>
-                Download assistant and tabular review chat history as JSON.
+                {tr("pages.settings.privacyData.page.downloadAssistantTabularReviewChat")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -338,15 +351,14 @@ export default function PrivacyDataPage() {
               className="shrink-0"
             >
               <Download className="h-4 w-4 shrink-0" />
-              {isExportingChats ? "Exporting..." : "Export"}
+              {isExportingChats ? tr("pages.settings.privacyData.page.exporting") : tr("pages.settings.privacyData.page.export")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Export tabular reviews</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.exportTabularReviews2")}</SettingsLabel>
               <SettingsDescription>
-                Download all owned tabular reviews, cells, and review chat
-                records as JSON.
+                {tr("pages.settings.privacyData.page.downloadAllOwnedTabularReviews")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -358,15 +370,14 @@ export default function PrivacyDataPage() {
               className="shrink-0"
             >
               <Download className="h-4 w-4 shrink-0" />
-              {isExportingTabularReviews ? "Exporting..." : "Export"}
+              {isExportingTabularReviews ? tr("pages.settings.privacyData.page.exporting") : tr("pages.settings.privacyData.page.export")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Export account JSON</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.exportAccountJson")}</SettingsLabel>
               <SettingsDescription>
-                Download account metadata, projects, document metadata,
-                workflows, and review data as JSON.
+                {tr("pages.settings.privacyData.page.downloadAccountMetadataProjectsDocument")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -378,42 +389,40 @@ export default function PrivacyDataPage() {
               className="shrink-0"
             >
               <Download className="h-4 w-4 shrink-0" />
-              {isExportingAccount ? "Exporting..." : "Export"}
+              {isExportingAccount ? tr("pages.settings.privacyData.page.exporting") : tr("pages.settings.privacyData.page.export")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Export memory</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.exportMemory2")}</SettingsLabel>
               <SettingsDescription>
-                Download your app memory and every project memory you can access
-                as Markdown files in a ZIP archive.
+                {tr("pages.settings.privacyData.page.downloadAppMemoryEveryProject")}
               </SettingsDescription>
             </div>
             <PillButtonUI
               tone="black"
               size="sm"
-              aria-label="Export memory"
+              aria-label={tr("pages.settings.privacyData.page.exportMemory2")}
               onClick={handleExportMemoryData}
               disabled={isExportingMemory}
               loading={isExportingMemory}
               className="shrink-0"
             >
               <Download className="h-4 w-4 shrink-0" />
-              {isExportingMemory ? "Exporting..." : "Export"}
+              {isExportingMemory ? tr("pages.settings.privacyData.page.exporting") : tr("pages.settings.privacyData.page.export")}
             </PillButtonUI>
           </SettingsRow>
         </GlassCardUI>
       </section>
 
       <section className="space-y-3">
-        <SettingsHeading>Delete data</SettingsHeading>
+        <SettingsHeading>{tr("pages.settings.privacyData.page.deleteData")}</SettingsHeading>
         <GlassCardUI>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Delete all chats</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.deleteAllChats2")}</SettingsLabel>
               <SettingsDescription>
-                Permanently delete your assistant and tabular review chat
-                history.
+                {tr("pages.settings.privacyData.page.permanentlyDeleteAssistantTabularReview")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -425,15 +434,14 @@ export default function PrivacyDataPage() {
               className="w-full shrink-0 sm:w-auto"
             >
               <Trash2 className="h-4 w-4 shrink-0" />
-              Delete
+              {tr("pages.settings.privacyData.page.delete")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Delete all tabular reviews</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.deleteAllTabularReviews2")}</SettingsLabel>
               <SettingsDescription>
-                Permanently delete all tabular reviews you own, including cells
-                and review chats.
+                {tr("pages.settings.privacyData.page.permanentlyDeleteAllTabularReviews")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -445,15 +453,14 @@ export default function PrivacyDataPage() {
               className="w-full shrink-0 sm:w-auto"
             >
               <Trash2 className="h-4 w-4 shrink-0" />
-              Delete
+              {tr("pages.settings.privacyData.page.delete")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Delete all projects</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.deleteAllProjects2")}</SettingsLabel>
               <SettingsDescription>
-                Permanently delete all projects you own, including documents,
-                chats, and tabular reviews.
+                {tr("pages.settings.privacyData.page.permanentlyDeleteAllProjectsOwn")}
               </SettingsDescription>
             </div>
             <PillButtonUI
@@ -465,28 +472,27 @@ export default function PrivacyDataPage() {
               className="w-full shrink-0 sm:w-auto"
             >
               <Trash2 className="h-4 w-4 shrink-0" />
-              Delete
+              {tr("pages.settings.privacyData.page.delete")}
             </PillButtonUI>
           </SettingsRow>
           <SettingsRow>
             <div className="space-y-1">
-              <SettingsLabel>Delete all memory</SettingsLabel>
+              <SettingsLabel>{tr("pages.settings.privacyData.page.deleteAllMemory2")}</SettingsLabel>
               <SettingsDescription>
-                Permanently delete your app memory and memories for private
-                projects you created.
+                {tr("pages.settings.privacyData.page.permanentlyDeleteAppMemoryMemories")}
               </SettingsDescription>
             </div>
             <PillButtonUI
               tone="danger"
               size="sm"
-              aria-label="Delete all memory"
+              aria-label={tr("pages.settings.privacyData.page.deleteAllMemory2")}
               onClick={() => setPendingDeleteAction("memory")}
               disabled={!!deletingAction}
               loading={deletingAction === "memory"}
               className="w-full shrink-0 sm:w-auto"
             >
               <Trash2 className="h-4 w-4 shrink-0" />
-              Delete
+              {tr("pages.settings.privacyData.page.delete")}
             </PillButtonUI>
           </SettingsRow>
         </GlassCardUI>
@@ -495,10 +501,10 @@ export default function PrivacyDataPage() {
         open={!!pendingDeleteAction}
         title={pendingDeleteCopy?.title}
         message={pendingDeleteCopy?.message}
-        confirmLabel="Delete"
+        confirmLabel={tr("pages.settings.privacyData.page.delete")}
         confirmVariant="danger"
         confirmStatus={deletingAction ? "loading" : "idle"}
-        cancelLabel="Cancel"
+        cancelLabel={tr("pages.settings.privacyData.page.cancel")}
         onCancel={() => {
           if (deletingAction) return;
           setPendingDeleteAction(null);
@@ -512,8 +518,8 @@ export default function PrivacyDataPage() {
         open={!!pendingMfaAction}
         onCancel={() => setPendingMfaAction(null)}
         onVerified={() => void handleMfaVerified()}
-        title="Two-factor verification required"
-        message="This action is sensitive. Enter a code from your authenticator app to continue."
+        title={tr("pages.settings.privacyData.page.twoFactorVerificationRequired")}
+        message={tr("pages.settings.privacyData.page.actionSensitiveEnterCodeFrom")}
       />
     </div>
   );

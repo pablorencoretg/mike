@@ -30,6 +30,7 @@ import {
   organizationSettingsHref,
   useOrganizationSettings,
 } from "./OrganizationSettingsShell";
+import { tr } from "@/shared/i18n/runtime";
 
 // The Privacy & Data section of an organization's settings: the
 // organization-wide twin of a person's own Privacy & Data page. Each action
@@ -45,39 +46,63 @@ const DELETE_ROWS: {
 }[] = [
   {
     kind: "chats",
-    label: "Delete all chats",
-    description:
-      "Permanently delete the organization's assistant, project and tabular review chat history.",
-    title: "Delete all organization chats?",
-    message:
-      "This will permanently delete assistant, project and tabular review chat history across the organization, for every member. Consider exporting anything you need to keep first. This action cannot be undone.",
+    get label() {
+        return tr("organizations.organizationPrivacyData.deleteAllChats");
+    },
+    get description() {
+        return tr("organizations.organizationPrivacyData.permanentlyDeleteOrganizationSAssistant");
+    },
+    get title() {
+        return tr("organizations.organizationPrivacyData.deleteAllOrganizationChats");
+    },
+    get message() {
+        return tr("organizations.organizationPrivacyData.willPermanentlyDeleteAssistantProject");
+    },
   },
   {
     kind: "tabular-reviews",
-    label: "Delete all tabular reviews",
-    description:
-      "Permanently delete every tabular review in the organization, including cells and review chats.",
-    title: "Delete all organization tabular reviews?",
-    message:
-      "This will permanently delete every tabular review in the organization, including their cells and review chats, for every member. Consider exporting anything you need to keep first. This action cannot be undone.",
+    get label() {
+        return tr("organizations.organizationPrivacyData.deleteAllTabularReviews");
+    },
+    get description() {
+        return tr("organizations.organizationPrivacyData.permanentlyDeleteEveryTabularReview");
+    },
+    get title() {
+        return tr("organizations.organizationPrivacyData.deleteAllOrganizationTabularReviews");
+    },
+    get message() {
+        return tr("organizations.organizationPrivacyData.willPermanentlyDeleteEveryTabular");
+    },
   },
   {
     kind: "projects",
-    label: "Delete all projects",
-    description:
-      "Permanently delete every project in the organization, including documents, chats, and tabular reviews.",
-    title: "Delete all organization projects?",
-    message:
-      "This will permanently delete every project in the organization, including their documents, chats, and tabular reviews, for every member. Consider exporting anything you need to keep first. This action cannot be undone.",
+    get label() {
+        return tr("organizations.organizationPrivacyData.deleteAllProjects");
+    },
+    get description() {
+        return tr("organizations.organizationPrivacyData.permanentlyDeleteEveryProjectOrganizatio");
+    },
+    get title() {
+        return tr("organizations.organizationPrivacyData.deleteAllOrganizationProjects");
+    },
+    get message() {
+        return tr("organizations.organizationPrivacyData.willPermanentlyDeleteEveryProject");
+    },
   },
   {
     kind: "memories",
-    label: "Delete all memory",
-    description:
-      "Permanently delete the memory of every project in the organization.",
-    title: "Delete all organization memory?",
-    message:
-      "This permanently deletes the memory of every project in the organization. Memory remains enabled and can be rebuilt from future conversations. This action cannot be undone.",
+    get label() {
+        return tr("organizations.organizationPrivacyData.deleteAllMemory");
+    },
+    get description() {
+        return tr("organizations.organizationPrivacyData.permanentlyDeleteMemoryEveryProject");
+    },
+    get title() {
+        return tr("organizations.organizationPrivacyData.deleteAllOrganizationMemory");
+    },
+    get message() {
+        return tr("organizations.organizationPrivacyData.permanentlyDeletesMemoryEveryProject");
+    },
   },
 ];
 
@@ -94,15 +119,15 @@ export function OrganizationPrivacyData() {
     return (
       <EmptyState
         icon={<OrganizationSkeuoIcon />}
-        title="Privacy & Data"
-        description="Only this organization's owners can manage its data."
+        title={tr("organizations.organizationPrivacyData.privacyData")}
+        description={tr("organizations.organizationPrivacyData.onlyOrganizationSOwnersCan")}
         action={
           <PillButtonUI
             tone="white"
             size="sm"
             onClick={() => router.push(organizationSettingsHref(orgId))}
           >
-            Back to General
+            {tr("organizations.organizationPrivacyData.backGeneral")}
           </PillButtonUI>
         }
       />
@@ -129,7 +154,7 @@ export function OrganizationPrivacyData() {
         setMfaKind(kind);
         return;
       }
-      setWarningMessage("Failed to delete data. Please try again.");
+      setWarningMessage(tr("organizations.organizationPrivacyData.failedDeleteDataPleaseTry"));
     } finally {
       setDeletingKind(null);
     }
@@ -144,22 +169,20 @@ export function OrganizationPrivacyData() {
       {org && isOrgOwner(org.role) ? (
         <section aria-labelledby="org-privacy-departed" className="space-y-3">
           <SettingsHeading id="org-privacy-departed">
-            Departed members
+            {tr("organizations.organizationPrivacyData.departedMembers")}
           </SettingsHeading>
           <GlassCardUI>
             <SettingsRow>
               <div className="space-y-1">
-                <SettingsLabel>Work left by departed members</SettingsLabel>
+                <SettingsLabel>{tr("organizations.organizationPrivacyData.workLeftByDepartedMembers")}</SettingsLabel>
                 <SettingsDescription>
-                  Private, unshared work a member leaves behind is kept for 30
-                  days, then permanently deleted. Reassign or delete it from
-                  the Members page.
+                  {tr("organizations.organizationPrivacyData.privateUnsharedWorkMemberLeaves")}
                 </SettingsDescription>
               </div>
               <PillButtonUI
                 tone="black"
                 size="sm"
-                aria-label="Review departed members"
+                aria-label={tr("organizations.organizationPrivacyData.reviewDepartedMembers")}
                 onClick={() =>
                   router.push(
                     `${organizationSettingsHref(orgId, "members")}?view=departed`,
@@ -167,14 +190,14 @@ export function OrganizationPrivacyData() {
                 }
                 className="w-full shrink-0 sm:w-auto"
               >
-                Review
+                {tr("organizations.organizationPrivacyData.review")}
               </PillButtonUI>
             </SettingsRow>
           </GlassCardUI>
         </section>
       ) : null}
       <section aria-labelledby="org-privacy-delete" className="space-y-3">
-        <SettingsHeading id="org-privacy-delete">Delete data</SettingsHeading>
+        <SettingsHeading id="org-privacy-delete">{tr("organizations.organizationPrivacyData.deleteData")}</SettingsHeading>
         <GlassCardUI>
           {DELETE_ROWS.map((row) => (
             <SettingsRow key={row.kind}>
@@ -193,7 +216,7 @@ export function OrganizationPrivacyData() {
                 className="w-full shrink-0 sm:w-auto"
               >
                 <Trash2 className="h-4 w-4 shrink-0" />
-                Delete
+                {tr("organizations.organizationPrivacyData.delete")}
               </PillButtonUI>
             </SettingsRow>
           ))}
@@ -203,10 +226,10 @@ export function OrganizationPrivacyData() {
         open={pendingKind !== null}
         title={pendingRow?.title}
         message={pendingRow?.message}
-        confirmLabel="Delete"
+        confirmLabel={tr("organizations.organizationPrivacyData.delete")}
         confirmVariant="danger"
         confirmStatus={deletingKind ? "loading" : "idle"}
-        cancelLabel="Cancel"
+        cancelLabel={tr("organizations.organizationPrivacyData.cancel")}
         onCancel={() => {
           if (deletingKind) return;
           setPendingKind(null);
@@ -224,12 +247,12 @@ export function OrganizationPrivacyData() {
           setMfaKind(null);
           if (kind) void deleteData(kind);
         }}
-        title="Two-factor verification required"
-        message="This action is sensitive. Enter a code from your authenticator app to continue."
+        title={tr("organizations.organizationPrivacyData.twoFactorVerificationRequired")}
+        message={tr("organizations.organizationPrivacyData.actionSensitiveEnterCodeFrom")}
       />
       <WarningPopup
         open={!!warningMessage}
-        title="Action failed"
+        title={tr("organizations.organizationPrivacyData.actionFailed")}
         message={warningMessage}
         onClose={() => setWarningMessage(null)}
       />

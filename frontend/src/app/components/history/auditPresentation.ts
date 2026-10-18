@@ -1,4 +1,5 @@
 import type { AuditEvent, OrgPrivateContentKind } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 export interface AuditPrivateAccess {
   kind: OrgPrivateContentKind;
@@ -58,7 +59,9 @@ export const ACTION_LABELS: Record<string, string> = {
   "org.member.removed": "Member removed",
   "org.member.left": "Member left",
   "org.data.deleted": "Organization data deleted",
-  "chat.message": "Chat message sent",
+  get "chat.message"() {
+        return tr("history.auditPresentation.chatMessageSent");
+    },
   "document.uploaded": "Document uploaded",
   "document.generated": "Document generated",
   "document.edited": "Document edited",
@@ -92,7 +95,7 @@ export function auditAction(event: AuditEvent): string {
   // Failed or cancelled operations must not read as successful changes.
   if (event.status === "completed") return label;
   const operations: Record<string, string> = {
-    "chat.message": "Chat message",
+    "chat.message": tr("history.auditPresentation.chatMessage"),
     "document.uploaded": "Document upload",
     "document.generated": "Document generation",
     "document.edited": "Document edit",
@@ -258,16 +261,16 @@ export function auditSummary(event: AuditEvent, personal: boolean): string {
   const name =
     subject.name === "-" ? `the ${subject.type.toLowerCase()}` : subject.name;
   if (event.action === "org.member.role_changed")
-    return `${actor} changed the organization role for ${name}.`;
+    return tr("history.auditPresentation.changedOrganizationRole", { actor, name });
   if (
     event.action === "org.invite.created" ||
     event.action === "org.invite.resent"
   )
     return `${actor} ${event.action.endsWith("resent") ? "resent an invitation to" : "invited"} ${name}.`;
-  if (event.action === "document.uploaded") return `${actor} uploaded ${name}.`;
-  if (event.action === "document.edited") return `${actor} edited ${name}.`;
+  if (event.action === "document.uploaded") return tr("history.auditPresentation.uploaded", { actor, name });
+  if (event.action === "document.edited") return tr("history.auditPresentation.edited", { actor, name });
   if (event.action === "document.generated")
-    return `${actor} generated ${name}.`;
+    return tr("history.auditPresentation.generated", { actor, name });
   return `${auditAction(event)} by ${personal ? "you" : actor}`;
 }
 
@@ -277,26 +280,26 @@ export function auditDestination(
   if (event.review_id)
     return {
       href: `/tabular-reviews/${encodeURIComponent(event.review_id)}`,
-      label: "Open review",
+      label: tr("history.auditPresentation.openReview"),
     };
   if (event.chat_id && event.surface !== "word")
     return {
       href: event.project_id
         ? `/projects/${encodeURIComponent(event.project_id)}/assistant/chat/${encodeURIComponent(event.chat_id)}`
         : `/assistant/chat/${encodeURIComponent(event.chat_id)}`,
-      label: "Open chat",
+      label: tr("history.auditPresentation.openChat"),
     };
   if (event.project_id)
     return {
       href: `/projects/${encodeURIComponent(event.project_id)}`,
-      label: "Open project",
+      label: tr("history.auditPresentation.openProject"),
     };
   const access = auditPrivateAccess(event);
   if (access && ["project", "chat", "tabular_review"].includes(access.kind)) {
     const target = {
-      project: { path: "/projects/", label: "Open project" },
-      chat: { path: "/assistant/chat/", label: "Open chat" },
-      tabular_review: { path: "/tabular-reviews/", label: "Open review" },
+      project: { path: "/projects/", label: tr("history.auditPresentation.openProject") },
+      chat: { path: "/assistant/chat/", label: tr("history.auditPresentation.openChat") },
+      tabular_review: { path: "/tabular-reviews/", label: tr("history.auditPresentation.openReview") },
     }[access.kind as "project" | "chat" | "tabular_review"];
     return {
       href: `${target.path}${encodeURIComponent(access.item_id)}`,

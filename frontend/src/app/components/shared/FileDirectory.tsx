@@ -28,6 +28,7 @@ import {
     LIQUID_GLASS_MODAL_ROW_HOVER_CLASS,
     LIQUID_GLASS_MODAL_ROW_SELECTED_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 type DirectoryFolder = Pick<
     LibraryFolder,
@@ -40,9 +41,15 @@ const DIRECTORY_ROW_ACTION_CLASS =
     "col-span-5 grid min-w-0 grid-cols-[14px_minmax(0,1fr)_48px_84px_64px] items-center gap-2 text-left";
 
 const DIRECTORY_TABS: { value: DirectoryTab; label: string }[] = [
-    { value: "files", label: "Documents" },
-    { value: "templates", label: "Templates" },
-    { value: "projects", label: "Projects" },
+    { value: "files", get label() {
+        return tr("shared.fileDirectory.documents");
+    } },
+    { value: "templates", get label() {
+        return tr("shared.fileDirectory.templates");
+    } },
+    { value: "projects", get label() {
+        return tr("shared.fileDirectory.projects");
+    } },
 ];
 const ALL_DIRECTORY_TAB_VALUES = DIRECTORY_TABS.map((tab) => tab.value);
 
@@ -628,7 +635,7 @@ function WorkspaceFileDirectory({
                     checked={selected}
                     indeterminate={false}
                     disabled={disabled}
-                    label={`Select ${doc.filename}`}
+                    label={tr("shared.fileDirectory.select", { filename: doc.filename })}
                     onChange={() => toggle(doc)}
                 />
                 <DocFileIcon fileType={doc.file_type} />
@@ -689,8 +696,8 @@ function WorkspaceFileDirectory({
                             }
                             label={
                                 folderSelectionReady
-                                    ? `Select all files in ${folder.name}`
-                                    : `Expand ${folder.name} and load all files before selecting it`
+                                    ? tr("shared.fileDirectory.selectAllFiles", { name: folder.name })
+                                    : tr("shared.fileDirectory.expandLoadAllFilesBefore", { name: folder.name })
                             }
                             onChange={() => toggleDocuments(docsInFolder)}
                         />
@@ -818,7 +825,7 @@ function WorkspaceFileDirectory({
                       paddingLeft: indentedRowPadding(depth + 1),
                                     }}
                                 >
-                                    Empty
+                                    {tr("shared.fileDirectory.empty")}
                                 </p>
                             )}
                         </div>
@@ -834,7 +841,7 @@ function WorkspaceFileDirectory({
                 <SearchBar
                     value={search}
                     onValueChange={setSearch}
-                    placeholder="Search..."
+                    placeholder={tr("shared.fileDirectory.search")}
                     autoFocus
                     wrapperClassName={showTabs ? "mb-4" : "mb-3"}
                 />
@@ -886,7 +893,7 @@ function WorkspaceFileDirectory({
                 <SearchBar
                     value={search}
                     onValueChange={setSearch}
-                    placeholder="Search..."
+                    placeholder={tr("shared.fileDirectory.search")}
                     autoFocus
                     wrapperClassName={showTabs ? "mb-4" : "mb-3"}
                 />
@@ -901,7 +908,7 @@ function WorkspaceFileDirectory({
                 )}
                 <div className="min-h-0 flex-1 overflow-y-auto">
                     <p className="text-center text-sm text-gray-400 py-8">
-                        No documents yet
+                        {tr("shared.fileDirectory.noDocumentsYet")}
                     </p>
                 </div>
             </div>
@@ -913,7 +920,7 @@ function WorkspaceFileDirectory({
             <SearchBar
                 value={search}
                 onValueChange={setSearch}
-                placeholder="Search..."
+                placeholder={tr("shared.fileDirectory.search")}
                 autoFocus
                 wrapperClassName={showTabs ? "mb-4" : "mb-3"}
             />
@@ -929,14 +936,14 @@ function WorkspaceFileDirectory({
             {activeTabHasNoResults ? (
                 <div className="min-h-0 flex-1 overflow-y-auto">
                     <p className="text-center text-sm text-gray-400 py-8">
-                        No matches found
+                        {tr("shared.fileDirectory.noMatchesFound")}
                     </p>
                 </div>
             ) : (
                 <div className="flex min-h-0 flex-1 flex-col">
                     <FileDirectoryHeader />
                     <div
-                      aria-label="File directory"
+                      aria-label={tr("shared.fileDirectory.fileDirectory")}
                       className="min-h-0 flex-1 overflow-y-auto"
                       onScroll={handleDirectoryScroll}
                     >
@@ -1030,7 +1037,7 @@ function WorkspaceFileDirectory({
                                 directoryFileFolders.length === 0 &&
                                 visibleUploadingFilenames.length === 0 && (
                                     <p className="text-center text-sm text-gray-400 py-8">
-                                        No documents yet
+                                        {tr("shared.fileDirectory.noDocumentsYet")}
                                     </p>
                                 )}
                         </>
@@ -1078,7 +1085,7 @@ function WorkspaceFileDirectory({
                                 visibleTemplateDocs.length === 0 &&
                                 directoryTemplateFolders.length === 0 && (
                                     <p className="text-center text-sm text-gray-400 py-8">
-                                        No templates yet
+                                        {tr("shared.fileDirectory.noTemplatesYet")}
                                     </p>
                                 )}
                         </>
@@ -1127,8 +1134,8 @@ function WorkspaceFileDirectory({
                                             }
                                             label={
                                                 projectSelectionReady
-                                                    ? `Select all files in ${project.name}`
-                                                    : `Expand ${project.name} and load all files before selecting it`
+                                                    ? tr("shared.fileDirectory.selectAllFiles", { name: project.name })
+                                                    : tr("shared.fileDirectory.expandLoadAllFilesBefore", { name: project.name })
                                             }
                                             onChange={() =>
                                                 toggleDocuments(docs)
@@ -1171,11 +1178,11 @@ function WorkspaceFileDirectory({
                         {loadingProjectLevels.has(`${project.id}:root`) ? (
                           <p className="flex items-center gap-2 pl-7 py-2 text-xs text-gray-400">
                             <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                            Loading project files
+                            {tr("shared.fileDirectory.loadingProjectFiles")}
                           </p>
                         ) : docs.length === 0 && projectFolders.length === 0 ? (
                                                 <p className="pl-7 py-1 text-xs text-gray-400">
-                                                    Empty
+                                                    {tr("shared.fileDirectory.empty")}
                                                 </p>
                                             ) : (
                                                 <>
@@ -1224,7 +1231,7 @@ function WorkspaceFileDirectory({
                         !q &&
                         visibleDirectoryProjects.length === 0 && (
                             <p className="text-center text-sm text-gray-400 py-8">
-                                No projects yet
+                                {tr("shared.fileDirectory.noProjectsYet")}
                             </p>
                         )}
             {activeTab === "projects" && !q && (
@@ -1259,10 +1266,10 @@ function FileDirectoryHeader() {
         <div
             className={`${DIRECTORY_GRID_CLASS} px-2 pb-1 pt-0.5 text-[11px] font-medium text-gray-400`}
         >
-            <span className="col-span-3">Name</span>
-            <span>Version</span>
-            <span>Created</span>
-            <span className="text-right">Size</span>
+            <span className="col-span-3">{tr("shared.fileDirectory.name")}</span>
+            <span>{tr("shared.fileDirectory.version")}</span>
+            <span>{tr("shared.fileDirectory.created")}</span>
+            <span className="text-right">{tr("shared.fileDirectory.size")}</span>
         </div>
     );
 }

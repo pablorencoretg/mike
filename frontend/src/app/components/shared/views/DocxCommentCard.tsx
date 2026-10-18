@@ -20,6 +20,7 @@ import { LIQUID_FLOAT_PANEL_SURFACE_CLASS } from "@/app/components/ui/liquid-sur
 import { DocxCommentEdit } from "./DocxCommentEdit";
 import { DocxCommentReply } from "./DocxCommentReply";
 import { docxCommentEditable } from "./docxCommentEditing";
+import { tr } from "@/shared/i18n/runtime";
 
 /** One thread: the root comment, its replies, and a reply action. */
 export function DocxCommentCard({
@@ -56,7 +57,7 @@ export function DocxCommentCard({
         if (!thread.activatable) return;
         const result = editor.setActiveReviewItem(thread.key);
         setError(
-            result.ok ? null : "This comment could not be shown in the document.",
+            result.ok ? null : tr("shared.views.docxCommentCard.commentCouldNotShownDocument"),
         );
     };
     const remove = (entry: ReviewCommentPlacement) => {
@@ -65,10 +66,10 @@ export function DocxCommentCard({
             setError(
                 result.ok
                     ? null
-                    : "This comment could not be deleted. Please try again.",
+                    : tr("shared.views.docxCommentCard.commentCouldNotDeletedPlease"),
             );
         } catch {
-            setError("This comment could not be deleted. Please try again.");
+            setError(tr("shared.views.docxCommentCard.commentCouldNotDeletedPlease"));
         }
     };
     return (
@@ -109,7 +110,7 @@ export function DocxCommentCard({
                 >
                     <div className="flex items-center justify-between gap-2">
                         <p className="min-w-0 truncate font-medium">
-                            {entry.author || "Unknown author"}
+                            {entry.author || tr("shared.views.docxCommentCard.unknownAuthor")}
                         </p>
                         <CommentMenu
                             label={`Actions for ${index === 0 ? "comment" : "reply"} by ${entry.author || "Unknown author"}`}
@@ -134,7 +135,7 @@ export function DocxCommentCard({
                         <>
                             <p className="whitespace-pre-wrap break-words">
                                 {entry.text ||
-                                    (index === 0 ? "Empty comment" : "")}
+                                    (index === 0 ? tr("shared.views.docxCommentCard.emptyComment") : "")}
                             </p>
                             <CommentTime date={entry.date} />
                         </>
@@ -142,7 +143,7 @@ export function DocxCommentCard({
                 </div>
             ))}
             {thread.resolved && (
-                <p className="mt-2 text-muted-foreground">Resolved</p>
+                <p className="mt-2 text-muted-foreground">{tr("shared.views.docxCommentCard.resolved")}</p>
             )}
             {replying ? (
                 <DocxCommentReply
@@ -159,7 +160,7 @@ export function DocxCommentCard({
                     disabled={!writable || !author?.trim() || thread.readOnly}
                     onClick={() => onReply(thread.key)}
                 >
-                    Reply
+                    {tr("shared.views.docxCommentCard.reply")}
                 </TextButtonUI>
             )}
             {error && (
@@ -209,7 +210,7 @@ function CommentMenu({
                 <TextButtonUI
                     size="icon-xs"
                     aria-label={label}
-                    title="More actions"
+                    title={tr("shared.views.docxCommentCard.moreActions")}
                     className="-mr-1 flex-none"
                 >
                     <MoreHorizontal aria-hidden="true" className="h-4 w-4" />
@@ -232,7 +233,7 @@ function CommentMenu({
                     }}
                 >
                     <Pencil className="h-3.5 w-3.5" />
-                    Edit
+                    {tr("shared.views.docxCommentCard.edit")}
                 </DropdownItem>
                 <DropdownItem
                     disabled={!canDelete}
@@ -240,7 +241,7 @@ function CommentMenu({
                     onSelect={onDelete}
                 >
                     <Trash2 className="h-3.5 w-3.5" />
-                    Delete
+                    {tr("shared.views.docxCommentCard.delete")}
                 </DropdownItem>
             </DropdownContent>
         </Dropdown>

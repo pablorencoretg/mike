@@ -13,6 +13,7 @@ import { useDocumentWorkspace } from "@/app/contexts/WorkspaceContext";
 import { notifyError } from "@/app/lib/userFacingError";
 import { useAssignLatest } from "@/app/hooks/useLatestRef";
 import type { Document, LibraryFolder, Project } from "./types";
+import { tr } from "@/shared/i18n/runtime";
 
 export type DirectoryTab = "files" | "templates" | "projects";
 
@@ -227,7 +228,7 @@ export function useDirectoryData(
                 // so say so instead of passing an empty shelf off as the
                 // truth.
                 notifyError(error, {
-                    action: `load your ${tab}`,
+                    action: tr("shared.useDirectoryData.load", { tab }),
                     dedupeKey: `directory:${tab}`,
                     onRetry: () => retryRef.current?.loadTab(tab),
                 });
@@ -290,7 +291,7 @@ export function useDirectoryData(
           // A folder that stays empty after the spinner looks like an empty
           // folder, so the failure has to be said out loud.
           notifyError(error, {
-            action: "open the folder",
+            action: tr("shared.useDirectoryData.openFolder"),
             dedupeKey: `directory-folder:${tab}:${folderId}`,
             onRetry: () =>
               retryRef.current?.loadFolderChildren(tab, folderId),
@@ -356,7 +357,7 @@ export function useDirectoryData(
           }));
         } catch (error) {
           notifyError(error, {
-            action: `load more ${tab}`,
+            action: tr("shared.useDirectoryData.loadMore", { tab }),
             dedupeKey: `directory-more:${tab}:${levelKey}`,
             onRetry: () =>
               retryRef.current?.loadMoreLibraryDocuments(tab, parentId),
@@ -400,7 +401,7 @@ export function useDirectoryData(
       setProjectsHasMore(rows.length > DIRECTORY_PAGE_SIZE);
     } catch (error) {
       notifyError(error, {
-        action: "load more projects",
+        action: tr("shared.useDirectoryData.loadMoreProjects"),
         dedupeKey: "directory-more-projects",
         onRetry: () => retryRef.current?.loadMoreProjects(),
       });
@@ -445,7 +446,7 @@ export function useDirectoryData(
           }));
         } catch (error) {
           notifyError(error, {
-            action: "open the project folder",
+            action: tr("shared.useDirectoryData.openProjectFolder"),
             dedupeKey: `directory-project-level:${levelKey}`,
             onRetry: () =>
               retryRef.current?.loadProjectLevel(projectId, parentFolderId),
@@ -505,7 +506,7 @@ export function useDirectoryData(
           }));
         } catch (error) {
           notifyError(error, {
-            action: "load more project files",
+            action: tr("shared.useDirectoryData.loadMoreProjectFiles"),
             dedupeKey: `directory-project-more:${levelKey}`,
             onRetry: () =>
               retryRef.current?.loadMoreProjectDocuments(

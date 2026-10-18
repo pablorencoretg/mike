@@ -26,6 +26,7 @@ import {
   presetDirectory,
   presetTemplateUrl,
 } from "./presetTemplates";
+import { tr } from "@/shared/i18n/runtime";
 
 const PRESETS_BY_ID = new Map(
   PRESET_TEMPLATES.map((preset) => [preset.id, preset]),
@@ -123,7 +124,7 @@ export function PresetTemplatesPage({
         setError(
           userFacingApiError(
             caught,
-            "Could not add this preset. Please try again.",
+            tr("library.presetTemplatesPage.couldNotAddPresetPlease"),
           ),
         );
       } finally {
@@ -147,9 +148,9 @@ export function PresetTemplatesPage({
       canPreview: canUsePreset,
       canAdd: canUsePreset,
       addLabel: (count, status) => {
-        if (status === "pending") return "Import…";
-        if (status === "complete") return "Imported";
-        return count > 1 ? `Import ${count}` : "Import";
+        if (status === "pending") return tr("library.presetTemplatesPage.import");
+        if (status === "complete") return tr("library.presetTemplatesPage.imported");
+        return count > 1 ? tr("library.presetTemplatesPage.import2", { count }) : tr("library.presetTemplatesPage.import3");
       },
       addStatus: (documents) => {
         if (documents.some((doc) => importStatus[doc.id] === "pending")) return "pending";
@@ -178,12 +179,12 @@ export function PresetTemplatesPage({
     <div className="flex h-full min-h-0 flex-col">
       <PageHeader
         breadcrumbs={[
-          { label: "Library", onClick: () => router.push("/library") },
+          { label: tr("library.presetTemplatesPage.library"), onClick: () => router.push("/library") },
           {
-            label: "Templates",
+            label: tr("library.presetTemplatesPage.templates"),
             onClick: () => router.push("/library/templates"),
           },
-          { label: "Presets" },
+          { label: tr("library.presetTemplatesPage.presets") },
           ...folderBreadcrumbs,
         ]}
         actions={[
@@ -191,7 +192,7 @@ export function PresetTemplatesPage({
             type: "search",
             value: search,
             onChange: setSearch,
-            placeholder: "Search presets...",
+            placeholder: tr("library.presetTemplatesPage.searchPresets"),
           },
         ]}
       />
@@ -204,7 +205,7 @@ export function PresetTemplatesPage({
               className="pl-2"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
-              Back
+              {tr("library.presetTemplatesPage.back")}
             </TabPillButtonUI>
           }
           actions={

@@ -13,6 +13,7 @@ import {
     LIQUID_GLASS_SUBTLE_CLASS,
     LIQUID_GLASS_TRANSLUCENT_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 type AskInputsEvent = Extract<AssistantEvent, { type: "ask_inputs" }>;
 type AskInputItem = AskInputsEvent["items"][number];
@@ -353,16 +354,16 @@ export function AskInputPopup({
             }
             if (item.kind === "multi_choice") {
                 if (item.skipped)
-                    return `${index + 1}. Skipped: ${item.question}`;
+                    return tr("assistant.askInputPopup.skipped", { value: index + 1, question: item.question });
                 return `${index + 1}. ${item.question}\n${item.answers?.join(", ") ?? ""}`;
             }
             if (item.kind !== "documents") {
                 if (item.skipped)
-                    return `${index + 1}. Skipped: ${item.question}`;
+                    return tr("assistant.askInputPopup.skipped", { value: index + 1, question: item.question });
                 return `${index + 1}. ${item.question}\n${item.answer ?? ""}`;
             }
-            if (item.skipped) return `${index + 1}. Skipped document request.`;
-            return `${index + 1}. Documents attached: ${item.filenames.join(", ")}`;
+            if (item.skipped) return tr("assistant.askInputPopup.skippedDocumentRequest", { value: index + 1 });
+            return tr("assistant.askInputPopup.documentsAttached", { value: index + 1, join: item.filenames.join(", ") });
         });
         const onlyApprovals = response.responses.every(
             (item) => item.kind === "approval",
@@ -429,7 +430,7 @@ export function AskInputPopup({
 
     return (
         <>
-            {submitFailed && <p role="alert" className="px-3 py-2 text-sm text-red-600">Could not send these inputs. Please try again.</p>}
+            {submitFailed && <p role="alert" className="px-3 py-2 text-sm text-red-600">{tr("assistant.askInputPopup.couldNotSendTheseInputs")}</p>}
             <div
                 className={`w-full overflow-hidden rounded-[18px] pb-3 font-serif md:rounded-[22px] ${LIQUID_GLASS_TRANSLUCENT_CLASS}`}
             >
@@ -437,7 +438,7 @@ export function AskInputPopup({
                     <div className="flex min-w-0 items-center">
                         <div className="text-sm text-gray-500">
                             {submitted ? (
-                                isSubmitting ? "Sending inputs…" : "Inputs sent"
+                                isSubmitting ? tr("assistant.askInputPopup.sendingInputs") : tr("assistant.askInputPopup.inputsSent")
                             ) : (
                                 <div className="flex flex-wrap gap-x-1.5 gap-y-1">
                                     {event.items.map((item) => {
@@ -446,10 +447,10 @@ export function AskInputPopup({
                                         const isResolved = itemResolved(item);
                                         const label =
                                             item.kind === "documents"
-                                                ? "Documents"
+                                                ? tr("assistant.askInputPopup.documents")
                                                 : item.kind === "approval"
-                                                  ? "Approval"
-                                                  : "Question";
+                                                  ? tr("assistant.askInputPopup.approval")
+                                                  : tr("assistant.askInputPopup.question");
                                         return (
                                             <TabPillButtonUI
                                                 key={item.id}
@@ -476,7 +477,7 @@ export function AskInputPopup({
                     {!submitted && (
                         <CloseButton
                             onClick={dismiss}
-                            label="Dismiss"
+                            label={tr("assistant.askInputPopup.dismiss")}
                             size="md"
                         />
                     )}
@@ -492,8 +493,7 @@ export function AskInputPopup({
                                             <DocumentPrompt />
                                         ) : activeItem.kind === "approval" ? (
                                             <p className="text-sm text-gray-800">
-                                                Mike wants to run this action.
-                                                Approve it to run it now.
+                                                {tr("assistant.askInputPopup.mikeWantsRunActionApprove")}
                                             </p>
                                         ) : (
                                             <p className="text-sm text-gray-800">
@@ -670,7 +670,7 @@ export function AskInputPopup({
                                         }
                                         className="font-sans"
                                     >
-                                        Reject
+                                        {tr("assistant.askInputPopup.reject")}
                                     </PillButtonUI>
                                     <PillButtonUI
                                         tone="black"
@@ -687,11 +687,11 @@ export function AskInputPopup({
                                         {answers[activeItem.id] ===
                                         "approve" ? (
                                             <>
-                                                Approved
+                                                {tr("assistant.askInputPopup.approved")}
                                                 <Check className="h-3 w-3" />
                                             </>
                                         ) : (
-                                            "Approve"
+                                            tr("assistant.askInputPopup.approve")
                                         )}
                                     </PillButtonUI>
                                 </div>
@@ -709,8 +709,8 @@ export function AskInputPopup({
                                         className="px-1 font-sans text-[10px] text-gray-500 transition-colors hover:text-gray-800"
                                     >
                                         {skipped.has(activeItem.id)
-                                            ? "Unskip"
-                                            : "Skip"}
+                                            ? tr("assistant.askInputPopup.unskip")
+                                            : tr("assistant.askInputPopup.skip")}
                                     </button>
                                     <PillButtonUI
                                         tone="black"
@@ -728,11 +728,11 @@ export function AskInputPopup({
                                     >
                                         {confirmed.has(activeItem.id) ? (
                                             <>
-                                                Confirmed
+                                                {tr("assistant.askInputPopup.confirmed")}
                                                 <Check className="h-3 w-3" />
                                             </>
                                         ) : (
-                                            "Confirm"
+                                            tr("assistant.askInputPopup.confirm")
                                         )}
                                     </PillButtonUI>
                                 </div>
@@ -762,7 +762,7 @@ export function AskInputPopup({
                         selected.filter((doc) => !existing.has(doc.id)),
                     );
                 }}
-                breadcrumb={["Assistant", "Add Documents"]}
+                breadcrumb={[tr("assistant.askInputPopup.assistant"), tr("assistant.askInputPopup.addDocuments")]}
                 uploadStateId="assistant-ask-input"
                 initialSelectedDocuments={
                     docSelectorTarget
@@ -798,7 +798,7 @@ function OpenTextInput({
                 onChange={(event) =>
                     onChange(event.target.value.slice(0, OPEN_TEXT_MAX_LENGTH))
                 }
-                placeholder="Type your answer..."
+                placeholder={tr("assistant.askInputPopup.typeAnswer")}
                 className="min-h-28 w-full resize-y rounded-lg bg-gray-100/70 px-3 py-2 text-sm leading-5 text-gray-700 outline-none transition-colors placeholder:text-gray-400 focus:bg-gray-200/70 disabled:cursor-default disabled:opacity-60"
             />
             <p
@@ -882,7 +882,7 @@ function OptionInput({
                             <span className="min-w-0 flex-1 flex items-start gap-2">
                                 <textarea
                                     name={`other-${item.id}`}
-                                    aria-label={item.other_label || "Other"}
+                                    aria-label={item.other_label || tr("assistant.askInputPopup.other")}
                                     aria-describedby={`other-${item.id}-limit`}
                                     maxLength={MAX_CHOICE_LENGTH}
                                     rows={1}
@@ -900,7 +900,7 @@ function OptionInput({
                                         e.target.style.height = "auto";
                                         e.target.style.height = `${e.target.scrollHeight}px`;
                                     }}
-                                    placeholder="Type your answer..."
+                                    placeholder={tr("assistant.askInputPopup.typeAnswer")}
                                     className="flex-1 resize-none overflow-hidden bg-transparent text-sm leading-5 text-gray-600 outline-none placeholder:text-gray-400"
                                 />
                                 <span id={`other-${item.id}-limit`} className="mt-0.5 shrink-0 font-sans text-[10px] text-gray-400">
@@ -909,7 +909,7 @@ function OptionInput({
                             </span>
                         ) : (
                             <span className="min-w-0 flex-1 text-sm text-gray-700">
-                                {item.other_label || "Other"}
+                                {item.other_label || tr("assistant.askInputPopup.other")}
                             </span>
                         )}
                         {otherOpen && (
@@ -925,7 +925,7 @@ function OptionInput({
 function DocumentPrompt() {
     return (
         <p className="mt-0.5 text-sm text-gray-800">
-            Add the following documents if available:
+            {tr("assistant.askInputPopup.addFollowingDocumentsIfAvailable")}
         </p>
     );
 }
@@ -1023,7 +1023,7 @@ function DocumentInput({
                             <span className="mt-0.5 shrink-0 whitespace-nowrap font-sans text-[10px] text-gray-500">
                                 {docs.length > 0
                                     ? `${docs.length} file${docs.length === 1 ? "" : "s"} added`
-                                    : "+ Add"}
+                                    : tr("assistant.askInputPopup.add")}
                             </span>
                         </span>
                     </div>

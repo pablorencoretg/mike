@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getDocumentFileUrl } from "@/app/lib/mikeApi";
 import { authenticatedFetch } from "@/app/lib/authEvents";
+import { tr } from "@/shared/i18n/runtime";
 
 export interface FetchDocxResult {
     bytes: ArrayBuffer | null;
@@ -99,7 +100,7 @@ export function useFetchDocxBytes(
             .catch(() => {
                 if (cancelled) return;
                 setError(
-                    "This document could not be loaded. Please try again.",
+                    tr("app.hooks.useFetchDocxBytes.documentCouldNotLoadedPlease"),
                 );
             })
             .finally(() => {

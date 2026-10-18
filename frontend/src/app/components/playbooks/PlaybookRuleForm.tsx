@@ -21,6 +21,7 @@ import type {
   PlaybookRule,
 } from "@/app/lib/mikeApi";
 import { cn } from "@/app/lib/utils";
+import { tr } from "@/shared/i18n/runtime";
 
 type PositionKind = "standard" | "fallbacks" | "unacceptable";
 type RuleAction = PlaybookRule["actions"][number];
@@ -48,33 +49,55 @@ const POSITION_GROUPS: Record<
 > = {
   standard: {
     dot: "bg-emerald-500",
-    title: "Standard position",
-    label: "Standard",
+    get title() {
+        return tr("playbooks.playbookRuleForm.standardPosition");
+    },
+    get label() {
+        return tr("playbooks.playbookRuleForm.standard");
+    },
     empty: "None yet.",
     usage: "preferred",
   },
   fallbacks: {
     dot: "bg-amber-500",
-    title: "Fallback positions",
-    label: "Fallback",
+    get title() {
+        return tr("playbooks.playbookRuleForm.fallbackPositions");
+    },
+    get label() {
+        return tr("playbooks.playbookRuleForm.fallback");
+    },
     empty: "None yet.",
     usage: "illustrative",
   },
   unacceptable: {
     dot: "bg-red-500",
-    title: "Unacceptable positions",
-    label: "Unacceptable",
+    get title() {
+        return tr("playbooks.playbookRuleForm.unacceptablePositions");
+    },
+    get label() {
+        return tr("playbooks.playbookRuleForm.unacceptable");
+    },
     empty: "None yet.",
     usage: "unacceptable",
   },
 };
 
 const USAGE_OPTIONS: { value: PlaybookClauseUsage; label: string }[] = [
-  { value: "illustrative", label: "Illustrative" },
-  { value: "preferred", label: "Preferred" },
-  { value: "verbatim", label: "Verbatim" },
-  { value: "accepted", label: "Previously accepted" },
-  { value: "unacceptable", label: "Unacceptable" },
+  { value: "illustrative", get label() {
+        return tr("playbooks.playbookRuleForm.illustrative");
+    } },
+  { value: "preferred", get label() {
+        return tr("playbooks.playbookRuleForm.preferred");
+    } },
+  { value: "verbatim", get label() {
+        return tr("playbooks.playbookRuleForm.verbatim");
+    } },
+  { value: "accepted", get label() {
+        return tr("playbooks.playbookRuleForm.previouslyAccepted");
+    } },
+  { value: "unacceptable", get label() {
+        return tr("playbooks.playbookRuleForm.unacceptable");
+    } },
 ];
 
 // A sample clause is one grey tile: its controls along the top and the clause
@@ -116,9 +139,9 @@ export function clauseUsageConflict(
   if (kind === "unacceptable")
     return usage === "illustrative" || usage === "unacceptable"
       ? null
-      : "Conflicts with this unacceptable position.";
+      : tr("playbooks.playbookRuleForm.conflictsUnacceptablePosition");
   return usage === "unacceptable"
-    ? "Conflicts with this acceptable position."
+    ? tr("playbooks.playbookRuleForm.conflictsAcceptablePosition")
     : null;
 }
 
@@ -129,7 +152,7 @@ export function describeSourceRefs(refs: string[]) {
       const paragraph = /^P(\d+)$/.exec(ref);
       if (paragraph) return `paragraph ${paragraph[1]}`;
       const cell = /^T(\d+)R(\d+)C(\d+)$/.exec(ref);
-      if (cell) return `table ${cell[1]}, row ${cell[2]}, cell ${cell[3]}`;
+      if (cell) return tr("playbooks.playbookRuleForm.tableRowCell", { cell: cell[1], cell2: cell[2], cell3: cell[3] });
       return ref;
     })
     .join("; ");
@@ -138,9 +161,15 @@ export function describeSourceRefs(refs: string[]) {
 export type RuleFormTab = "details" | "positions" | "escalation";
 
 export const RULE_FORM_TABS: { id: RuleFormTab; label: string }[] = [
-  { id: "details", label: "Overview" },
-  { id: "positions", label: "Positions" },
-  { id: "escalation", label: "Escalation" },
+  { id: "details", get label() {
+        return tr("playbooks.playbookRuleForm.overview");
+    } },
+  { id: "positions", get label() {
+        return tr("playbooks.playbookRuleForm.positions");
+    } },
+  { id: "escalation", get label() {
+        return tr("playbooks.playbookRuleForm.escalation");
+    } },
 ];
 
 export function PlaybookRuleForm({
@@ -181,7 +210,7 @@ export function PlaybookRuleForm({
     <div className="space-y-4">
       {rule.sourceRefs.length > 0 && (
         <p className="text-xs text-gray-500 [overflow-wrap:anywhere]">
-          Source: {describeSourceRefs(rule.sourceRefs)}
+          {tr("playbooks.playbookRuleForm.source", { describeSourceRefs: describeSourceRefs(rule.sourceRefs) })}
         </p>
       )}
       <div className="grid gap-4 @[32rem]:grid-cols-2">
@@ -190,7 +219,7 @@ export function PlaybookRuleForm({
             htmlFor={scopeId}
             className={`mb-2 block ${PLAYBOOK_LABEL_CLASS}`}
           >
-            Scope
+            {tr("playbooks.playbookRuleForm.scope")}
           </label>
           <ModalSelect
             variant="flat"
@@ -200,13 +229,12 @@ export function PlaybookRuleForm({
               onChange({ ...rule, scope: scope as PlaybookRule["scope"] })
             }
             options={[
-              { value: "clause", label: "Clause" },
-              { value: "agreement", label: "Whole agreement" },
+              { value: "clause", label: tr("playbooks.playbookRuleForm.clause") },
+              { value: "agreement", label: tr("playbooks.playbookRuleForm.wholeAgreement") },
             ]}
           />
           <p className="mt-2 text-xs text-gray-500">
-            Choose whether this rule applies to individual clauses or the
-            agreement as a whole.
+            {tr("playbooks.playbookRuleForm.chooseWhetherRuleAppliesIndividual")}
           </p>
         </div>
         <div className="min-w-0">
@@ -214,7 +242,7 @@ export function PlaybookRuleForm({
             htmlFor={requiredId}
             className={`mb-2 block ${PLAYBOOK_LABEL_CLASS}`}
           >
-            Requirement
+            {tr("playbooks.playbookRuleForm.requirement")}
           </label>
           <ModalSelect
             variant="flat"
@@ -224,20 +252,20 @@ export function PlaybookRuleForm({
               onChange({ ...rule, required: value === "required" })
             }
             options={[
-              { value: "optional", label: "Optional" },
-              { value: "required", label: "Required" },
+              { value: "optional", label: tr("playbooks.playbookRuleForm.optional") },
+              { value: "required", label: tr("playbooks.playbookRuleForm.required") },
             ]}
           />
           <p className="mt-2 text-xs text-gray-500">
             {rule.required
-              ? "If the contract doesn’t contain this term, the review flags it as missing and suggests a clause to add."
-              : "The review doesn’t flag the contract when this term is absent."}
+              ? tr("playbooks.playbookRuleForm.ifContractDoesnTContain")
+              : tr("playbooks.playbookRuleForm.reviewDoesnTFlagContract")}
           </p>
         </div>
       </div>
       <Field
-        label="Concept to detect"
-        description="Describe the term so the review can find it in any contract."
+        label={tr("playbooks.playbookRuleForm.conceptDetect")}
+        description={tr("playbooks.playbookRuleForm.describeTermSoReviewCan")}
         value={rule.concept}
         onChange={(concept) => onChange({ ...rule, concept })}
         multiline
@@ -247,8 +275,8 @@ export function PlaybookRuleForm({
         onChange={(conditions) => onChange({ ...rule, conditions })}
       />
       <Field
-        label="Additional guidance"
-        description="Context or priorities the review should apply to this rule."
+        label={tr("playbooks.playbookRuleForm.additionalGuidance")}
+        description={tr("playbooks.playbookRuleForm.contextPrioritiesReviewShouldApply")}
         value={rule.guidance}
         onChange={(guidance) => onChange({ ...rule, guidance })}
         multiline
@@ -289,7 +317,7 @@ function ConditionsField({
   return (
     <div className="min-w-0">
       <label htmlFor={id} className={`mb-2 block ${PLAYBOOK_LABEL_CLASS}`}>
-        Applies only when
+        {tr("playbooks.playbookRuleForm.appliesOnlyWhen")}
       </label>
       <textarea
         id={id}
@@ -304,7 +332,7 @@ function ConditionsField({
         className={`${PLAYBOOK_TEXTAREA_CLASS} min-h-[3.25rem]`}
       />
       <p id={helpId} className={PLAYBOOK_HELP_CLASS}>
-        One condition per line. Leave empty if the rule always applies.
+        {tr("playbooks.playbookRuleForm.oneConditionPerLineLeave")}
       </p>
     </div>
   );
@@ -353,13 +381,13 @@ function EscalationField({
   if (rows.length === 0)
     return (
       <EmptyState
-        title="Escalations"
-        description="Describe a situation the review may meet and what the reviewer should do then. An escalation is saved once “Then” is filled in."
+        title={tr("playbooks.playbookRuleForm.escalations")}
+        description={tr("playbooks.playbookRuleForm.describeSituationReviewMayMeet")}
         className="m-auto w-fit max-w-full py-12"
         action={
           <PillButtonUI tone="black" onClick={addEscalation}>
             <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-            Add escalation
+            {tr("playbooks.playbookRuleForm.addEscalation")}
           </PillButtonUI>
         }
       />
@@ -371,20 +399,20 @@ function EscalationField({
           key={index}
           className={`min-w-0 space-y-3 rounded-xl px-3 pb-3 pt-1.5 md:px-4 md:pb-4 md:pt-2 ${LIQUID_GLASS_FLAT_CLASS}`}
         >
-          <legend className="sr-only">Escalation {index + 1}</legend>
+          <legend className="sr-only">{tr("playbooks.playbookRuleForm.escalation2", { value: index + 1 })}</legend>
           <div className="flex h-8 items-center justify-between gap-2">
             <span
               aria-hidden="true"
               className="text-sm font-medium text-gray-900"
             >
-              Escalation {index + 1}
+              {tr("playbooks.playbookRuleForm.escalation2", { value: index + 1 })}
             </span>
             <HeaderActionsMenu
-              title={`Actions for escalation ${index + 1}`}
+              title={tr("playbooks.playbookRuleForm.actionsEscalation", { value: index + 1 })}
               triggerClassName="h-6 w-6 shrink-0"
               items={[
                 {
-                  label: "Duplicate",
+                  label: tr("playbooks.playbookRuleForm.duplicate"),
                   onSelect: () =>
                     commit([
                       ...rows.slice(0, index + 1),
@@ -393,7 +421,7 @@ function EscalationField({
                     ]),
                 },
                 {
-                  label: "Delete",
+                  label: tr("playbooks.playbookRuleForm.delete"),
                   variant: "danger" as const,
                   onSelect: () => commit(rows.filter((_, i) => i !== index)),
                 },
@@ -401,14 +429,14 @@ function EscalationField({
             />
           </div>
           <Field
-            label="When"
+            label={tr("playbooks.playbookRuleForm.when")}
             value={row.scenario}
             onChange={(scenario) =>
               commit(rows.map((r, i) => (i === index ? { ...r, scenario } : r)))
             }
           />
           <Field
-            label="Then"
+            label={tr("playbooks.playbookRuleForm.then")}
             value={row.instruction}
             onChange={(instruction) =>
               commit(
@@ -421,7 +449,7 @@ function EscalationField({
       ))}
       <TextButtonUI className="-ml-2" onClick={addEscalation}>
         <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-        Add escalation
+        {tr("playbooks.playbookRuleForm.addEscalation")}
       </TextButtonUI>
     </div>
   );
@@ -548,7 +576,7 @@ function PositionGroup({
             }
           >
             <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-            Add
+            {tr("playbooks.playbookRuleForm.add")}
           </TextButtonUI>
         )}
       </div>
@@ -622,25 +650,25 @@ function PositionCard({
           className="h-8 min-w-0 flex-1 rounded-md bg-transparent px-1 text-sm font-medium text-gray-900 outline-none transition-colors placeholder:text-gray-400 hover:bg-app-surface-hover focus-visible:ring-2 focus-visible:ring-blue-500/40"
         />
         <HeaderActionsMenu
-          title={`Actions for ${label}`}
+          title={tr("playbooks.playbookRuleForm.actions", { label })}
           triggerClassName="h-6 w-6 shrink-0"
           items={[
             ...(ordered && count > 1
               ? [
                   {
-                    label: "Move up",
+                    label: tr("playbooks.playbookRuleForm.moveUp"),
                     disabled: index === 0,
                     onSelect: () => onMove(-1),
                   },
                   {
-                    label: "Move down",
+                    label: tr("playbooks.playbookRuleForm.moveDown"),
                     disabled: index === count - 1,
                     onSelect: () => onMove(1),
                   },
                 ]
               : []),
             {
-              label: "Remove position",
+              label: tr("playbooks.playbookRuleForm.removePosition"),
               variant: "danger" as const,
               onSelect: onRemove,
             },
@@ -648,14 +676,14 @@ function PositionCard({
         />
       </div>
       <Field
-        label="Criteria"
+        label={tr("playbooks.playbookRuleForm.criteria")}
         value={position.criteria}
         onChange={(criteria) => onChange({ ...position, criteria })}
         multiline
       />
       <div className="min-w-0 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h5 className={PLAYBOOK_LABEL_CLASS}>Sample clauses</h5>
+          <h5 className={PLAYBOOK_LABEL_CLASS}>{tr("playbooks.playbookRuleForm.sampleClauses")}</h5>
           <TextButtonUI
             onClick={() =>
               onChange({
@@ -672,7 +700,7 @@ function PositionCard({
             }
           >
             <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-            Add clause
+            {tr("playbooks.playbookRuleForm.addClause")}
           </TextButtonUI>
         </div>
         {position.sampleClauses.map((clause, clauseIndex) => (
@@ -718,13 +746,13 @@ function SampleClause({
     <div className={CLAUSE_TILE_CLASS}>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-3 pr-1 pt-1">
         <label htmlFor={textId} className="text-xs font-medium text-gray-500">
-          Clause {index + 1}
+          {tr("playbooks.playbookRuleForm.clause2", { value: index + 1 })}
         </label>
         <div className="ml-auto flex min-w-0 items-center gap-1">
           <ModalSelect
             variant="flat"
             id={usageId}
-            aria-label={`Clause ${index + 1} usage`}
+            aria-label={tr("playbooks.playbookRuleForm.clauseUsage", { value: index + 1 })}
             value={clause.usage}
             onChange={(usage) =>
               onChange({ ...clause, usage: usage as PlaybookClauseUsage })
@@ -735,8 +763,8 @@ function SampleClause({
           />
           <TextButtonUI
             size="icon-xs"
-            aria-label={`Remove clause ${index + 1}`}
-            title="Remove clause"
+            aria-label={tr("playbooks.playbookRuleForm.removeClause", { value: index + 1 })}
+            title={tr("playbooks.playbookRuleForm.removeClause2")}
             onClick={onRemove}
           >
             <X aria-hidden="true" className="h-3.5 w-3.5" />

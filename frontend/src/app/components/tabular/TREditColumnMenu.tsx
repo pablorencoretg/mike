@@ -21,6 +21,7 @@ import {
     LIQUID_GLASS_FLOAT_CLASS,
     LIQUID_GLASS_SUBTLE_CLASS,
 } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 // Liquid-glass field styling shared by the menu's inputs/controls, matching the
 // modal's glass treatment (translucent white over the light-gray panel).
@@ -250,17 +251,17 @@ export function TREditColumnMenu({
                     >
                     <div className="flex items-center justify-between mb-3">
                         <p className="font-serif text-lg font-medium text-gray-900">
-                            Edit Column
+                            {tr("tabular.tREditColumnMenu.editColumn")}
                         </p>
                         <GlassIconButtonUI
                             onClick={() => setOpen(false)}
-                            aria-label="Close"
+                            aria-label={tr("tabular.tREditColumnMenu.close")}
                         >
                             <X className="h-3.5 w-3.5" />
                         </GlassIconButtonUI>
                     </div>
                     <FieldLabel htmlFor={`${menuId}-name`}>
-                        Label
+                        {tr("tabular.tREditColumnMenu.label")}
                     </FieldLabel>
                     <input
                         id={`${menuId}-name`}
@@ -273,7 +274,7 @@ export function TREditColumnMenu({
                     {/* Format */}
                     <div className="mt-3">
                         <FieldLabel htmlFor={`${menuId}-format`}>
-                            Format
+                            {tr("tabular.tREditColumnMenu.format")}
                         </FieldLabel>
                         <Dropdown>
                             <DropdownTrigger asChild>
@@ -358,7 +359,7 @@ export function TREditColumnMenu({
                                     onKeyDown={handleTagKeyDown}
                                     onBlur={commitTag}
                                     placeholder={
-                                        tags.length === 0 ? "Add tags…" : ""
+                                        tags.length === 0 ? tr("tabular.tREditColumnMenu.addTags") : ""
                                     }
                                     className="min-w-[60px] flex-1 bg-transparent text-xs text-gray-700 placeholder-gray-300 focus:outline-none"
                                 />
@@ -370,7 +371,7 @@ export function TREditColumnMenu({
                     <div className="mt-3">
                         <div className="flex items-start justify-between">
                             <FieldLabel htmlFor={`${menuId}-prompt`}>
-                                Prompt
+                                {tr("tabular.tREditColumnMenu.prompt")}
                             </FieldLabel>
                             <button
                                 type="button"
@@ -383,7 +384,7 @@ export function TREditColumnMenu({
                                 ) : (
                                     <Plus className="h-3 w-3" />
                                 )}
-                                Auto-generate
+                                {tr("tabular.tREditColumnMenu.autoGenerate")}
                             </button>
                         </div>
                         <textarea
@@ -401,7 +402,7 @@ export function TREditColumnMenu({
                             onClick={handleDelete}
                             disabled={deleting || saving}
                         >
-                            Delete
+                            {tr("tabular.tREditColumnMenu.delete")}
                         </PillButtonUI>
                         <PillButtonUI
                             tone="black"
@@ -415,7 +416,7 @@ export function TREditColumnMenu({
                                 !prompt.trim()
                             }
                         >
-                            {saving ? "Saving…" : "Save"}
+                            {saving ? tr("tabular.tREditColumnMenu.saving") : tr("tabular.tREditColumnMenu.save")}
                         </PillButtonUI>
                     </div>
                     </div>,

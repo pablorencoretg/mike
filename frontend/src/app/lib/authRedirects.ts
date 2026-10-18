@@ -1,3 +1,4 @@
+import { tr } from "@/shared/i18n/runtime";
 const AUTH_REDIRECT_PATHS = new Set([
     "/assistant",
     "/login",
@@ -48,10 +49,10 @@ export function authErrorDescription(
     );
     if (!error) return null;
     if (/expired|invalid/i.test(error)) {
-        return "This confirmation link is invalid or has expired.";
+        return tr("app.lib.authRedirects.confirmationLinkInvalidHasExpired");
     }
     if (/access.denied|cancel/i.test(error)) {
-        return "Authentication was cancelled or denied.";
+        return tr("app.lib.authRedirects.authenticationWasCancelledDenied");
     }
-    return "Authentication could not be completed. Please try again.";
+    return tr("app.lib.authRedirects.authenticationCouldNotCompletedPlease");
 }

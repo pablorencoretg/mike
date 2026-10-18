@@ -1,4 +1,5 @@
 import type { ResourceAccessScope } from "./types";
+import { tr } from "@/shared/i18n/runtime";
 
 interface AccessScopeLabelProps {
   scope?: ResourceAccessScope;
@@ -34,13 +35,13 @@ export function AccessScopeLabel({
   const description =
     scope === "organization"
       ? organizationName
-        ? `Shared with everyone in ${organizationName}`
-        : "Shared with everyone in the organisation"
+        ? tr("shared.accessScopeLabel.sharedEveryone", { organizationName })
+        : tr("shared.accessScopeLabel.sharedEveryoneOrganisation")
       : hasDirectGrantCount
         ? `Shared with ${accessUserCount} ${accessUserCount === 1 ? "user" : "users"}`
         : scope === "shared"
-          ? "Shared with individuals"
-          : "Private";
+          ? tr("shared.accessScopeLabel.sharedIndividuals")
+          : tr("shared.accessScopeLabel.private");
 
   return (
     <span

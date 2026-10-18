@@ -8,7 +8,8 @@ export type { MessageKey, Messages } from "./messages/types";
 
 const DICTIONARIES: Record<Locale, Messages> = { en, es };
 
-export type TranslateValues = Record<string, string | number>;
+/** A missing value (null or undefined) is shown as an empty string. */
+export type TranslateValues = Record<string, string | number | null | undefined>;
 export type Translate = (key: MessageKey, values?: TranslateValues) => string;
 
 function lookup(dictionary: Messages, key: string): string | undefined {
@@ -25,7 +26,7 @@ export function interpolate(template: string, values?: TranslateValues): string 
     if (!values) return template;
     return template.replace(/\{(\w+)\}/g, (match, name: string) =>
         Object.prototype.hasOwnProperty.call(values, name)
-            ? String(values[name])
+            ? String(values[name] ?? "")
             : match,
     );
 }

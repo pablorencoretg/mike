@@ -18,6 +18,7 @@ import type { TabDropPosition } from "@/app/lib/reorderTabs";
 import { cn } from "@/app/lib/utils";
 import { CloseButton } from "@/shared/ui/CloseButton";
 import { LIQUID_GLASS_HOVER_CLASS } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 export interface DocumentTabItem {
     id: string;
@@ -335,7 +336,7 @@ export function DocumentTabBar({
                                                 onClose(tab.id);
                                             }}
                                             className="shrink-0 rounded-full p-0.5 text-gray-400 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
-                                            aria-label={`Close ${tab.title}`}
+                                            aria-label={tr("shared.documentTabBar.close", { title: tab.title })}
                                         >
                                             <X
                                                 aria-hidden="true"
@@ -378,7 +379,7 @@ export function DocumentTabBar({
             {onClosePanel && (
                 <CloseButton
                     onClick={onClosePanel}
-                    label="Close panel"
+                    label={tr("shared.documentTabBar.closePanel")}
                     className="mt-2 ml-2 mr-2 self-start"
                 />
             )}

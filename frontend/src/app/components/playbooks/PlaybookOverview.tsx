@@ -8,6 +8,7 @@ import type { Playbook } from "@/app/lib/mikeApi";
 import { modelDisplayName } from "@/shared/lib/modelCatalog";
 import { PlaybookPanels } from "./PlaybookPanels";
 import { accessScope } from "./PlaybookTable";
+import { tr } from "@/shared/i18n/runtime";
 
 function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
@@ -35,13 +36,13 @@ export function PlaybookOverview({
   const headingId = useId();
   const facts: { label: string; value: ReactNode }[] = [
     {
-      label: "Creator",
+      label: tr("playbooks.playbookOverview.creator"),
       value: (
         <CreatorLabel
           label={
             playbook.isCreator
-              ? "Me"
-              : playbook.creatorName?.trim() || "Unknown"
+              ? tr("playbooks.playbookOverview.me")
+              : playbook.creatorName?.trim() || tr("playbooks.playbookOverview.unknown")
           }
           photo={playbook.creatorPhoto}
           name={playbook.creatorName}
@@ -49,7 +50,7 @@ export function PlaybookOverview({
       ),
     },
     {
-      label: "Created",
+      label: tr("playbooks.playbookOverview.created"),
       value: (
         <time dateTime={playbook.createdAt}>
           {formatDateTime(playbook.createdAt)}
@@ -57,7 +58,7 @@ export function PlaybookOverview({
       ),
     },
     {
-      label: "Updated",
+      label: tr("playbooks.playbookOverview.updated"),
       value: (
         <time dateTime={playbook.updatedAt}>
           {formatDateTime(playbook.updatedAt)}
@@ -65,11 +66,11 @@ export function PlaybookOverview({
       ),
     },
     {
-      label: "Workspace",
+      label: tr("playbooks.playbookOverview.workspace"),
       value: playbook.orgId ? workspaceName || "Organization" : "Personal",
     },
     {
-      label: "Access",
+      label: tr("playbooks.playbookOverview.access"),
       value: (
         <AccessScopeLabel
           scope={accessScope(playbook)}
@@ -81,29 +82,29 @@ export function PlaybookOverview({
       ),
     },
     {
-      label: "Source",
+      label: tr("playbooks.playbookOverview.source"),
       value: playbook.sourceFilename || "Created in Mike",
     },
     ...(playbook.importModel
       ? [
           {
-            label: "Compiled with",
+            label: tr("playbooks.playbookOverview.compiled"),
             value: modelDisplayName(playbook.importModel),
           },
         ]
       : []),
-    { label: "Rules", value: ruleCount },
+    { label: tr("playbooks.playbookOverview.rules"), value: ruleCount },
   ];
 
   return (
     <PlaybookPanels
       sidebar={
         <section
-          aria-label="Playbook information"
+          aria-label={tr("playbooks.playbookOverview.playbookInformation")}
           className={`flex min-h-0 min-w-0 flex-col ${EDITOR_SURFACE_CLASS}`}
         >
           <div className="flex h-9 shrink-0 items-center px-3">
-            <h2 className="text-xs text-gray-700">Details</h2>
+            <h2 className="text-xs text-gray-700">{tr("playbooks.playbookOverview.details")}</h2>
           </div>
           <dl className="min-h-0 space-y-3 overflow-y-auto px-3 pb-3">
             {facts.map((fact) => (
@@ -125,7 +126,7 @@ export function PlaybookOverview({
         {/* Spaced like the rule pane's header so the views line up. */}
         <div className="shrink-0 px-4 pb-2 pt-4 md:px-5 md:pt-5">
           <h2 id={headingId} className="text-sm font-medium text-gray-900">
-            Overview
+            {tr("playbooks.playbookOverview.overview")}
           </h2>
         </div>
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 pb-4 pt-2 md:px-5 md:pb-5">

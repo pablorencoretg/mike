@@ -13,6 +13,7 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     LIQUID_GLASS_SUBTLE_CLASS,
 } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 const DESKTOP_QUERY = "(min-width: 768px)";
 
@@ -98,8 +99,8 @@ export function TableToolbar<T extends string>({
                     <DropdownTrigger asChild>
                         <button
                             type="button"
-                            title="Toolbar actions"
-                            aria-label="Toolbar actions"
+                            title={tr("shared.tableToolbar.toolbarActions")}
+                            aria-label={tr("shared.tableToolbar.toolbarActions")}
                             className={`ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full text-gray-700 ${LIQUID_GLASS_SUBTLE_CLASS} ${LIQUID_GLASS_HOVER_CLASS} transition-colors hover:text-gray-900 active:scale-[0.98]`}
                         >
                             <Settings2 className="h-3.5 w-3.5" />

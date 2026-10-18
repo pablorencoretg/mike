@@ -1,13 +1,14 @@
 import type { AssistantEvent } from "../../shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 export function eventErrorMessage(event: AssistantEvent): string | null {
     if (event.type === "error") {
         return event.safe_to_display
             ? event.message
-            : "Sorry, something went wrong.";
+            : tr("assistant.message.eventUtils.sorrySomethingWentWrong");
     }
     if ("error" in event && typeof event.error === "string" && event.error) {
-        return "Sorry, something went wrong.";
+        return tr("assistant.message.eventUtils.sorrySomethingWentWrong");
     }
     return null;
 }
@@ -28,26 +29,26 @@ export function connectorToolLabel(
 }
 
 export function toolCallLabel(name: string): string {
-    if (name === "ask_inputs") return "Asking for input...";
-    if (name === "generate_docx") return "Creating document...";
-    if (name === "generate_excel") return "Creating spreadsheet...";
-    if (name === "generate_ppt") return "Creating presentation...";
-    if (name === "edit_document") return "Editing document...";
-    if (name === "read_document") return "Reading document...";
-    if (name === "fetch_documents") return "Reading documents...";
-    if (name === "find_in_document") return "Searching document...";
-    if (name === "find_documents") return "Searching documents...";
-    if (name === "replicate_document") return "Copying document...";
-    if (name === "read_workflow") return "Reading workflow...";
-    if (name === "list_workflows") return "Loading workflows...";
-    if (name === "list_documents") return "Loading documents...";
+    if (name === "ask_inputs") return tr("assistant.message.eventUtils.askingInput");
+    if (name === "generate_docx") return tr("assistant.message.eventUtils.creatingDocument");
+    if (name === "generate_excel") return tr("assistant.message.eventUtils.creatingSpreadsheet");
+    if (name === "generate_ppt") return tr("assistant.message.eventUtils.creatingPresentation");
+    if (name === "edit_document") return tr("assistant.message.eventUtils.editingDocument");
+    if (name === "read_document") return tr("assistant.message.eventUtils.readingDocument");
+    if (name === "fetch_documents") return tr("assistant.message.eventUtils.readingDocuments");
+    if (name === "find_in_document") return tr("assistant.message.eventUtils.searchingDocument");
+    if (name === "find_documents") return tr("assistant.message.eventUtils.searchingDocuments");
+    if (name === "replicate_document") return tr("assistant.message.eventUtils.copyingDocument");
+    if (name === "read_workflow") return tr("assistant.message.eventUtils.readingWorkflow");
+    if (name === "list_workflows") return tr("assistant.message.eventUtils.loadingWorkflows");
+    if (name === "list_documents") return tr("assistant.message.eventUtils.loadingDocuments");
     if (name === "courtlistener_search_case_law")
-        return "Searching case law...";
-    if (name === "courtlistener_get_cases") return "Fetching cases...";
-    if (name === "courtlistener_find_in_case") return "Searching case...";
-    if (name === "courtlistener_read_case") return "Reading case...";
+        return tr("assistant.message.eventUtils.searchingCaseLaw");
+    if (name === "courtlistener_get_cases") return tr("assistant.message.eventUtils.fetchingCases");
+    if (name === "courtlistener_find_in_case") return tr("assistant.message.eventUtils.searchingCase");
+    if (name === "courtlistener_read_case") return tr("assistant.message.eventUtils.readingCase");
     if (name === "courtlistener_verify_citations")
-        return "Verifying citations...";
-    if (name.startsWith("mcp_")) return "Using connector...";
-    return name ? `Running ${name}...` : "Working...";
+        return tr("assistant.message.eventUtils.verifyingCitations");
+    if (name.startsWith("mcp_")) return tr("assistant.message.eventUtils.usingConnector");
+    return name ? tr("assistant.message.eventUtils.running", { name }) : tr("assistant.message.eventUtils.working");
 }

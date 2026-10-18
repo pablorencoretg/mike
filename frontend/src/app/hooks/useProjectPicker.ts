@@ -5,6 +5,7 @@ import type { Project } from "@/app/components/shared/types";
 import { useWorkspaceParam } from "@/app/contexts/WorkspaceContext";
 import { listProjects } from "@/app/lib/mikeApi";
 import { userFacingApiError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 type PickerState = {
     workspace: string | undefined;
@@ -44,7 +45,7 @@ export function useProjectPicker() {
                     open: false,
                     error: userFacingApiError(
                         error,
-                        "Projects could not be loaded. Please try again.",
+                        tr("app.hooks.useProjectPicker.projectsCouldNotLoadedPlease"),
                     ),
                 }));
             },

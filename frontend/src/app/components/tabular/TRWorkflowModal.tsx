@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import type { Workflow } from "../shared/types";
 import { WorkflowPickerModal } from "../workflows/WorkflowPickerModal";
+import { tr } from "@/shared/i18n/runtime";
 
 interface TRWorkflowModalProps {
     open: boolean;
@@ -26,7 +27,7 @@ export function TRWorkflowModal({
             onSelect={onApply}
             workflowType="tabular"
             breadcrumbs={breadcrumbs}
-            primaryLabel="Apply"
+            primaryLabel={tr("tabular.tRWorkflowModal.apply")}
             selectingLabel="Applying..."
             selecting={applying}
             closeOnSelect={false}

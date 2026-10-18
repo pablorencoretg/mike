@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { MikeApiError, type MemoryCurrent } from "@/app/lib/mikeApi";
 import { notifyError, userFacingApiError } from "@/app/lib/userFacingError";
 import { useMemoryAutosave } from "./useMemoryAutosave";
+import { tr } from "@/shared/i18n/runtime";
 
 const POLL_MIN_MS = 3000;
 const POLL_MAX_MS = 30000;
@@ -234,7 +235,7 @@ export function useMemoryFileController({
           // ends the status refresh: the file would sit on "processing"
           // forever unless the user hears about it and can reload.
           notifyError(cause, {
-            action: "check for memory updates",
+            action: tr("memory.useMemoryFileController.checkMemoryUpdates"),
             dedupeKey: "memory-file-poll",
             onRetry: () => void load(),
           });

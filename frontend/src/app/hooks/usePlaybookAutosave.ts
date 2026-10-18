@@ -7,6 +7,7 @@ import {
   type PlaybookContent,
 } from "@/app/lib/mikeApi";
 import { notifyError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 type Change = {
   id: string;
@@ -61,7 +62,7 @@ export function usePlaybookAutosave(onSaved: (playbook: Playbook) => void) {
       } catch (error) {
         setStatus("error");
         notifyError(error, {
-          action: "save your playbook",
+          action: tr("app.hooks.usePlaybookAutosave.savePlaybook"),
           dedupeKey: `playbook-autosave:${pending.current.keys().next().value}`,
           onRetry: () => {
             void flush();

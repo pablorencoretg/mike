@@ -30,6 +30,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { useT } from "@/shared/i18n/I18nContext";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this screen's deltas: here every session-
  *  shaped failure is really "your reset link is no longer usable". */
@@ -63,7 +64,7 @@ function ResetPasswordContent() {
     const isUnavailablePreview = preview === "reset-unavailable";
     const displayedReady = isUnavailablePreview || ready;
     const displayedError = isUnavailablePreview
-        ? "This password-reset link is invalid or has expired."
+        ? tr("app.resetPassword.page.passwordResetLinkInvalidHas")
         : error;
     const resetUnavailable =
         displayedReady && !!displayedError && !password && !confirmPassword;
@@ -78,7 +79,7 @@ function ResetPasswordContent() {
                 if (cancelled) return;
                 if (!session) {
                     setError(
-                        "This password-reset link is invalid or has expired.",
+                        tr("app.resetPassword.page.passwordResetLinkInvalidHas"),
                     );
                 }
                 setReady(true);
@@ -89,15 +90,15 @@ function ResetPasswordContent() {
                 // not, and telling the user to request a new link then would
                 // send them round a loop that cannot work.
                 const described = describeError(caught, {
-                    action: "check your reset link",
+                    action: tr("app.resetPassword.page.checkResetLink"),
                     fallback:
-                        "This password-reset link is invalid or has expired.",
+                        tr("app.resetPassword.page.passwordResetLinkInvalidHas"),
                 });
                 setError(
                     described.kind === "unauthenticated" ||
                         described.kind === "not_found" ||
                         described.kind === "validation"
-                        ? "This password-reset link is invalid or has expired."
+                        ? tr("app.resetPassword.page.passwordResetLinkInvalidHas")
                         : described.message,
                 );
                 setReady(true);
@@ -130,9 +131,9 @@ function ResetPasswordContent() {
             setSuccess(true);
         } catch (caught) {
             const described = describeError(caught, {
-                action: "update your password",
+                action: tr("app.resetPassword.page.updatePassword"),
                 codeMessages: RESET_ERROR_MESSAGES,
-                fallback: "Unable to update your password. Try again.",
+                fallback: tr("app.resetPassword.page.unableUpdatePasswordTryAgain"),
             });
             setFailure(described);
             setError(described.message);

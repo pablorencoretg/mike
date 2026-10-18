@@ -1,4 +1,5 @@
 import { diagnosticErrorTags } from "./sentryPrivacy";
+import { tr } from "../i18n/runtime";
 
 /**
  * Sentry event hygiene shared by the web app (browser + Next server) and the
@@ -689,7 +690,7 @@ export function createEventScrubber(options?: {
             // Only the first argument is the logging label. Other strings
             // may be document/model output; never concatenate them into titles
             // or grouping keys. Raw arguments are removed by scrubFreeform.
-            const label = typeof args[0] === "string" ? args[0].trim() : "Console error";
+            const label = typeof args[0] === "string" ? args[0].trim() : tr("shared.lib.sentryEvent.consoleError");
             const nestedError = args
                 .map((arg) =>
                     typeof arg === "object" && arg instanceof Error

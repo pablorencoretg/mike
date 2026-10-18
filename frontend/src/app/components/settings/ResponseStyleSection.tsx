@@ -27,6 +27,7 @@ import {
 } from "@/app/lib/mikeApi";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { cn } from "@/app/lib/utils";
+import { tr } from "@/shared/i18n/runtime";
 
 type OptionCopy = { label: string; description: string };
 
@@ -38,14 +39,14 @@ function languageOptions(
 ): Record<ResponseLanguage, OptionCopy> {
   const options = {
     auto: {
-      label: "Automatic",
-      description: "Mike replies in the language you write in.",
+      label: tr("settings.responseStyleSection.automatic"),
+      description: tr("settings.responseStyleSection.mikeRepliesLanguageWrite"),
     },
   } as Record<ResponseLanguage, OptionCopy>;
   for (const [code, name] of Object.entries(names)) {
     options[code as ResponseLanguage] = {
       label: name,
-      description: `Mike replies in ${name}.`,
+      description: tr("settings.responseStyleSection.mikeReplies", { name }),
     };
   }
   return options;
@@ -60,59 +61,102 @@ const SETTINGS: {
   };
 } = {
   verbosity: {
-    label: "Verbosity",
+    get label() {
+        return tr("settings.responseStyleSection.verbosity");
+    },
     options: {
       concise: {
-        label: "Concise",
-        description: "Short, direct answers that lead with the conclusion.",
+        get label() {
+        return tr("settings.responseStyleSection.concise");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.shortDirectAnswersLeadConclusion");
+    },
       },
       balanced: {
-        label: "Balanced",
-        description: "Enough explanation to follow the reasoning.",
+        get label() {
+        return tr("settings.responseStyleSection.balanced");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.enoughExplanationFollowReasoning");
+    },
       },
       detailed: {
-        label: "Detailed",
-        description: "Fuller reasoning, exceptions, and practical next steps.",
+        get label() {
+        return tr("settings.responseStyleSection.detailed");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.fullerReasoningExceptionsPracticalNext");
+    },
       },
     },
   },
   formatting: {
-    label: "Headers and Lists",
+    get label() {
+        return tr("settings.responseStyleSection.headersLists");
+    },
     options: {
       balanced: {
-        label: "Balanced",
-        description: "Mike picks the layout that suits each answer.",
+        get label() {
+        return tr("settings.responseStyleSection.balanced");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.mikePicksLayoutSuitsEach");
+    },
       },
       less: {
-        label: "Less",
-        description: "Mostly prose, with headings and lists only when needed.",
+        get label() {
+        return tr("settings.responseStyleSection.less");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.mostlyProseHeadingsListsOnly");
+    },
       },
       more: {
-        label: "More",
-        description: "Headings, bullet points, and tables for easy scanning.",
+        get label() {
+        return tr("settings.responseStyleSection.more");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.headingsBulletPointsTablesEasy");
+    },
       },
     },
   },
   tone: {
-    label: "Tone",
+    get label() {
+        return tr("settings.responseStyleSection.tone");
+    },
     options: {
       formal: {
-        label: "Formal and Legal",
-        description: "A precise, client-ready legal register.",
+        get label() {
+        return tr("settings.responseStyleSection.formalLegal");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.preciseClientReadyLegalRegister");
+    },
       },
       balanced: {
-        label: "Balanced",
-        description: "Mike's usual professional tone.",
+        get label() {
+        return tr("settings.responseStyleSection.balanced");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.mikeSUsualProfessionalTone");
+    },
       },
       plain: {
-        label: "Plain and Simple",
-        description:
-          "Short sentences and everyday words, with legal terms explained.",
+        get label() {
+        return tr("settings.responseStyleSection.plainSimple");
+    },
+        get description() {
+        return tr("settings.responseStyleSection.shortSentencesEverydayWordsLegal");
+    },
       },
     },
   },
   language: {
-    label: "Language",
+    get label() {
+        return tr("settings.responseStyleSection.language");
+    },
     options: languageOptions({
       "en-US": "English (US)",
       "en-GB": "English (UK)",
@@ -200,7 +244,7 @@ export function ResponseStyleSection() {
         ...current,
         [field]: userFacingApiError(
           error,
-          "This setting could not be saved. Please try again.",
+          tr("settings.responseStyleSection.settingCouldNotSavedPlease"),
         ),
       }));
     }
@@ -208,15 +252,15 @@ export function ResponseStyleSection() {
 
   return (
     <section className="space-y-3" aria-labelledby="response-style-heading">
-      <SettingsHeading id="response-style-heading">Response style</SettingsHeading>
+      <SettingsHeading id="response-style-heading">{tr("settings.responseStyleSection.responseStyle")}</SettingsHeading>
       <SettingsDescription>
-        Choose how Mike shapes its answers in chats.
+        {tr("settings.responseStyleSection.chooseHowMikeShapesIts")}
       </SettingsDescription>
       <GlassCardUI>
         {loadError ? (
           <SettingsRow>
             <p className="text-sm text-red-600" role="alert">
-              Could not load your response style.
+              {tr("settings.responseStyleSection.couldNotLoadResponseStyle")}
             </p>
             <PillButtonUI
               tone="white"
@@ -226,7 +270,7 @@ export function ResponseStyleSection() {
                 setLoadVersion((current) => current + 1);
               }}
             >
-              Retry
+              {tr("settings.responseStyleSection.retry")}
             </PillButtonUI>
           </SettingsRow>
         ) : (
@@ -301,7 +345,7 @@ function StyleSettingRow({
               authInputUIClassName,
             )}
           >
-            <span className="truncate">{selected?.label ?? "Loading..."}</span>
+            <span className="truncate">{selected?.label ?? tr("settings.responseStyleSection.loading")}</span>
             <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
           </button>
         </DropdownTrigger>

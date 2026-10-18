@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import type { Document } from "@/app/components/shared/types";
 import { GlassCardUI } from "@/shared/ui/GlassCardUI";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ReviewDocument = {
   id: string;
@@ -31,7 +32,7 @@ export function PlaybookReviewDocuments({
 
   return (
     <section
-      aria-label="Documents to review"
+      aria-label={tr("playbooks.playbookReviewDocuments.documentsReview")}
       aria-busy={disabled}
       className={`rounded-xl bg-gray-100 p-4 transition-colors ${dragging && !disabled ? "ring-2 ring-inset ring-blue-500/40" : ""}`}
       onDragEnter={(event) => {
@@ -63,8 +64,8 @@ export function PlaybookReviewDocuments({
             {disabled
               ? `${documents.filter((document) => document.status === "completed").length} of ${documents.length} reviewed`
               : dragging
-                ? "Drop documents to add them"
-                : "Drop more documents here or use Add document below."}
+                ? tr("playbooks.playbookReviewDocuments.dropDocumentsAddThem")
+                : tr("playbooks.playbookReviewDocuments.dropMoreDocumentsHereUse")}
           </p>
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-2">
             {documents.map((document) => (
@@ -78,14 +79,14 @@ export function PlaybookReviewDocuments({
                         aria-live="polite"
                       >
                         {document.status === "reviewing"
-                          ? "Reviewing…"
+                          ? tr("playbooks.playbookReviewDocuments.reviewing")
                           : document.status === "completed"
-                            ? "Reviewed"
+                            ? tr("playbooks.playbookReviewDocuments.reviewed")
                             : document.status === "failed"
-                              ? "Couldn’t review"
+                              ? tr("playbooks.playbookReviewDocuments.couldnTReview")
                               : document.kind === "saved"
-                                ? "Saved file"
-                                : "Uploaded document"}
+                                ? tr("playbooks.playbookReviewDocuments.savedFile")
+                                : tr("playbooks.playbookReviewDocuments.uploadedDocument")}
                       </p>
                       {document.error && (
                         <p role="alert" className="mt-2 text-xs text-red-600">
@@ -96,7 +97,7 @@ export function PlaybookReviewDocuments({
                     <PillButtonUI
                       tone="white"
                       size="icon-xs"
-                      aria-label={`Remove ${document.name}`}
+                      aria-label={tr("playbooks.playbookReviewDocuments.remove", { name: document.name })}
                       disabled={disabled}
                       className="shrink-0"
                       onClick={() => onRemove(document.id)}
@@ -118,11 +119,11 @@ export function PlaybookReviewDocuments({
         >
           <span className="block text-sm text-gray-700">
             {dragging
-              ? "Drop documents to add them"
-              : "Add documents to review"}
+              ? tr("playbooks.playbookReviewDocuments.dropDocumentsAddThem")
+              : tr("playbooks.playbookReviewDocuments.addDocumentsReview")}
           </span>
           <span className="mt-1 block text-xs text-gray-500">
-            Drag and drop PDF, DOCX, or TXT files here, or click to browse.
+            {tr("playbooks.playbookReviewDocuments.dragDropPdfDocxTxt")}
           </span>
         </button>
       )}

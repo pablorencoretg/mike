@@ -59,6 +59,7 @@ import { LIQUID_GLASS_FLAT_CLASS } from "@/app/components/ui/liquid-surface";
 import { cn } from "@/app/lib/utils";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import type { MessageExcerpt } from "@/shared/lib/messageExcerpts";
+import { tr } from "@/shared/i18n/runtime";
 
 const ICON_SIZE = 28;
 const GAP = 14;
@@ -114,7 +115,7 @@ function AssistantGreeting({ username }: { username: string }) {
                             "transform 900ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 800ms ease-in-out 300ms",
                     }}
                 >
-                    Hi, {username}
+                    {tr("projects.projectChatPanel.hi", { username })}
                 </h1>
             </div>
         </div>
@@ -603,10 +604,10 @@ export function ProjectChatPanel({
             // Without this the refusal was an unhandled rejection and the
             // panel just sat there, indistinguishable from a slow delete.
             onActionError({
-                title: "Chat not deleted",
+                title: tr("projects.projectChatPanel.chatNotDeleted"),
                 message: userFacingApiError(
                     error,
-                    "The chat could not be deleted. Please try again.",
+                    tr("projects.projectChatPanel.chatCouldNotDeletedPlease"),
                 ),
             });
         } finally {
@@ -623,7 +624,7 @@ export function ProjectChatPanel({
         if (nextTitle === undefined) {
             setChatTitleEdit({
                 chatId: activeChatId,
-                title: chatTitle ?? "New Chat",
+                title: chatTitle ?? tr("projects.projectChatPanel.newChat"),
             });
             return;
         }
@@ -671,10 +672,10 @@ export function ProjectChatPanel({
                 ),
             );
             onActionError({
-                title: "Chat not renamed",
+                title: tr("projects.projectChatPanel.chatNotRenamed"),
                 message: userFacingApiError(
                     error,
-                    "The chat could not be renamed. Please try again.",
+                    tr("projects.projectChatPanel.chatCouldNotRenamedPlease"),
                 ),
             });
         }
@@ -722,7 +723,7 @@ export function ProjectChatPanel({
                 {chatDragOver && (
                     <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-md">
                         <p className="font-serif text-xl text-gray-900">
-                            Drop files here to add to chat
+                            {tr("projects.projectChatPanel.dropFilesHereAddChat")}
                         </p>
                     </div>
                 )}
@@ -769,7 +770,7 @@ export function ProjectChatPanel({
                                     ...(onOpenSideChat
                                         ? [
                                               {
-                                                  label: "Open side chat",
+                                                  label: tr("projects.projectChatPanel.openSideChat"),
                                                   icon: MessageSquare,
                                                   onSelect: onOpenSideChat,
                                               },
@@ -778,14 +779,14 @@ export function ProjectChatPanel({
                                     ...(onCloseSideChat
                                         ? [
                                               {
-                                                  label: "Close side chat",
+                                                  label: tr("projects.projectChatPanel.closeSideChat"),
                                                   icon: X,
                                                   onSelect: onCloseSideChat,
                                               },
                                           ]
                                         : []),
                                     {
-                                        label: "Rename",
+                                        label: tr("projects.projectChatPanel.rename"),
                                         icon: Pencil,
                                         onSelect: () => void handleRenameChat(),
                                         disabled:
@@ -794,15 +795,15 @@ export function ProjectChatPanel({
                                             !canRenameChat,
                                     },
                                     {
-                                        label: "Memory",
+                                        label: tr("projects.projectChatPanel.memory"),
                                         icon: Brain,
                                         onSelect: onOpenMemory,
                                         disabled: !project,
                                     },
                                     {
                                         label: deletingChat
-                                            ? "Deleting..."
-                                            : "Delete",
+                                            ? tr("projects.projectChatPanel.deleting")
+                                            : tr("projects.projectChatPanel.delete"),
                                         icon: Trash2,
                                         onSelect: () => void handleDeleteChat(),
                                         disabled:
@@ -1001,7 +1002,7 @@ export function ProjectChatPanel({
             </div>
             <ApiKeyMissingPopup
                 open={rejectedApiKey !== null}
-                title="API key rejected"
+                title={tr("projects.projectChatPanel.apiKeyRejected")}
                 message={`${
                     rejectedKeyProvider
                         ? `The ${providerLabel(rejectedKeyProvider)} API key`

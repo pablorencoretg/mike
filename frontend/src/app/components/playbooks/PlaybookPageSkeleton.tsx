@@ -3,6 +3,7 @@
 import { SkeletonLine } from "@/app/components/shared/TablePrimitive";
 import { TableToolbar } from "@/app/components/shared/TableToolbar";
 import { EDITOR_SURFACE_CLASS } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 function PillSkeleton({ className }: { className: string }) {
   return (
@@ -22,7 +23,7 @@ export function PlaybookPageSkeleton() {
     <div
       role="status"
       aria-busy="true"
-      aria-label="Loading playbook"
+      aria-label={tr("playbooks.playbookPageSkeleton.loadingPlaybook")}
       className="flex min-h-0 flex-1 flex-col"
     >
       <div className="shrink-0">

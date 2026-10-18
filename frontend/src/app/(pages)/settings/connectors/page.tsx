@@ -59,6 +59,7 @@ import { SettingsHeading } from "@/app/components/settings/SettingsHeading";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { LIQUID_GLASS_SUBTLE_CLASS } from "@/shared/ui/LiquidGlassUI";
 import { ToggleSwitchUI } from "@/shared/ui/ToggleSwitchUI";
+import { tr } from "@/shared/i18n/runtime";
 
 /** What the user was doing, for "Couldn't ..." and honest retry text. */
 const CONNECTOR_ACTION_LABELS = {
@@ -85,7 +86,7 @@ const CONNECTOR_ACTION_LABELS = {
 function connectorMessage(error: unknown, action: string): string {
   return describeError(error, {
     action,
-    fallback: `Mike couldn't ${action}. Try again.`,
+    fallback: tr("pages.settings.connectors.page.mikeCouldnTTryAgain", { action }),
   }).message;
 }
 
@@ -617,7 +618,7 @@ export default function ConnectorsPage() {
     if (connector.loadFailed) {
       setAddErrorGuideUrl(null);
       setAddError(
-        `Could not load ${connector.name}. Reload this page and try again.`,
+        tr("pages.settings.connectors.page.couldNotLoadReloadPage", { name: connector.name }),
       );
       return;
     }
@@ -897,7 +898,7 @@ export default function ConnectorsPage() {
         if (needsAuthorization) {
           if (surface === "modal") {
             setAddAuthMessage(
-              "Complete authorization in the popup to finish connecting this MCP server.",
+              tr("pages.settings.connectors.page.completeAuthorizationPopupFinishConnecti"),
             );
             setAddStep("auth");
           }
@@ -921,7 +922,7 @@ export default function ConnectorsPage() {
           const discarded = await discardCreatedConnector();
           if (!discarded) {
             setAddError(
-              "Authorization was cancelled, but the incomplete connector could not be removed. Remove it from Installed before trying again.",
+              tr("pages.settings.connectors.page.authorizationWasCancelledButIncomplete"),
             );
           }
           return;
@@ -949,7 +950,7 @@ export default function ConnectorsPage() {
         setAddError(
           discarded
             ? message
-            : `${message} The incomplete connector could not be removed; remove it from Installed before trying again.`,
+            : tr("pages.settings.connectors.page.incompleteConnectorCouldNotRemoved", { message }),
         );
       } finally {
         setBusyKey(null);
@@ -1298,22 +1299,22 @@ export default function ConnectorsPage() {
   return (
     <div className="@container">
       <p className="mb-4 text-sm text-app-text-muted">
-        Connections belong to your Personal workspace and are available only in Personal chats.
+        {tr("pages.settings.connectors.page.connectionsBelongPersonalWorkspaceAvaila")}
       </p>
       <section aria-labelledby="installed-connectors-heading">
         <div className="mb-4 flex items-center justify-between gap-3">
           <SettingsHeading id="installed-connectors-heading">
-            Installed
+            {tr("pages.settings.connectors.page.installed")}
           </SettingsHeading>
           <PillButtonUI
             tone="white"
             size="xs"
             onClick={() => setAddOpen(true)}
-            aria-label="Add custom connector"
+            aria-label={tr("pages.settings.connectors.page.addCustomConnector")}
             className={`h-7 ${LIQUID_GLASS_SUBTLE_CLASS}`}
           >
             <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-            Custom
+            {tr("pages.settings.connectors.page.custom")}
           </PillButtonUI>
         </div>
         {error && (
@@ -1370,7 +1371,7 @@ export default function ConnectorsPage() {
                 <GlassCardUI>
                   <div className="p-4">
                     <SettingsDescription>
-                      No connectors yet.
+                      {tr("pages.settings.connectors.page.noConnectorsYet")}
                     </SettingsDescription>
                   </div>
                 </GlassCardUI>
@@ -1381,12 +1382,12 @@ export default function ConnectorsPage() {
       <section className="mt-6" aria-labelledby="discover-connectors-heading">
         <div className="mb-4">
           <SettingsHeading id="discover-connectors-heading">
-            Discover
+            {tr("pages.settings.connectors.page.discover")}
           </SettingsHeading>
         </div>
         {discoverGoogle.length === 0 && discoverPresets.length === 0 && (
           <SettingsDescription>
-            Every available connector is installed.
+            {tr("pages.settings.connectors.page.everyAvailableConnectorInstalled")}
           </SettingsDescription>
         )}
         <div className="grid grid-cols-1 gap-3 @min-[32rem]:grid-cols-2">
@@ -1463,8 +1464,8 @@ export default function ConnectorsPage() {
               showToken={showDetailToken}
               tokenPlaceholder={
                 selectedConnector.hasAuthConfig
-                  ? "Saved token encrypted"
-                  : "Bearer token"
+                  ? tr("pages.settings.connectors.page.savedTokenEncrypted")
+                  : tr("pages.settings.connectors.page.bearerToken")
               }
               tokenAction={
                 selectedConnector.hasAuthConfig ||
@@ -1472,8 +1473,8 @@ export default function ConnectorsPage() {
                   ? {
                       label:
                         clearedBearerTokenConnectorId === selectedConnector.id
-                          ? "Cleared"
-                          : "Clear",
+                          ? tr("pages.settings.connectors.page.cleared")
+                          : tr("pages.settings.connectors.page.clear"),
                       loading:
                         busyKey === `clear-token:${selectedConnector.id}`,
                       cleared:
@@ -1546,7 +1547,7 @@ export default function ConnectorsPage() {
                 }
               >
                 <FolderPlus className="h-3.5 w-3.5" aria-hidden="true" />
-                Add files from Google Drive
+                {tr("pages.settings.connectors.page.addFilesFromGoogleDrive")}
               </PillButtonUI>
               <p role="status" className="text-xs text-gray-500">
                 {drivePicker.message}
@@ -1591,7 +1592,7 @@ export default function ConnectorsPage() {
       />
       <WarningPopup
         open={!!addError}
-        title="Could not add connector"
+        title={tr("pages.settings.connectors.page.couldNotAddConnector")}
         message={addError}
         onClose={() => {
           setAddError(null);
@@ -1604,13 +1605,13 @@ export default function ConnectorsPage() {
       </WarningPopup>
       <WarningPopup
         open={!!detailError}
-        title="Connector update failed"
+        title={tr("pages.settings.connectors.page.connectorUpdateFailed")}
         message={detailError}
         onClose={() => setDetailError(null)}
       />
       <WarningPopup
         open={!!detailSetupNotice}
-        title="Administrator setup required"
+        title={tr("pages.settings.connectors.page.administratorSetupRequired")}
         message={detailSetupNotice}
         onClose={() => setDetailSetupNotice(null)}
       >
@@ -1692,11 +1693,11 @@ function DiscoverCard({
           loading={adding}
           aria-label={
             authorizing
-              ? `Cancel ${name} authorization`
-              : `Add ${name} connector`
+              ? tr("pages.settings.connectors.page.cancelAuthorization", { name })
+              : tr("pages.settings.connectors.page.addConnector", { name })
           }
         >
-          {authorizing ? "Cancel" : adding ? "Adding..." : "Add"}
+          {authorizing ? tr("pages.settings.connectors.page.cancel") : adding ? tr("pages.settings.connectors.page.adding") : tr("pages.settings.connectors.page.add")}
         </PillButtonUI>
       }
     />

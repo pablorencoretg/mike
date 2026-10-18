@@ -37,6 +37,7 @@ import {
     type ProjectTreeItemKind,
 } from "@/app/lib/projectTreeMoves";
 import { useLatestRef } from "@/app/hooks/useLatestRef";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     projectName?: string | null;
@@ -247,7 +248,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                         <li
                             key={`uploading-${upload.clientId}`}
                             role="status"
-                            aria-label={`Uploading ${upload.filename}`}
+                            aria-label={tr("projects.projectExplorer.uploading", { filename: upload.filename })}
                             className="flex items-center gap-2 py-1.5 pr-2 text-gray-400"
                             style={{ paddingLeft: basePadding }}
                         >
@@ -278,7 +279,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                             ref={newFolderInputRef}
                             autoFocus
                             className="flex-1 min-w-0 text-xs bg-transparent outline-none border-b border-gray-300 text-gray-800"
-                            placeholder="Folder name"
+                            placeholder={tr("projects.projectExplorer.folderName")}
                             value={newFolderName}
                             onChange={(e) => setNewFolderName(e.target.value)}
                             onKeyDown={(e) => {
@@ -498,7 +499,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                 uploadingDocuments.length === 0 &&
                 creatingIn === undefined && (
                     <li className="px-2 py-2 text-xs text-gray-400">
-                        No documents in this project.
+                        {tr("projects.projectExplorer.noDocumentsProject")}
                     </li>
                 )}
 
@@ -536,7 +537,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                             onSelect={() => void onDownloadFolder(contextFolder)}
                         >
                             <Download aria-hidden="true" className="h-3.5 w-3.5" />
-                            Download
+                            {tr("projects.projectExplorer.download")}
                         </DropdownItem>
                     )}
                     {onCreateFolder && !contextMenu.docId && (
@@ -552,7 +553,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                             }}
                         >
                             <SubfolderSvgIcon className="h-3.5 w-3.5 shrink-0" />
-                            New subfolder
+                            {tr("projects.projectExplorer.newSubfolder")}
                         </DropdownItem>
                     )}
                     {contextMenu.folderId && onRenameFolder && (
@@ -563,7 +564,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                             }}
                         >
                             <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
-                            Rename
+                            {tr("projects.projectExplorer.rename")}
                         </DropdownItem>
                     )}
                     {contextMenu.folderId && onDeleteFolder && (
@@ -572,7 +573,7 @@ export const ProjectExplorer = forwardRef<ProjectExplorerHandle, Props>(function
                             onSelect={() => onDeleteFolder(contextMenu.folderId!)}
                         >
                             <Trash2 className="h-3.5 w-3.5" />
-                            Delete folder
+                            {tr("projects.projectExplorer.deleteFolder")}
                         </DropdownItem>
                     )}
                 </DropdownAtPoint>

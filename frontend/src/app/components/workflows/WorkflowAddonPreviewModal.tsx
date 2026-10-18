@@ -16,6 +16,7 @@ import { PdfView } from "../shared/views/PdfView";
 import { SpreadsheetView } from "../shared/views/SpreadsheetView";
 import { workflowAddonAssetDisplayUrl } from "@/app/lib/mikeApi";
 import { resolveDocumentViewType } from "@/app/lib/documentViewType";
+import { tr } from "@/shared/i18n/runtime";
 
 type DetailView = "columns" | "skill" | "assets";
 type AddonAsset = NonNullable<WorkflowAddon["assets"]>[number];
@@ -119,12 +120,12 @@ function SkillViewer({ skill }: { skill: string }) {
             onClick={() => void copy()}
             className="flex items-center gap-1 text-xs text-gray-400 transition-colors hover:text-gray-700"
           >
-            {copied ? <Check className="h-3 w-3" /> : "Copy"}
+            {copied ? <Check className="h-3 w-3" /> : tr("workflows.workflowAddonPreviewModal.copy")}
           </button>
           <button
             type="button"
             aria-label={
-              showRaw ? "Show rendered SKILL.md" : "Show raw SKILL.md"
+              showRaw ? tr("workflows.workflowAddonPreviewModal.showRenderedSkillMd") : tr("workflows.workflowAddonPreviewModal.showRawSkillMd")
             }
             aria-pressed={showRaw}
             onClick={() => setShowRaw((current) => !current)}
@@ -150,7 +151,7 @@ function SkillViewer({ skill }: { skill: string }) {
               remarkPlugins={[remarkGfm]}
               components={markdownComponents}
             >
-              {markdown || "_No instructions provided._"}
+              {markdown || tr("workflows.workflowAddonPreviewModal.noInstructionsProvided")}
             </ReactMarkdown>
           </div>
         )}
@@ -282,11 +283,11 @@ function WorkflowAddonPreviewDialog({
   const assets = addon.assets ?? [];
   const tabs: { id: DetailView; label: string }[] =
     addon.type === "tabular"
-      ? [{ id: "columns", label: "Columns" }]
+      ? [{ id: "columns", label: tr("workflows.workflowAddonPreviewModal.columns") }]
       : [
           { id: "skill", label: "SKILL.md" },
           ...(assets.length > 0
-            ? [{ id: "assets" as const, label: "Assets" }]
+            ? [{ id: "assets" as const, label: tr("workflows.workflowAddonPreviewModal.assets") }]
             : []),
         ];
 
@@ -295,14 +296,14 @@ function WorkflowAddonPreviewDialog({
       open
       onClose={onClose}
       breadcrumbs={[
-        "Workflows",
-        "Add-ons",
+        tr("workflows.workflowAddonPreviewModal.workflows"),
+        tr("workflows.workflowAddonPreviewModal.addOns"),
         addon.title,
         ...(selectedAsset ? [selectedAsset.filename] : []),
       ]}
       size={selectedAsset ? "xl" : "lg"}
       primaryAction={{
-        label: importing ? "Importing…" : "Import",
+        label: importing ? tr("workflows.workflowAddonPreviewModal.importing") : tr("workflows.workflowAddonPreviewModal.import"),
         icon: <Plus className="h-4 w-4" />,
         disabled: importing,
         onClick: () => void onImport(addon),
@@ -310,7 +311,7 @@ function WorkflowAddonPreviewDialog({
       secondaryAction={
         selectedAsset
           ? {
-              label: "Back",
+              label: tr("workflows.workflowAddonPreviewModal.back"),
               icon: <ChevronLeft className="h-4 w-4" />,
               onClick: () => setSelectedAsset(null),
             }
@@ -349,19 +350,19 @@ function WorkflowAddonPreviewDialog({
           <section className="shrink-0">
             <div className="flex flex-wrap items-end gap-x-8 gap-y-3">
               <MetadataItem
-                label="Contributor"
+                label={tr("workflows.workflowAddonPreviewModal.contributor")}
                 value={addon.contributors
                   .map((contributor) => contributor.name)
                   .join(", ")}
               />
-              <MetadataItem label="Language" value={addon.language || "—"} />
-              <MetadataItem label="Version" value={addon.version || "—"} />
+              <MetadataItem label={tr("workflows.workflowAddonPreviewModal.language")} value={addon.language || "—"} />
+              <MetadataItem label={tr("workflows.workflowAddonPreviewModal.version")} value={addon.version || "—"} />
               <MetadataItem
-                label="Practice"
+                label={tr("workflows.workflowAddonPreviewModal.practice")}
                 value={addon.practice || "General"}
               />
               <MetadataItem
-                label="Jurisdiction"
+                label={tr("workflows.workflowAddonPreviewModal.jurisdiction")}
                 value={addon.jurisdictions?.join(", ") || "—"}
               />
             </div>
@@ -381,7 +382,7 @@ function WorkflowAddonPreviewDialog({
                       }
                       className="ml-1 inline font-medium text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
                     >
-                      {descriptionExpanded ? "Show less" : "Show more"}
+                      {descriptionExpanded ? tr("workflows.workflowAddonPreviewModal.showLess") : tr("workflows.workflowAddonPreviewModal.showMore")}
                     </button>
                   )}
                 </p>
@@ -403,10 +404,10 @@ function WorkflowAddonPreviewDialog({
                   <div className="grid min-h-10 shrink-0 grid-cols-[52px_0.8fr_1.8fr] items-center border-b border-white/60 text-xs font-medium text-gray-500">
                     <div className="px-3 py-1.5">#</div>
                     <div className="border-l border-white/60 px-3 py-1.5">
-                      Column
+                      {tr("workflows.workflowAddonPreviewModal.column")}
                     </div>
                     <div className="border-l border-white/60 px-3 py-1.5">
-                      Prompt
+                      {tr("workflows.workflowAddonPreviewModal.prompt")}
                     </div>
                   </div>
                   <div className="min-h-0 flex-1 overflow-y-auto">
@@ -431,12 +432,12 @@ function WorkflowAddonPreviewDialog({
               ) : view === "assets" ? (
                 <div className="flex h-full min-h-0 flex-col">
                   <div className="flex min-h-10 shrink-0 items-center border-b border-white/60 px-3 py-1.5 text-xs font-medium text-gray-500">
-                    Assets
+                    {tr("workflows.workflowAddonPreviewModal.assets")}
                   </div>
                   <div className="min-h-0 flex-1 overflow-y-auto">
                     {assets.length === 0 ? (
                       <div className="flex h-full min-h-24 items-center justify-center px-4 text-xs text-gray-400">
-                        No assets included.
+                        {tr("workflows.workflowAddonPreviewModal.noAssetsIncluded")}
                       </div>
                     ) : (
                       assets.map((file) => (

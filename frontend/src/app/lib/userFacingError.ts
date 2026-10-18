@@ -57,6 +57,7 @@ import {
     type NotifyErrorOptions,
 } from "@/shared/lib/errorNotifier";
 import { isReported, reportError } from "@/app/lib/errorReporting";
+import { tr } from "@/shared/i18n/runtime";
 
 export {
     SUPPORT_EMAIL,
@@ -195,7 +196,7 @@ export const notifyError = createErrorNotifier<NotifyErrorOptions>({
                 described.kind === "unauthenticated" && signInHref
                     ? [
                           {
-                              label: "Sign in",
+                              label: tr("app.lib.userFacingError.sign"),
                               onClick: () => window.location.assign(signInHref),
                           },
                       ]

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { PillButtonUI } from "./PillButtonUI";
 import { TextButtonUI } from "./TextButtonUI";
 import { TextSlabUI } from "./TextSlabUI";
+import { tr } from "../i18n/runtime";
 
 export type EditCardUIBusyAction =
     | "view"
@@ -96,8 +97,8 @@ export function EditCardUI({
                 <div className="mb-2 flex items-start gap-2">
                     {changeNumber !== undefined && (
                         <span
-                            aria-label={`Tracked change ${changeNumber}`}
-                            title={`Tracked change ${changeNumber}`}
+                            aria-label={tr("shared.ui.editCardUI.trackedChange", { changeNumber })}
+                            title={tr("shared.ui.editCardUI.trackedChange", { changeNumber })}
                             className="mt-0.5 inline-flex h-4 w-4 shrink-0 self-start items-center justify-center rounded-full bg-gray-200 text-[9px] font-medium leading-none text-gray-600"
                         >
                             {changeNumber}
@@ -143,7 +144,7 @@ export function EditCardUI({
                     className="mt-1 truncate font-sans text-[11px] text-gray-400"
                     title={locationHint}
                 >
-                    In: “{locationHint}”
+                    {tr("shared.ui.editCardUI.text", { locationHint })}
                 </p>
             )}
 
@@ -151,7 +152,7 @@ export function EditCardUI({
                 <div
                     className="mt-2 flex items-center gap-2"
                     role="group"
-                    aria-label="Edit actions"
+                    aria-label={tr("shared.ui.editCardUI.editActions")}
                 >
                     {showAcceptAndApply && (
                         <PillButtonUI
@@ -164,9 +165,9 @@ export function EditCardUI({
                             loading={busyAction === "accept-and-apply"}
                         >
                             {busyAction === "accept-and-apply" ? (
-                                "Accepting & applying..."
+                                tr("shared.ui.editCardUI.acceptingApplying")
                             ) : (
-                                "Accept & apply"
+                                tr("shared.ui.editCardUI.acceptApply")
                             )}
                         </PillButtonUI>
                     )}
@@ -179,9 +180,9 @@ export function EditCardUI({
                             loading={busyAction === "apply"}
                         >
                             {busyAction === "apply" ? (
-                                "Applying..."
+                                tr("shared.ui.editCardUI.applying")
                             ) : (
-                                "Apply"
+                                tr("shared.ui.editCardUI.apply")
                             )}
                         </PillButtonUI>
                     )}
@@ -194,11 +195,11 @@ export function EditCardUI({
                             loading={busyAction === "accept"}
                         >
                             {busyAction === "accept" ? (
-                                "Accepting..."
+                                tr("shared.ui.editCardUI.accepting")
                             ) : status === "accepted" ? (
-                                "Accepted"
+                                tr("shared.ui.editCardUI.accepted")
                             ) : (
-                                "Accept"
+                                tr("shared.ui.editCardUI.accept")
                             )}
                         </PillButtonUI>
                     )}
@@ -211,17 +212,17 @@ export function EditCardUI({
                             loading={busyAction === "reject"}
                         >
                             {busyAction === "reject" ? (
-                                "Rejecting..."
+                                tr("shared.ui.editCardUI.rejecting")
                             ) : status === "rejected" ? (
-                                "Rejected"
+                                tr("shared.ui.editCardUI.rejected")
                             ) : (
-                                "Reject"
+                                tr("shared.ui.editCardUI.reject")
                             )}
                         </PillButtonUI>
                     )}
                     {onClose && (
-                        <TextButtonUI size="xs" title="Close tracked change" onClick={onClose} className="ml-auto">
-                            Close
+                        <TextButtonUI size="xs" title={tr("shared.ui.editCardUI.closeTrackedChange")} onClick={onClose} className="ml-auto">
+                            {tr("shared.ui.editCardUI.close")}
                         </TextButtonUI>
                     )}
                     {onView && (
@@ -233,12 +234,12 @@ export function EditCardUI({
                             loading={busyAction === "view"}
                             title={
                                 resolved
-                                    ? "This change has been resolved and is no longer in the document."
+                                    ? tr("shared.ui.editCardUI.changeHasBeenResolvedNo")
                                     : undefined
                             }
                             className={onClose ? undefined : "ml-auto"}
                         >
-                            View
+                            {tr("shared.ui.editCardUI.view")}
                         </PillButtonUI>
                     )}
                 </div>

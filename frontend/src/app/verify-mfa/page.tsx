@@ -20,6 +20,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { authMessages } from "@/app/lib/authMessages";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this screen's deltas. */
 const MFA_ERROR_MESSAGES = authMessages({
@@ -107,7 +108,7 @@ export default function VerifyMfaPage() {
                                 "No verified authenticator is registered for this account. Contact support to regain access.",
                                 { kind: "forbidden" },
                             ),
-                            { action: "verify your identity" },
+                            { action: tr("app.verifyMfa.page.verifyIdentity") },
                         ),
                     );
                 }
@@ -115,10 +116,10 @@ export default function VerifyMfaPage() {
                 if (cancelled) return;
                 setError(
                     describeError(caught, {
-                        action: "load your authenticator",
+                        action: tr("app.verifyMfa.page.loadAuthenticator"),
                         codeMessages: MFA_ERROR_MESSAGES,
                         fallback:
-                            "Unable to load authenticator verification. Try again.",
+                            tr("app.verifyMfa.page.unableLoadAuthenticatorVerificationTry"),
                     }),
                 );
             } finally {
@@ -144,9 +145,9 @@ export default function VerifyMfaPage() {
             setVerifying(false);
             setError(
                 describeError(caught, {
-                    action: "verify that code",
+                    action: tr("app.verifyMfa.page.verifyCode"),
                     codeMessages: MFA_ERROR_MESSAGES,
-                    fallback: "That code is invalid or expired.",
+                    fallback: tr("app.verifyMfa.page.codeInvalidExpired"),
                 }),
             );
             return;
@@ -166,8 +167,8 @@ export default function VerifyMfaPage() {
         } catch (caught) {
             setError(
                 describeError(caught, {
-                    action: "sign out",
-                    fallback: "Unable to sign out. Try again.",
+                    action: tr("app.verifyMfa.page.signOut"),
+                    fallback: tr("app.verifyMfa.page.unableSignOutTryAgain"),
                 }),
             );
         }
@@ -181,11 +182,10 @@ export default function VerifyMfaPage() {
             <div className={`w-full max-w-md ${authGlassCardUIClassName}`}>
                 <div className="mb-8 space-y-2">
                     <h1 className="font-serif text-2xl font-medium text-gray-950">
-                        Verify your identity
+                        {tr("app.verifyMfa.page.verifyIdentity2")}
                     </h1>
                     <p className="text-sm text-gray-500">
-                        Enter the six-digit code from your authenticator app to
-                        continue.
+                        {tr("app.verifyMfa.page.enterSixDigitCodeFrom")}
                     </p>
                 </div>
 
@@ -193,12 +193,11 @@ export default function VerifyMfaPage() {
                     {displayedLoading ? (
                         <div className="flex h-13 items-center justify-center text-sm text-gray-500">
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Loading authenticator...
+                            {tr("app.verifyMfa.page.loadingAuthenticator")}
                         </div>
                     ) : displayedFactors.length === 0 ? (
                         <p className="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600">
-                            No verified authenticator factor is available for
-                            this session.
+                            {tr("app.verifyMfa.page.noVerifiedAuthenticatorFactorAvailable")}
                         </p>
                     ) : (
                         <>
@@ -216,7 +215,7 @@ export default function VerifyMfaPage() {
                                             value={factor.id}
                                         >
                                             {factor.friendly_name ||
-                                                "Authenticator app"}
+                                                tr("app.verifyMfa.page.authenticatorApp")}
                                         </option>
                                     ))}
                                 </select>
@@ -243,7 +242,7 @@ export default function VerifyMfaPage() {
                                     )}
                                     className="ml-2 underline underline-offset-2"
                                 >
-                                    Contact support
+                                    {tr("app.verifyMfa.page.contactSupport")}
                                 </a>
                             )}
                         </p>
@@ -256,7 +255,7 @@ export default function VerifyMfaPage() {
                             disabled={verifying}
                             className="px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:text-gray-950 disabled:cursor-not-allowed disabled:text-gray-400"
                         >
-                            Cancel
+                            {tr("app.verifyMfa.page.cancel")}
                         </button>
                         <PillButtonUI
                             tone="black"
@@ -266,7 +265,7 @@ export default function VerifyMfaPage() {
                             disabled={!canVerify}
                             loading={verifying}
                         >
-                            {verifying ? "Verifying..." : "Verify"}
+                            {verifying ? tr("app.verifyMfa.page.verifying") : tr("app.verifyMfa.page.verify")}
                         </PillButtonUI>
                     </div>
                 </div>

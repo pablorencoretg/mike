@@ -16,6 +16,7 @@ import {
     DropdownSeparator,
     DropdownTrigger,
 } from "@/shared/ui/dropdown";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     onBrowseAll: () => void;
@@ -42,8 +43,8 @@ export function AddDocButton({
                     type="button"
                     disabled={uploading}
                     className="flex h-7.5 items-center gap-1 rounded-lg px-2 text-sm text-gray-400 transition-colors hover:text-gray-700 cursor-pointer disabled:cursor-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
-                    title="Add to message"
-                    aria-label="Add to message"
+                    title={tr("assistant.addDocButton.addMessage")}
+                    aria-label={tr("assistant.addDocButton.addMessage")}
                 >
                     {uploading ? (
                         <Loader2 aria-hidden="true" className="h-4 w-4 shrink-0 animate-spin" />
@@ -67,14 +68,14 @@ export function AddDocButton({
             >
                 <DropdownItem onSelect={onLocalFiles}>
                     <Upload aria-hidden="true" className="h-4 w-4 shrink-0 text-gray-500" />
-                    Upload Documents
+                    {tr("assistant.addDocButton.uploadDocuments")}
                 </DropdownItem>
                 <DropdownItem onSelect={() => {
                     openingDialog.current = true;
                     onBrowseAll();
                 }}>
                     <Cloud aria-hidden="true" className="h-4 w-4 shrink-0 text-gray-500" />
-                    Saved Documents
+                    {tr("assistant.addDocButton.savedDocuments")}
                 </DropdownItem>
                 {(onWorkflows || onPlaybooks) && <DropdownSeparator />}
                 {onWorkflows && (
@@ -83,7 +84,7 @@ export function AddDocButton({
                         onWorkflows();
                     }}>
                         <Waypoints aria-hidden="true" className="h-4 w-4 shrink-0 text-gray-500" />
-                        Workflows
+                        {tr("assistant.addDocButton.workflows")}
                     </DropdownItem>
                 )}
                 {onPlaybooks && (
@@ -92,7 +93,7 @@ export function AddDocButton({
                         onPlaybooks();
                     }}>
                         <ClipboardCheck aria-hidden="true" className="h-4 w-4 shrink-0 text-gray-500" />
-                        Playbooks
+                        {tr("assistant.addDocButton.playbooks")}
                     </DropdownItem>
                 )}
             </DropdownContent>

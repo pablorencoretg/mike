@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { isReported, reportError } from "@/app/lib/errorReporting";
 import { describeError, supportMailtoFor } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 type CrashError = Error & { digest?: string };
 
@@ -28,7 +29,7 @@ export function useCrashBoundary(
     }, [component, error, level]);
 
     return supportMailtoFor(
-        describeError(error, { action: "load this page" }),
+        describeError(error, { action: tr("app.hooks.useCrashBoundary.loadPage") }),
         `Error reference: ${error.digest ?? "unavailable"}`,
     );
 }

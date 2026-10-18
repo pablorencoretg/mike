@@ -1,4 +1,5 @@
 import { notifyPartialFailure } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 const DEFAULT_DELETE_CONCURRENCY = 5;
 
@@ -67,7 +68,7 @@ export function notifyBulkReviewDeleteOutcome({
     ].filter((notice): notice is string => notice !== null);
     if (notices.length === 0) return;
     notifyPartialFailure(notices.join(" "), {
-        action: "delete those reviews",
+        action: tr("app.lib.deleteTabularReviewsWithConcurrency.deleteThoseReviews"),
         onRetry: failedCount > 0 ? retry : undefined,
     });
 }

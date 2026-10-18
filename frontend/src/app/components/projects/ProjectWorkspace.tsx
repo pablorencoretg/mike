@@ -58,6 +58,7 @@ import {
     ProjectPageHeader,
     type ProjectWorkspaceSection,
 } from "./ProjectPageParts";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * A denied action: the sentence for the popup plus which role the action is
@@ -273,7 +274,7 @@ export function ProjectWorkspaceProvider({
                 setProject(null);
                 setFolders([]);
                 notifyError(error, {
-                    action: "load this project",
+                    action: tr("projects.projectWorkspace.loadProject"),
                     dedupeKey: `project-load:${projectId}`,
                     onRetry: () =>
                         setProjectReloadToken((token) => token + 1),
@@ -373,7 +374,7 @@ export function ProjectWorkspaceProvider({
         } catch (error) {
             setGrantsUnavailable(true);
             notifyError(error, {
-                action: "load who has access",
+                action: tr("projects.projectWorkspace.loadWhoHasAccess"),
                 dedupeKey: `project-access:${projectId}`,
                 onRetry: () => refreshGrantsRef.current?.(),
             });
@@ -407,7 +408,7 @@ export function ProjectWorkspaceProvider({
 
     const createChat = useCallback(() => {
         if (!canDo("content.edit")) {
-            denyUnlessLoading({ action: "create a chat", requiredRole: "editor" });
+            denyUnlessLoading({ action: tr("projects.projectWorkspace.createChat"), requiredRole: "editor" });
             return;
         }
         router.push(`/projects/${projectId}/assistant/chat`);
@@ -419,7 +420,7 @@ export function ProjectWorkspaceProvider({
         // an unexplained failed submit.
         if (!canDo("content.edit")) {
             denyUnlessLoading({
-                action: "create a tabular review",
+                action: tr("projects.projectWorkspace.createTabularReview"),
                 requiredRole: "editor",
             });
             return;
@@ -468,7 +469,7 @@ export function ProjectWorkspaceProvider({
     }) {
         if (!canDo("access.manage")) {
             denyUnlessLoading({
-                action: "edit project details",
+                action: tr("projects.projectWorkspace.editProjectDetails"),
                 requiredRole: "owner",
             });
             return;
@@ -517,7 +518,7 @@ export function ProjectWorkspaceProvider({
             // project still listed, which reads as "nothing happened".
             setDeleteProjectStatus("idle");
             notifyError(error, {
-                action: "delete this project",
+                action: tr("projects.projectWorkspace.deleteProject"),
                 dedupeKey: `project-delete:${projectId}`,
                 // Retry re-opens the confirmation rather than deleting from
                 // the notice: a destructive action is always confirmed.
@@ -665,9 +666,9 @@ export function ProjectWorkspaceProvider({
 
                     <ConfirmPopup
                         open={deleteProjectConfirmOpen}
-                        title="Delete project?"
-                        message="This will permanently delete the project and its related documents, chats, and tabular reviews."
-                        confirmLabel="Delete"
+                        title={tr("projects.projectWorkspace.deleteProject2")}
+                        message={tr("projects.projectWorkspace.willPermanentlyDeleteProjectIts")}
+                        confirmLabel={tr("projects.projectWorkspace.delete")}
                         confirmVariant="danger"
                         confirmStatus={
                             deleteProjectStatus === "deleting"
@@ -676,7 +677,7 @@ export function ProjectWorkspaceProvider({
                                   ? "complete"
                                   : "idle"
                         }
-                        cancelLabel="Cancel"
+                        cancelLabel={tr("projects.projectWorkspace.cancel")}
                         onCancel={() => {
                             if (deleteProjectStatus === "deleting") return;
                             setDeleteProjectConfirmOpen(false);
@@ -697,18 +698,18 @@ export function ProjectWorkspaceProvider({
                             // them out of their own project.
                             currentUserId={user?.id ?? null}
                             breadcrumb={[
-                                "Projects",
+                                tr("projects.projectWorkspace.projects"),
                                 project.name +
                                     (project.cm_number
                                         ? ` (${project.cm_number})`
                                         : ""),
-                                "Access",
+                                tr("projects.projectWorkspace.access"),
                             ]}
                             access={{
                                 grants: grants ?? [],
                                 grantsUnavailable,
                                 orgId: project.org_id ?? null,
-                                ownerLabel: "Project owners",
+                                ownerLabel: tr("projects.projectWorkspace.projectOwners"),
                                 canManage: canDo("access.manage"),
                                 visibility: project.visibility ?? "private",
                                 onGrant: async (email, role) => {
@@ -748,9 +749,9 @@ export function ProjectSectionToolbar({
                 backAction
                     ? []
                     : [
-                          { id: "documents", label: "Documents" },
-                          { id: "assistant", label: "Chats" },
-                          { id: "reviews", label: "Tabular Reviews" },
+                          { id: "documents", label: tr("projects.projectWorkspace.documents") },
+                          { id: "assistant", label: tr("projects.projectWorkspace.chats") },
+                          { id: "reviews", label: tr("projects.projectWorkspace.tabularReviews") },
                       ]
             }
             active={activeSection}
@@ -767,7 +768,7 @@ export function ProjectSectionToolbar({
                 backAction ? (
                     <TabPillButtonUI onClick={backAction} className="pl-2">
                         <ChevronLeft className="h-3.5 w-3.5" />
-                        Back
+                        {tr("projects.projectWorkspace.back")}
                     </TabPillButtonUI>
                 ) : undefined
             }

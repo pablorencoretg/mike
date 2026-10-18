@@ -1,5 +1,6 @@
 import type { Project } from "@/app/components/shared/types";
 import { notifyError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ProjectTreeItemKind = "doc" | "folder";
 
@@ -100,7 +101,7 @@ export function notifyMoveFailure(
     retry: () => void | Promise<void>,
 ): void {
     notifyError(error, {
-        action: kind === "doc" ? "move this document" : "move this folder",
+        action: kind === "doc" ? tr("app.lib.projectTreeMoves.moveDocument") : tr("app.lib.projectTreeMoves.moveFolder"),
         dedupeKey: `explorer-move-${kind}:${id}`,
         onRetry: retry,
     });

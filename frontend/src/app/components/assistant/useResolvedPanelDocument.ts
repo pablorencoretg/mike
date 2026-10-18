@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { getPanelDocument } from "@/app/lib/mikeApi";
 import type { PanelDocument } from "../shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 function mergePanelDocuments(
     summary: PanelDocument,
@@ -30,10 +31,10 @@ function friendlyDocumentError(message: string): string {
     if (message.includes("429") || /rate limit|throttled/i.test(message)) {
         const wait = message.match(/available in\s+(\d+)\s+seconds/i)?.[1];
         return wait
-            ? `This source is temporarily rate limited. Please try again in about ${wait} seconds.`
-            : "This source is temporarily rate limited. Please try again shortly.";
+            ? tr("assistant.useResolvedPanelDocument.sourceTemporarilyRateLimitedPlease", { wait })
+            : tr("assistant.useResolvedPanelDocument.sourceTemporarilyRateLimitedPlease2");
     }
-    return "Could not load this document. Please try again shortly.";
+    return tr("assistant.useResolvedPanelDocument.couldNotLoadDocumentPlease");
 }
 
 export function useResolvedPanelDocument(document: PanelDocument): {
@@ -81,7 +82,7 @@ export function useResolvedPanelDocument(document: PanelDocument): {
                         error:
                             reason instanceof Error
                                 ? friendlyDocumentError(reason.message)
-                                : "Could not load this document.",
+                                : tr("assistant.useResolvedPanelDocument.couldNotLoadDocument"),
                     });
             });
         return () => {

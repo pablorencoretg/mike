@@ -83,6 +83,7 @@ import { useQueryParamTab } from "@/app/hooks/useQueryParamTab";
 import { AccessScopeLabel } from "@/app/components/shared/AccessScopeLabel";
 import { useT } from "@/shared/i18n/I18nContext";
 import type { MessageKey, Translate } from "@/shared/i18n/translate";
+import { tr } from "@/shared/i18n/runtime";
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleDateString(undefined, {
@@ -232,7 +233,7 @@ export function ProjectsOverview() {
                 // set a practice", so the empty dropdown is explained rather
                 // than left to be misread.
                 notifyError(error, {
-                    action: "load the project filters",
+                    action: tr("projects.projectsOverview.loadProjectFilters"),
                     dedupeKey: "projects-filter-options",
                     onRetry: () =>
                         setFilterOptionsAttempt((attempt) => attempt + 1),
@@ -412,7 +413,7 @@ export function ProjectsOverview() {
         // mistaken for an outsider just because they did not create it.
         if (!can(roleFrom(detailsProject), "access.manage")) {
             setOwnerOnlyAction({
-                action: "edit project details",
+                action: tr("projects.projectsOverview.editProjectDetails"),
                 contacts: detailsProject.admin_contacts,
             });
             return;
@@ -508,7 +509,7 @@ export function ProjectsOverview() {
             // with no explanation. The row is back, so deleting again is
             // exactly the action that just failed.
             notifyError(error, {
-                action: `delete “${project.name}”`,
+                action: tr("projects.projectsOverview.delete", { name: project.name }),
                 dedupeKey: `project-delete:${project.id}`,
                 onRetry: () => void handleDeleteProjectRow(project),
                 supportNote: `Project: ${project.name} (${project.id})`,
@@ -558,7 +559,7 @@ export function ProjectsOverview() {
                     .map((project) => project?.admin_contacts),
             );
             setOwnerOnlyAction({
-                action: `delete ${blocked} of the selected projects — only a project owner can delete a project`,
+                action: tr("projects.projectsOverview.deleteSelectedProjectsOnlyProject", { blocked }),
                 contacts: blockedContacts,
             });
         }
@@ -598,7 +599,7 @@ export function ProjectsOverview() {
                 }
                 deleteLabel={
                     appliesToSelection
-                        ? `Delete ${actionIds.length} projects`
+                        ? tr("projects.projectsOverview.deleteProjects", { actionIdsCount: actionIds.length })
                         : undefined
                 }
             />
@@ -875,7 +876,7 @@ export function ProjectsOverview() {
                                         onSelectionChange={() =>
                                             toggleOne(project.id)
                                         }
-                                        checkboxTitle={`Select ${project.name}`}
+                                        checkboxTitle={tr("projects.projectsOverview.select", { name: project.name })}
                                     >
                                         <ClosedProjectSvgIcon className="mr-2 h-4 w-4 shrink-0" />
                                         <span className="min-w-0 flex-1 truncate text-xs text-gray-800">

@@ -13,6 +13,7 @@ import { preloadSidebarIcons } from "@/app/components/shared/AppSidebarSkeuoIcon
 import { FullScreenLoader } from "@/app/components/shared/FullScreenLoader";
 import { HeaderButtonUI, HeaderButtonsUI } from "@/shared/ui/HeaderButtonsUI";
 import { cn } from "@/app/lib/utils";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function MikeLayout({
     children,
@@ -154,8 +155,8 @@ export default function MikeLayout({
                                             <HeaderButtonUI
                                                 iconOnly
                                                 onClick={handleSidebarToggle}
-                                                title="Open sidebar"
-                                                aria-label="Open sidebar"
+                                                title={tr("pages.layout.openSidebar")}
+                                                aria-label={tr("pages.layout.openSidebar")}
                                             >
                                                 <PanelLeft className="h-4 w-4" />
                                             </HeaderButtonUI>

@@ -21,6 +21,7 @@ import type { Citation, EditAnnotation, PanelDocument } from "../shared/types";
 import { cn } from "@/app/lib/utils";
 import { LIQUID_GLASS_FLOAT_CLASS } from "@/app/components/ui/liquid-surface";
 import { reorderTabs, type TabDropPosition } from "@/app/lib/reorderTabs";
+import { tr } from "@/shared/i18n/runtime";
 
 // ---------------------------------------------------------------------------
 // Tab data
@@ -344,7 +345,7 @@ export function AssistantSidePanel({
             />
 
             <DocumentTabBar
-                label="Assistant documents"
+                label={tr("assistant.assistantSidePanel.assistantDocuments")}
                 idPrefix="assistant-document"
                 activeTabId={active?.id ?? null}
                 onActivate={onActivateTab}
@@ -399,7 +400,7 @@ export function AssistantSidePanel({
                             className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                         >
                             <BookOpenText aria-hidden="true" className="h-4 w-4" />
-                            Open Documents
+                            {tr("assistant.assistantSidePanel.openDocuments")}
                         </button>
                     </div>
                 ) : null}

@@ -26,6 +26,7 @@ import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { DeletedOrganizations } from "./DeletedOrganizations";
 import { CreateOrganizationModal } from "./OrganizationModals";
 import { organizationSettingsHref } from "./OrganizationSettingsShell";
+import { tr } from "@/shared/i18n/runtime";
 
 /** Organizations follow the two-column settings card layout. */
 const CARD_GRID_CLASS = "grid grid-cols-1 gap-3 @min-[32rem]:grid-cols-2";
@@ -74,7 +75,7 @@ export function OrganizationsOverview() {
       // two halves of one screen answered the same kind of failure
       // differently — and the more useful answer was the one discarded.
       setLoadError(
-        userFacingApiError(orgsResult.reason, "Could not load organizations."),
+        userFacingApiError(orgsResult.reason, tr("organizations.organizationsOverview.couldNotLoadOrganizations")),
       );
       setOrgs([]);
     }
@@ -87,7 +88,7 @@ export function OrganizationsOverview() {
       setInvitationsError(
         userFacingApiError(
           invitationsResult.reason,
-          "Could not load your invitations.",
+          tr("organizations.organizationsOverview.couldNotLoadInvitations"),
         ),
       );
     }
@@ -105,7 +106,7 @@ export function OrganizationsOverview() {
       else await declineOrgInvitation(invitation.id);
     } catch (error) {
       setInvitationError(
-        userFacingApiError(error, "Could not answer that invitation."),
+        userFacingApiError(error, tr("organizations.organizationsOverview.couldNotAnswerInvitation")),
       );
     } finally {
       setAnsweringId(null);
@@ -140,18 +141,18 @@ export function OrganizationsOverview() {
       <section aria-labelledby="my-organizations-heading">
         <div className="mb-4 flex items-center justify-between gap-3">
           <SettingsHeading id="my-organizations-heading">
-            Organizations
+            {tr("organizations.organizationsOverview.organizations")}
           </SettingsHeading>
           <PillButtonUI
             tone="white"
             size="xs"
             onClick={() => setCreateOpen(true)}
-            aria-label="New organization"
+            aria-label={tr("organizations.organizationsOverview.newOrganization")}
             aria-haspopup="dialog"
             className={`h-7 ${LIQUID_GLASS_SUBTLE_CLASS}`}
           >
             <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-            New
+            {tr("organizations.organizationsOverview.new")}
           </PillButtonUI>
         </div>
         {loading ? (
@@ -175,14 +176,13 @@ export function OrganizationsOverview() {
                 <SettingsDescription>{loadError}</SettingsDescription>
               </div>
               <PillButtonUI tone="white" size="sm" onClick={() => void load()}>
-                Try again
+                {tr("organizations.organizationsOverview.tryAgain")}
               </PillButtonUI>
             </div>
           </GlassCardUI>
         ) : listedOrgs.length === 0 ? (
           <SettingsDescription>
-            No organizations yet. Create one to share projects and
-            workflows with your team.
+            {tr("organizations.organizationsOverview.noOrganizationsYetCreateOne")}
           </SettingsDescription>
         ) : (
           <div className={CARD_GRID_CLASS}>
@@ -205,21 +205,21 @@ export function OrganizationsOverview() {
                       <PillButtonUI
                         tone="blue"
                         size="sm"
-                        aria-label={`Manage ${org.name}`}
+                        aria-label={tr("organizations.organizationsOverview.manage2", { name: org.name })}
                         onClick={() =>
                           router.push(organizationSettingsHref(org.id))
                         }
                       >
-                        Manage
+                        {tr("organizations.organizationsOverview.manage")}
                       </PillButtonUI>
                     ) : (
                       <PillButtonUI
                         tone="black"
                         size="sm"
-                        aria-label={`Switch to ${org.name}`}
+                        aria-label={tr("organizations.organizationsOverview.switch2", { name: org.name })}
                         onClick={() => setWorkspace(org.id)}
                       >
-                        Switch
+                        {tr("organizations.organizationsOverview.switch")}
                       </PillButtonUI>
                     )
                   }
@@ -236,7 +236,7 @@ export function OrganizationsOverview() {
         <section aria-labelledby="my-invitations-heading">
           <div className="mb-4">
             <SettingsHeading id="my-invitations-heading">
-              Invitations
+              {tr("organizations.organizationsOverview.invitations")}
             </SettingsHeading>
           </div>
           {invitationsError ? (
@@ -253,7 +253,7 @@ export function OrganizationsOverview() {
                   size="sm"
                   onClick={() => void load()}
                 >
-                  Try again
+                  {tr("organizations.organizationsOverview.tryAgain")}
                 </PillButtonUI>
               </div>
             </GlassCardUI>
@@ -275,20 +275,20 @@ export function OrganizationsOverview() {
                           tone="white"
                           size="sm"
                           disabled={answering}
-                          aria-label={`Decline ${name}`}
+                          aria-label={tr("organizations.organizationsOverview.decline2", { name })}
                           onClick={() => void answer(invitation, false)}
                         >
-                          Decline
+                          {tr("organizations.organizationsOverview.decline")}
                         </PillButtonUI>
                         <PillButtonUI
                           tone="blue"
                           size="sm"
                           disabled={answering}
                           loading={answering}
-                          aria-label={`Accept ${name}`}
+                          aria-label={tr("organizations.organizationsOverview.accept2", { name })}
                           onClick={() => void answer(invitation, true)}
                         >
-                          Accept
+                          {tr("organizations.organizationsOverview.accept")}
                         </PillButtonUI>
                       </span>
                     }
@@ -321,7 +321,7 @@ export function OrganizationsOverview() {
       />
       <WarningPopup
         open={invitationError !== null}
-        title="Invitation not updated"
+        title={tr("organizations.organizationsOverview.invitationNotUpdated")}
         message={invitationError}
         onClose={() => setInvitationError(null)}
       />

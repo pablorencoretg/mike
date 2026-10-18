@@ -10,6 +10,7 @@ import { getPillClass } from "./pillUtils";
 import { SkeletonLine } from "../shared/TablePrimitive";
 import { TRExpandedCellSurface } from "./TRExpandedCellSurface";
 import { CitationPillUI } from "@/shared/ui/CitationPillUI";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     cell: TCell;
@@ -312,7 +313,7 @@ export function TabularCell({
                             className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-700 transition-colors"
                         >
                             <Expand className="h-3 w-3" />
-                            See details
+                            {tr("tabular.tabularCell.seeDetails")}
                         </button>
                     </div>
                 </TRExpandedCellSurface>

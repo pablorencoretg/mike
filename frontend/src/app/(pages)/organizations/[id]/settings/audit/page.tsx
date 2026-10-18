@@ -8,6 +8,7 @@ import {
 } from "@/app/components/organizations/OrganizationSettingsShell";
 import { EmptyState } from "@/app/components/ui/empty-state";
 import { isOrgAdmin } from "@/app/lib/permissions";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function OrganizationAuditPage() {
   const router = useRouter();
@@ -16,8 +17,8 @@ export default function OrganizationAuditPage() {
   if (!isOrgAdmin(org.role))
     return (
       <EmptyState
-        title="Audit log"
-        description="Only organization owners and admins can view the audit log."
+        title={tr("pages.organizations.id.settings.audit.page.auditLog")}
+        description={tr("pages.organizations.id.settings.audit.page.onlyOrganizationOwnersAdminsCan")}
       />
     );
   return (

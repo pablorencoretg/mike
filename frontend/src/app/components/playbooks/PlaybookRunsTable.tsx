@@ -20,6 +20,7 @@ import {
 import { describeError } from "@/app/lib/userFacingError";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { formatDateTime, runOutcome, runTitle } from "./PlaybookRuns";
+import { tr } from "@/shared/i18n/runtime";
 
 const DOCUMENT_COLUMN = "flex w-72 shrink-0 items-center gap-2 pl-3 pr-4";
 const PLAYBOOK_COLUMN = "w-56 shrink-0 truncate pr-4";
@@ -57,7 +58,7 @@ export function PlaybookRunsTable({
       },
       (err) => {
         if (!current) return;
-        setError(describeError(err, { action: "load the runs" }).message);
+        setError(describeError(err, { action: tr("playbooks.playbookRunsTable.loadRuns") }).message);
         setRuns([]);
       },
     );
@@ -75,7 +76,7 @@ export function PlaybookRunsTable({
     <TableScrollArea>
       <div
         role="table"
-        aria-label="Playbook runs"
+        aria-label={tr("playbooks.playbookRunsTable.playbookRuns")}
         aria-busy={runs === null}
         className="flex min-h-full min-w-0 flex-col"
       >
@@ -85,19 +86,19 @@ export function PlaybookRunsTable({
         >
           <TableHeaderRow role="row" className="min-w-0">
             <TableHeaderCell role="columnheader" className={DOCUMENT_COLUMN}>
-              Document
+              {tr("playbooks.playbookRunsTable.document")}
             </TableHeaderCell>
             <TableHeaderCell role="columnheader" className={PLAYBOOK_COLUMN}>
-              Playbook
+              {tr("playbooks.playbookRunsTable.playbook")}
             </TableHeaderCell>
             <TableHeaderCell role="columnheader" className={OUTCOME_COLUMN}>
-              Outcome
+              {tr("playbooks.playbookRunsTable.outcome")}
             </TableHeaderCell>
             <TableHeaderCell role="columnheader" className={MODE_COLUMN}>
-              Mode
+              {tr("playbooks.playbookRunsTable.mode")}
             </TableHeaderCell>
             <TableHeaderCell role="columnheader" className={DATE_COLUMN}>
-              Run
+              {tr("playbooks.playbookRunsTable.run")}
             </TableHeaderCell>
           </TableHeaderRow>
         </div>
@@ -132,7 +133,7 @@ export function PlaybookRunsTable({
           <TableEmptyState>
             <EmptyState
               tone="error"
-              title="Couldn’t load runs"
+              title={tr("playbooks.playbookRunsTable.couldnTLoadRuns")}
               description={error}
               action={
                 <PillButtonUI
@@ -143,7 +144,7 @@ export function PlaybookRunsTable({
                     setAttempt((count) => count + 1);
                   }}
                 >
-                  Try again
+                  {tr("playbooks.playbookRunsTable.tryAgain")}
                 </PillButtonUI>
               }
             />
@@ -151,11 +152,11 @@ export function PlaybookRunsTable({
         ) : displayed.length === 0 ? (
           <TableEmptyState>
             <EmptyState
-              title={query ? "No matching runs" : "No runs yet"}
+              title={query ? tr("playbooks.playbookRunsTable.noMatchingRuns") : tr("playbooks.playbookRunsTable.noRunsYet")}
               description={
                 query
-                  ? "Try another document or playbook name."
-                  : "Reviews you run with a playbook appear here."
+                  ? tr("playbooks.playbookRunsTable.tryAnotherDocumentPlaybookName")
+                  : tr("playbooks.playbookRunsTable.reviewsRunPlaybookAppearHere")
               }
             />
           </TableEmptyState>
@@ -194,7 +195,7 @@ export function PlaybookRunsTable({
                   className={`${PLAYBOOK_COLUMN} text-xs text-gray-600`}
                   title={run.playbookName}
                 >
-                  {run.playbookName || "Untitled playbook"}
+                  {run.playbookName || tr("playbooks.playbookRunsTable.untitledPlaybook")}
                 </TableCell>
                 <TableCell
                   role="cell"
@@ -206,7 +207,7 @@ export function PlaybookRunsTable({
                   role="cell"
                   className={`${MODE_COLUMN} text-xs text-gray-600`}
                 >
-                  {run.reviewMode === "permissive" ? "Permissive" : "Strict"}
+                  {run.reviewMode === "permissive" ? tr("playbooks.playbookRunsTable.permissive") : tr("playbooks.playbookRunsTable.strict")}
                 </TableCell>
                 <TableCell role="cell" className={DATE_COLUMN}>
                   <time dateTime={run.startedAt}>

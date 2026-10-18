@@ -12,6 +12,7 @@ import { useUserProfile } from "@/app/contexts/UserProfileContext";
 import { updateUserProfile } from "@/app/lib/mikeApi";
 import { FieldLabel } from "@/app/components/ui/form-field";
 import { describeError } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function OnboardingProfilePage() {
     const router = useRouter();
@@ -66,8 +67,8 @@ function ProfileDetailsForm({
         } catch (submitError) {
             setError(
                 describeError(submitError, {
-                    action: "save your details",
-                    fallback: "Unable to save your details. Try again.",
+                    action: tr("app.onboarding.profile.page.saveDetails"),
+                    fallback: tr("app.onboarding.profile.page.unableSaveDetailsTryAgain"),
                 }).message,
             );
         } finally {
@@ -78,13 +79,13 @@ function ProfileDetailsForm({
     return (
         <OnboardingShell
             step="Step 1 of 3"
-            title="Tell us about you"
-            description="Add the details we should use across Mike."
+            title={tr("app.onboarding.profile.page.tellUsAbout")}
+            description={tr("app.onboarding.profile.page.addDetailsWeShouldUse")}
         >
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <FieldLabel htmlFor="name">
-                        Name
+                        {tr("app.onboarding.profile.page.name")}
                     </FieldLabel>
                     <InputUI
                         id="name"
@@ -98,7 +99,7 @@ function ProfileDetailsForm({
 
                 <div>
                     <FieldLabel htmlFor="organisation">
-                        Organisation
+                        {tr("app.onboarding.profile.page.organisation")}
                     </FieldLabel>
                     <InputUI
                         id="organisation"
@@ -129,7 +130,7 @@ function ProfileDetailsForm({
                         disabled={submitting}
                         className="w-full"
                     >
-                        {submitting ? "Saving..." : "Continue"}
+                        {submitting ? tr("app.onboarding.profile.page.saving") : tr("app.onboarding.profile.page.continue")}
                     </PillButtonUI>
                 </div>
             </form>

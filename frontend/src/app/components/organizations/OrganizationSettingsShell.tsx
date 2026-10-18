@@ -23,6 +23,7 @@ import { getOrg, type Org } from "@/app/lib/mikeApi";
 import { isOrgAdmin, isOrgOwner } from "@/app/lib/permissions";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 // An organization's settings area: the same frame as a person's settings,
 // with its sections down the side.
@@ -104,7 +105,7 @@ export function OrganizationSettingsProvider({
       setLoadError(null);
     } catch (error) {
       setLoadError(
-        userFacingApiError(error, "Could not load this organization."),
+        userFacingApiError(error, tr("organizations.organizationSettingsShell.couldNotLoadOrganization")),
       );
     }
   }, [inWorkspace, orgId]);
@@ -131,15 +132,15 @@ export function OrganizationSettingsProvider({
       <TableEmptyState>
         <EmptyState
           icon={<OrganizationSkeuoIcon />}
-          title="Organization"
-          description="These settings are not available."
+          title={tr("organizations.organizationSettingsShell.organization")}
+          description={tr("organizations.organizationSettingsShell.theseSettingsNotAvailable")}
           action={
             <PillButtonUI
               tone="white"
               size="sm"
               onClick={() => router.push("/settings/organizations")}
             >
-              Your organizations
+              {tr("organizations.organizationSettingsShell.organizations")}
             </PillButtonUI>
           }
         />
@@ -155,7 +156,7 @@ export function OrganizationSettingsProvider({
       <TableEmptyState>
         <EmptyState
           icon={<OrganizationSkeuoIcon />}
-          title="Organization"
+          title={tr("organizations.organizationSettingsShell.organization")}
           description={loadError}
           tone="error"
           action={
@@ -167,7 +168,7 @@ export function OrganizationSettingsProvider({
                 void reload();
               }}
             >
-              Try again
+              {tr("organizations.organizationSettingsShell.tryAgain")}
             </PillButtonUI>
           }
         />
@@ -194,13 +195,13 @@ export function OrganizationSettingsFrame({
     () => [
       {
         id: "general",
-        label: "General",
+        label: tr("organizations.organizationSettingsShell.general"),
         href: organizationSettingsHref(orgId),
       },
       // A table page of its own; its header leads back here.
       {
         id: "members",
-        label: "Members",
+        label: tr("organizations.organizationSettingsShell.members"),
         href: organizationSettingsHref(orgId, "members"),
       },
       // Not offered to a member, nor before the caller's role is known.
@@ -208,13 +209,13 @@ export function OrganizationSettingsFrame({
         ? [
             {
               id: "audit",
-              label: "Audit log",
+              label: tr("organizations.organizationSettingsShell.auditLog"),
               href: organizationSettingsHref(orgId, "audit"),
             },
             {
               id: "providers",
               // Named as the same setting is in a person's own settings.
-              label: "Bring Your Own Keys",
+              label: tr("organizations.organizationSettingsShell.bringOwnKeys"),
               href: organizationSettingsHref(orgId, "providers"),
             },
           ]
@@ -225,7 +226,7 @@ export function OrganizationSettingsFrame({
             {
               id: "privacy-data",
               // Named as the same page is in a person's own settings.
-              label: "Privacy & Data",
+              label: tr("organizations.organizationSettingsShell.privacyData"),
               href: organizationSettingsHref(orgId, "privacy-data"),
             },
           ]
@@ -236,8 +237,8 @@ export function OrganizationSettingsFrame({
 
   return (
     <SettingsShell
-      title="Organization"
-      navLabel="Organization"
+      title={tr("organizations.organizationSettingsShell.organization")}
+      navLabel={tr("organizations.organizationSettingsShell.organization")}
       tabs={tabs}
       rootHref={organizationSettingsHref(orgId)}
     >

@@ -6,6 +6,7 @@ import "./fonts/fonts.css";
 import "./globals.css";
 import { CrashScreen } from "@/app/components/shared/CrashScreen";
 import { PillButtonUI } from "@/shared/ui/PillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export default function GlobalError({
     error,
@@ -17,7 +18,7 @@ export default function GlobalError({
     return (
         <html lang="en">
             <head>
-                <title>Something went wrong – Mike</title>
+                <title>{tr("app.globalError.somethingWentWrongMike")}</title>
             </head>
             <body className="font-sans antialiased">
                 <CrashScreen
@@ -34,7 +35,7 @@ export default function GlobalError({
                             size="normal"
                             onClick={() => window.history.back()}
                         >
-                            Back
+                            {tr("app.globalError.back")}
                         </PillButtonUI>
                     )}
                 />

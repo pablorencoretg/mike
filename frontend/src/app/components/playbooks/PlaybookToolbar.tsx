@@ -3,6 +3,7 @@
 import { Plus, Upload } from "lucide-react";
 import { TableToolbar } from "@/app/components/shared/TableToolbar";
 import { TabPillButtonUI } from "@/shared/ui/TabPillButtonUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export const PLAYBOOK_VIEWS = [
   "overview",
@@ -14,10 +15,18 @@ export type PlaybookView = (typeof PLAYBOOK_VIEWS)[number];
 
 const VIEWS: { id: PlaybookView; label: string; name?: string }[] = [
   // Named apart from the rule editor's own Overview tab.
-  { id: "overview", label: "Overview", name: "Playbook overview" },
-  { id: "rules", label: "Rules" },
-  { id: "references", label: "References" },
-  { id: "runs", label: "Runs" },
+  { id: "overview", get label() {
+        return tr("playbooks.playbookToolbar.overview");
+    }, name: "Playbook overview" },
+  { id: "rules", get label() {
+        return tr("playbooks.playbookToolbar.rules");
+    } },
+  { id: "references", get label() {
+        return tr("playbooks.playbookToolbar.references");
+    } },
+  { id: "runs", get label() {
+        return tr("playbooks.playbookToolbar.runs");
+    } },
 ];
 
 export function PlaybookToolbar({
@@ -37,13 +46,13 @@ export function PlaybookToolbar({
   onUpload: () => void;
 }) {
   return (
-    <nav aria-label="Playbook toolbar" className="shrink-0">
+    <nav aria-label={tr("playbooks.playbookToolbar.playbookToolbar")} className="shrink-0">
       <TableToolbar
         leading={
           <div className="flex w-full flex-wrap items-center justify-between gap-1.5">
             <div
               role="group"
-              aria-label="Playbook view"
+              aria-label={tr("playbooks.playbookToolbar.playbookView")}
               className="flex flex-wrap items-center gap-1.5"
             >
               {VIEWS.map((entry) => (
@@ -63,7 +72,7 @@ export function PlaybookToolbar({
                 onClick={onAddRule}
               >
                 <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-                New rule
+                {tr("playbooks.playbookToolbar.newRule")}
               </TabPillButtonUI>
             )}
             {view === "references" && (
@@ -72,7 +81,7 @@ export function PlaybookToolbar({
                 onClick={onUpload}
               >
                 <Upload aria-hidden="true" className="h-3.5 w-3.5" />
-                Upload
+                {tr("playbooks.playbookToolbar.upload")}
               </TabPillButtonUI>
             )}
           </div>

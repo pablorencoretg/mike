@@ -7,6 +7,7 @@ import {
     useWorkspace,
 } from "@/app/contexts/WorkspaceContext";
 import { showToast } from "@/shared/lib/toastStore";
+import { tr } from "@/shared/i18n/runtime";
 
 /** One notice for a switch, however many things on the page ask for it. */
 export const WORKSPACE_SWITCH_TOAST_KEY = "workspace-switch";
@@ -21,7 +22,7 @@ export const WORKSPACE_SWITCH_TOAST_MS = 2500;
 export function notifyWorkspaceSwitched(name: string, reason?: string): void {
     showToast({
         tone: "info",
-        title: `Switched to ${name}`,
+        title: tr("app.hooks.useItemWorkspace.switched", { name }),
         message: reason,
         durationMs: WORKSPACE_SWITCH_TOAST_MS,
         dedupeKey: WORKSPACE_SWITCH_TOAST_KEY,

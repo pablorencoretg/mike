@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { tr } from "@/shared/i18n/runtime";
 
 const DIVIDER_WIDTH = 6;
 
@@ -108,7 +109,7 @@ export function PlaybookPanels({
           aria-valuenow={Math.round(width)}
           aria-valuetext={`${Math.round(width)} pixels`}
           tabIndex={0}
-          title="Drag to resize, or use the left and right arrow keys"
+          title={tr("playbooks.playbookPanels.dragResizeUseLeftRight")}
           onPointerDown={(event) => {
             if (event.button !== 0) return;
             event.preventDefault();

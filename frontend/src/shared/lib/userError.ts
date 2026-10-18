@@ -1,3 +1,4 @@
+import { tr } from "../i18n/runtime";
 /**
  * Turns any thrown value into something a person can act on.
  *
@@ -111,9 +112,9 @@ export function networkMessage(origin?: string): string {
     // Naming the origin is for self-hosters, whose own server may be the
     // thing that is down, so that variant also says to check the server.
     if (origin) {
-        return `Mike couldn't reach the server at ${origin}. Check your connection and that the server is running, then try again.`;
+        return tr("shared.lib.userError.mikeCouldnTReachServer", { origin });
     }
-    return "Mike couldn't reach the server. Check your connection and try again.";
+    return tr("shared.lib.userError.mikeCouldnTReachServer2");
 }
 
 /**
@@ -287,7 +288,7 @@ function kindForStatus(status: number): UserErrorKind {
 function titleFor(kind: UserErrorKind, action?: string): string {
     if (action) {
         const trimmed = action.trim().replace(/[.!]+$/, "");
-        if (trimmed) return `Couldn't ${trimmed}`;
+        if (trimmed) return tr("shared.lib.userError.couldnT", { trimmed });
     }
     return KIND_TITLES[kind];
 }

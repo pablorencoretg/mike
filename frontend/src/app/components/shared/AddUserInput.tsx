@@ -10,6 +10,7 @@ import { PillButtonUI } from "@/shared/ui/PillButtonUI";
 import { cn } from "@/app/lib/utils";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { LIQUID_GLASS_SUBTLE_CLASS } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -64,7 +65,7 @@ export function AddUserInput({
         const email = trimmedEmail;
         if (!email || busy || checking) return;
         if (!EMAIL_RE.test(email)) {
-            setError("Enter a valid email.");
+            setError(tr("shared.addUserInput.enterValidEmail"));
             return;
         }
 
@@ -81,7 +82,7 @@ export function AddUserInput({
                 ? await lookupUserByEmail(email)
                 : { exists: false, email, display_name: null };
             if (requireExistingUser && !user.exists) {
-                setError(`${email} does not belong to a Mike user.`);
+                setError(tr("shared.addUserInput.doesNotBelongMikeUser", { email }));
                 return;
             }
 
@@ -91,7 +92,7 @@ export function AddUserInput({
             setError(
                 userFacingApiError(
                     err,
-                    "Could not add this user. Try again.",
+                    tr("shared.addUserInput.couldNotAddUserTry"),
                 ),
             );
         } finally {
@@ -156,7 +157,7 @@ export function AddUserInput({
                         {(busy || checking) && (
                             <Loader2 className="h-3 w-3 animate-spin" />
                         )}
-                        Add
+                        {tr("shared.addUserInput.add")}
                     </button>
                 ) : showAddButton ? (
                     <PillButtonUI
@@ -170,7 +171,7 @@ export function AddUserInput({
                         title={submitLabel}
                         className="shrink-0"
                     >
-                        Add
+                        {tr("shared.addUserInput.add")}
                     </PillButtonUI>
                 ) : null}
             </div>

@@ -20,6 +20,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { authMessages } from "@/app/lib/authMessages";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this screen's deltas: the address asked for
  *  here is a work address, so "valid email" is not specific enough. */
@@ -54,16 +55,16 @@ export default function SsoLoginPage() {
             window.location.assign(url);
         } catch (caught) {
             const described = describeError(caught, {
-                action: "start single sign-on",
+                action: tr("app.login.sso.page.startSingleSign"),
                 codeMessages: SSO_ERROR_MESSAGES,
-                fallback: "Unable to start single sign-on. Try again.",
+                fallback: tr("app.login.sso.page.unableStartSingleSignTry"),
             });
             setError(
                 described.kind === "rate_limited"
                     ? {
                           ...described,
                           message:
-                              "Too many attempts. Wait a moment and try again.",
+                              tr("app.login.sso.page.tooManyAttemptsWaitMoment"),
                       }
                     : described,
             );
@@ -85,14 +86,14 @@ export default function SsoLoginPage() {
                 <div className={authGlassCardUIClassName}>
                     <div className="mb-6">
                         <h1 className="font-serif text-2xl font-medium text-gray-950">
-                            SSO Login
+                            {tr("app.login.sso.page.ssoLogin")}
                         </h1>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <FieldLabel htmlFor="sso-email">
-                                Email
+                                {tr("app.login.sso.page.email")}
                             </FieldLabel>
                             <InputUI
                                 id="sso-email"
@@ -124,7 +125,7 @@ export default function SsoLoginPage() {
                                         disabled={loading}
                                         className="ml-2 underline underline-offset-2 disabled:no-underline disabled:opacity-60"
                                     >
-                                        Retry
+                                        {tr("app.login.sso.page.retry")}
                                     </button>
                                 )}
                                 {error.supportable && (
@@ -135,7 +136,7 @@ export default function SsoLoginPage() {
                                         )}
                                         className="ml-2 underline underline-offset-2"
                                     >
-                                        Contact support
+                                        {tr("app.login.sso.page.contactSupport")}
                                     </a>
                                 )}
                             </div>
@@ -156,7 +157,7 @@ export default function SsoLoginPage() {
                                         className="h-4 w-4 animate-spin"
                                     />
                                 )}
-                                {loading ? "Continuing…" : "Continue"}
+                                {loading ? tr("app.login.sso.page.continuing") : tr("app.login.sso.page.continue")}
                             </PillButtonUI>
                         </div>
                     </form>
@@ -167,7 +168,7 @@ export default function SsoLoginPage() {
                         href="/login"
                         className="font-medium transition-colors hover:text-gray-950"
                     >
-                        Back to login
+                        {tr("app.login.sso.page.backLogin")}
                     </Link>
                 </div>
             </div>

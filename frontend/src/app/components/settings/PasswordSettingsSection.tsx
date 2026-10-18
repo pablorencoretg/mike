@@ -29,6 +29,7 @@ import { SettingsHeading } from "./SettingsHeading";
 import { SettingsRow } from "./SettingsRow";
 import { SettingsDescription, SettingsLabel } from "./SettingsText";
 import { FieldLabel } from "@/app/components/ui/form-field";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this section's deltas, keyed by the `code`
  *  GoTrue returns from `PATCH /api/auth/password`. */
@@ -80,15 +81,15 @@ export function PasswordSettingsSection() {
       setPasswordValue("");
       setConfirmPassword("");
       setSetPasswordOpen(false);
-      setPasswordStatus("Password added to your account.");
+      setPasswordStatus(tr("settings.passwordSettingsSection.passwordAddedAccount"));
     } catch (error) {
       // GoTrue's own wording ("Password should be at least 6 characters")
       // contradicts Mike's policy, so the code decides the text instead.
       setPasswordSetError(
         describeError(error, {
-          action: "set your password",
+          action: tr("settings.passwordSettingsSection.setPassword"),
           codeMessages: PASSWORD_ERROR_MESSAGES,
-          fallback: "Unable to set your password. Try again.",
+          fallback: tr("settings.passwordSettingsSection.unableSetPasswordTryAgain"),
         }),
       );
     } finally {
@@ -102,14 +103,14 @@ export function PasswordSettingsSection() {
     setPasswordStatus(null);
     try {
       await requestPasswordReset(user.email);
-      setPasswordStatus(`Password-reset instructions sent to ${user.email}.`);
+      setPasswordStatus(tr("settings.passwordSettingsSection.passwordResetInstructionsSent", { email: user.email }));
     } catch (error) {
       setPasswordStatus(
         describeError(error, {
-          action: "send the reset email",
+          action: tr("settings.passwordSettingsSection.sendResetEmail"),
           codeMessages: PASSWORD_ERROR_MESSAGES,
           fallback:
-            "Unable to send a password-reset email right now. Try again.",
+            tr("settings.passwordSettingsSection.unableSendPasswordResetEmail"),
         }).message,
       );
     } finally {
@@ -120,7 +121,7 @@ export function PasswordSettingsSection() {
   /** A failure the form found itself; the text is already user-facing. */
   function localPasswordError(message: string): UserFacingError {
     return describeError(new UserVisibleError(message, { kind: "validation" }), {
-      action: "set your password",
+      action: tr("settings.passwordSettingsSection.setPassword"),
     });
   }
 
@@ -134,17 +135,17 @@ export function PasswordSettingsSection() {
 
   return (
     <section className="space-y-3">
-      <SettingsHeading>Password</SettingsHeading>
+      <SettingsHeading>{tr("settings.passwordSettingsSection.password")}</SettingsHeading>
       <GlassCardUI>
         <SettingsRow>
           <div className="min-w-0 space-y-1">
             <SettingsLabel>
-              {needsInitialPassword ? "Set password" : "Reset password"}
+              {needsInitialPassword ? tr("settings.passwordSettingsSection.setPassword2") : tr("settings.passwordSettingsSection.resetPassword")}
             </SettingsLabel>
             <SettingsDescription>
               {needsInitialPassword
-                ? "Add a password to sign in with your email and change your account email."
-                : `Send a secure password-reset link to ${user?.email}.`}
+                ? tr("settings.passwordSettingsSection.addPasswordSignEmailChange")
+                : tr("settings.passwordSettingsSection.sendSecurePasswordResetLink", { email: user?.email })}
             </SettingsDescription>
             {passwordStatus && (
               <p className="text-xs text-gray-500">{passwordStatus}</p>
@@ -162,10 +163,10 @@ export function PasswordSettingsSection() {
             className="shrink-0"
           >
             {needsInitialPassword
-              ? "Set password"
+              ? tr("settings.passwordSettingsSection.setPassword2")
               : passwordResetSending
-                ? "Sending..."
-                : "Send reset email"}
+                ? tr("settings.passwordSettingsSection.sending")
+                : tr("settings.passwordSettingsSection.sendResetEmail2")}
           </PillButtonUI>
         </SettingsRow>
       </GlassCardUI>
@@ -173,26 +174,26 @@ export function PasswordSettingsSection() {
       <Modal
         open={setPasswordOpen}
         onClose={closeSetPassword}
-        breadcrumbs={["Security", "Set password"]}
+        breadcrumbs={[tr("settings.passwordSettingsSection.security"), tr("settings.passwordSettingsSection.setPassword2")]}
         size="sm"
         className="h-auto"
         cancelAction={{
-          label: "Cancel",
+          label: tr("settings.passwordSettingsSection.cancel"),
           onClick: closeSetPassword,
           disabled: passwordSaving,
         }}
         primaryAction={{
-          label: passwordSaving ? "Setting..." : "Set password",
+          label: passwordSaving ? tr("settings.passwordSettingsSection.setting") : tr("settings.passwordSettingsSection.setPassword2"),
           onClick: () => void addPassword(),
           disabled: passwordSaving || !password || !confirmPassword,
         }}
       >
         <div className="space-y-4 pb-5">
           <p className="text-sm text-gray-500">
-            Use at least {MIN_PASSWORD_LENGTH} characters.
+            {tr("settings.passwordSettingsSection.useAtLeastCharacters", { MIN_PASSWORD_LENGTH })}
           </p>
           <div>
-            <FieldLabel htmlFor="new-account-password">Password</FieldLabel>
+            <FieldLabel htmlFor="new-account-password">{tr("settings.passwordSettingsSection.password")}</FieldLabel>
             <InputUI
               id="new-account-password"
               type="password"
@@ -204,7 +205,7 @@ export function PasswordSettingsSection() {
           </div>
           <div>
             <FieldLabel htmlFor="confirm-account-password">
-              Confirm password
+              {tr("settings.passwordSettingsSection.confirmPassword")}
             </FieldLabel>
             <InputUI
               id="confirm-account-password"
@@ -226,7 +227,7 @@ export function PasswordSettingsSection() {
                   )}
                   className="ml-2 underline underline-offset-2"
                 >
-                  Contact support
+                  {tr("settings.passwordSettingsSection.contactSupport")}
                 </a>
               )}
             </p>

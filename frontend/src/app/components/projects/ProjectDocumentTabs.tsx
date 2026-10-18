@@ -7,6 +7,7 @@ import { DocumentTabBar } from "@/app/components/shared/DocumentTabBar";
 import type { Document, PanelDocument } from "@/app/components/shared/types";
 import type { TabDropPosition } from "@/app/lib/reorderTabs";
 import type { DocumentPermissions } from "@/app/hooks/useDocumentPermissions";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     tabs: ReadonlyArray<{
@@ -49,7 +50,7 @@ export function ProjectDocumentTabs({
 }: Props) {
     return (
         <DocumentTabBar
-            label="Project documents"
+            label={tr("projects.projectDocumentTabs.projectDocuments")}
             idPrefix="project-document"
             className="project-document-tabs"
             tabs={tabs.map((tab) => {

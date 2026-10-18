@@ -6,6 +6,7 @@ import {
     PROJECT_ROLE_LABELS,
     type ProjectRole,
 } from "@/app/lib/permissions";
+import { tr } from "@/shared/i18n/runtime";
 
 /** Anyone the user could ask for access, as the API returns them. */
 export interface AccessContact {
@@ -39,8 +40,12 @@ const ROLE_SUBJECT: Record<
     NonNullable<Props["requiredRole"]>,
     { title: string; subject: string }
 > = {
-    owner: { title: "Owner-only action", subject: "an owner" },
-    editor: { title: "Editors only", subject: "an editor" },
+    owner: { get title() {
+        return tr("popups.permissionDeniedPopup.ownerOnlyAction");
+    }, subject: "an owner" },
+    editor: { get title() {
+        return tr("popups.permissionDeniedPopup.editorsOnly");
+    }, subject: "an editor" },
 };
 
 /**
@@ -118,14 +123,12 @@ export function PermissionDeniedPopup({
         >
             {contact && (
                 <p className="mt-1 text-xs text-gray-600">
-                    Ask{" "}
+                    {tr("popups.permissionDeniedPopup.ask")}{" "}
                     <span className="text-gray-600">
                         {contact.name
                             ? `${contact.name} (${contact.email})`
                             : contact.email}
-                    </span>{" "}
-                    if you need {PROJECT_ROLE_LABELS[requiredRole].toLowerCase()}{" "}
-                    access.
+                    </span>{" "}{tr("popups.permissionDeniedPopup.ifNeedAccess", { PROJECT_ROLE_LABELS: PROJECT_ROLE_LABELS[requiredRole].toLowerCase() })}
                 </p>
             )}
         </WarningPopup>

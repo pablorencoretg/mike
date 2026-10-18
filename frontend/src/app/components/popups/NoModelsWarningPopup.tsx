@@ -10,6 +10,7 @@ import {
     type NoModelsReason,
 } from "@/shared/lib/modelCatalog";
 import { WarningPopup } from "./WarningPopup";
+import { tr } from "@/shared/i18n/runtime";
 
 export function NoModelsWarningPopup({
     reason,
@@ -47,7 +48,7 @@ function VisibleNoModelsWarning({
         <WarningPopup
             open
             onClose={onClose}
-            title="No models available"
+            title={tr("popups.noModelsWarningPopup.noModelsAvailable")}
             message={NO_MODELS_MESSAGES[reason]}
             icon={
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-600" />
@@ -55,7 +56,7 @@ function VisibleNoModelsWarning({
             primaryAction={
                 settingsHref
                     ? {
-                          label: "Open Organization",
+                          label: tr("popups.noModelsWarningPopup.openOrganization"),
                           onClick: () => {
                               onClose();
                               router.push(settingsHref);
@@ -64,7 +65,7 @@ function VisibleNoModelsWarning({
                     : organizationFix
                       ? undefined
                       : {
-                            label: "Open Bring Your Own Keys",
+                            label: tr("popups.noModelsWarningPopup.openBringOwnKeys"),
                             onClick: () => {
                                 onClose();
                                 router.push("/settings/byok");

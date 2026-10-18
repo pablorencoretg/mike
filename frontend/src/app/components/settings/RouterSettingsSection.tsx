@@ -29,6 +29,7 @@ import {
   isSafeAccountModelId,
 } from "@/app/lib/accountModelIds";
 import { SettingsDescription } from "./SettingsText";
+import { tr } from "@/shared/i18n/runtime";
 
 const COST_FORMATTER = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -106,13 +107,17 @@ const ROUTER_MODEL_ID: Record<
     accepts: accountModelId("azure-foundry"),
     shape: "a deployment name with no spaces",
     example: "claude-opus-5-5",
-    hint: "Claude deployments are recognised by name. If a deployment is named differently, add it as anthropic:<name>, or openai:<name> for any other model.",
+    get hint() {
+        return tr("settings.routerSettingsSection.claudeDeploymentsRecognisedByName");
+    },
   },
   vertex: {
     accepts: accountModelId("vertex"),
     shape: "a Vertex AI model ID with no spaces",
     example: "gemini-3.1-pro-preview",
-    hint: "Claude and publisher/model IDs are recognised by name. For other partner models add openai:<id>; anthropic:<id> and gemini:<id> also work.",
+    get hint() {
+        return tr("settings.routerSettingsSection.claudePublisherModelIdsRecognised");
+    },
   },
   xai: {
     accepts: accountModelId("xai"),
@@ -176,22 +181,38 @@ const ROUTER_SETTINGS: readonly {
   loadCatalog?: (workspace?: string) => Promise<RouterCatalogModel[]>;
   catalogScope?: (settings: ApiKeySettings | undefined) => string | undefined;
 }[] = [
-  { provider: "openrouter", label: "OpenRouter", loadCatalog: getOpenRouterModels },
-  { provider: "vercel", label: "Vercel AI Gateway", loadCatalog: getVercelModels },
-  { provider: "opencode-go", label: "OpenCode Go", loadCatalog: getOpenCodeGoModels },
+  { provider: "openrouter", get label() {
+        return tr("settings.routerSettingsSection.openrouter");
+    }, loadCatalog: getOpenRouterModels },
+  { provider: "vercel", get label() {
+        return tr("settings.routerSettingsSection.vercelAiGateway");
+    }, loadCatalog: getVercelModels },
+  { provider: "opencode-go", get label() {
+        return tr("settings.routerSettingsSection.opencodeGo");
+    }, loadCatalog: getOpenCodeGoModels },
   {
     provider: "bedrock",
-    label: "Amazon Bedrock",
+    get label() {
+        return tr("settings.routerSettingsSection.amazonBedrock");
+    },
     loadCatalog: getBedrockModels,
     catalogScope: (settings) => settings?.bedrock?.region,
   },
-  { provider: "azure", label: "Azure OpenAI" },
-  { provider: "azure-foundry", label: "Azure AI Foundry" },
-  { provider: "vertex", label: "Google Vertex AI" },
+  { provider: "azure", get label() {
+        return tr("settings.routerSettingsSection.azureOpenai");
+    } },
+  { provider: "azure-foundry", get label() {
+        return tr("settings.routerSettingsSection.azureAiFoundry");
+    } },
+  { provider: "vertex", get label() {
+        return tr("settings.routerSettingsSection.googleVertexAi");
+    } },
   { provider: "xai", label: "xAI", loadCatalog: getXaiModels },
   {
     provider: "custom",
-    label: "OpenAI-compatible endpoint",
+    get label() {
+        return tr("settings.routerSettingsSection.openaiCompatibleEndpoint");
+    },
     loadCatalog: getCustomEndpointModels,
     catalogScope: (settings) => settings?.custom?.baseUrl,
   },
@@ -232,7 +253,7 @@ export function RouterSettingsSection({
           settings: profile.apiKeySettings,
           save: updateRouterModels,
           description:
-            "Add the models you want to use. Saved models appear in model selectors.",
+            tr("settings.routerSettingsSection.addModelsWantUseSaved"),
         }
       : null);
   if (!source) return null;
@@ -245,7 +266,7 @@ export function RouterSettingsSection({
 
   return (
     <section id="routers" className="scroll-mt-6 space-y-3">
-      <FieldLabel as="p">Model Selections</FieldLabel>
+      <FieldLabel as="p">{tr("settings.routerSettingsSection.modelSelections")}</FieldLabel>
       <SettingsDescription>{source.description}</SettingsDescription>
       <div className="space-y-4">
         {visible.map((router) => (
@@ -308,7 +329,7 @@ function RouterModelsSetting({
         if (!cancelled) {
           setCatalog([]);
           setError(
-            `${label}'s model list could not be loaded. You can still type a model ID.`,
+            tr("settings.routerSettingsSection.sModelListCouldNot", { label }),
           );
         }
       });
@@ -351,7 +372,7 @@ function RouterModelsSetting({
     setError(null);
     const ok = await onSave(next);
     setSaving(false);
-    if (!ok) setError(`${label} model preferences could not be saved.`);
+    if (!ok) setError(tr("settings.routerSettingsSection.modelPreferencesCouldNotSaved", { label }));
   };
 
   // Enter with no explicit highlight adds exactly what the user typed — and
@@ -366,8 +387,8 @@ function RouterModelsSetting({
     if (!model) {
       setError(
         candidate.length > MAX_MODEL_ID_LENGTH
-          ? `Model IDs are at most ${MAX_MODEL_ID_LENGTH} characters.`
-          : `"${candidate}" is not a model ID — pick one from the list, or type it as ${ROUTER_MODEL_ID[provider].shape}.`,
+          ? tr("settings.routerSettingsSection.modelIdsAtMostCharacters", { MAX_MODEL_ID_LENGTH })
+          : tr("settings.routerSettingsSection.notModelIdPickOne", { candidate, shape: ROUTER_MODEL_ID[provider].shape }),
       );
       return;
     }
@@ -489,7 +510,7 @@ function RouterModelsSetting({
             <button
               type="button"
               disabled={saving || catalog.length === 0}
-              aria-label={`Choose ${label} model`}
+              aria-label={tr("settings.routerSettingsSection.chooseModel", { label })}
               aria-controls={catalogId}
               aria-expanded={catalogOpen}
               aria-haspopup="listbox"
@@ -526,14 +547,14 @@ function RouterModelsSetting({
                             disagree with aria-activedescendant. */}
             {typedModelId && (
               <div className="px-3 py-2 text-xs text-gray-400">
-                Press Enter to add this model ID.
+                {tr("settings.routerSettingsSection.pressEnterAddModelId")}
               </div>
             )}
             <div
               id={catalogId}
               role="listbox"
               aria-multiselectable="true"
-              aria-label={`${label} model catalog`}
+              aria-label={tr("settings.routerSettingsSection.modelCatalog", { label })}
             >
               {visibleCatalog.map((model, index) => {
                 const selected = selection.includes(model.id);
@@ -575,7 +596,7 @@ function RouterModelsSetting({
             </div>
             {visibleCatalog.length === 0 && (
               <div className="px-3 py-2 text-xs text-gray-400">
-                No matching models.
+                {tr("settings.routerSettingsSection.noMatchingModels")}
               </div>
             )}
           </DropdownSurface>
@@ -588,8 +609,8 @@ function RouterModelsSetting({
               key={model}
               surface="flat"
               disabled={saving}
-              aria-label={`Remove ${model}`}
-              title={`Remove ${model}`}
+              aria-label={tr("settings.routerSettingsSection.remove", { model })}
+              title={tr("settings.routerSettingsSection.remove", { model })}
               onClick={() =>
                 void save(selection.filter((item) => item !== model))
               }

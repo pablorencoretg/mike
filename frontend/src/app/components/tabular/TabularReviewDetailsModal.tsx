@@ -6,6 +6,7 @@ import { ModalSelect } from "../modals/ModalSelect";
 import { FieldLabel, FormTextInput } from "../ui/form-field";
 import { ToggleSwitchUI } from "@/shared/ui/ToggleSwitchUI";
 import type { Project, TabularReview } from "../shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 interface TabularReviewDetailsModalProps {
     open: boolean;
@@ -57,7 +58,7 @@ export function TabularReviewDetailsModal({
                           project.name +
                           (project.cm_number ? ` (#${project.cm_number})` : ""),
                   }))
-                : [{ value: "", label: "No projects found" }],
+                : [{ value: "", label: tr("tabular.tabularReviewDetailsModal.noProjectsFound") }],
         [projects],
     );
     const hasChanges = useMemo(() => {
@@ -90,7 +91,7 @@ export function TabularReviewDetailsModal({
             });
             setSaved(true);
         } catch {
-            setError("Could not update tabular review details.");
+            setError(tr("tabular.tabularReviewDetailsModal.couldNotUpdateTabularReview"));
         } finally {
             setSaving(false);
         }
@@ -101,21 +102,21 @@ export function TabularReviewDetailsModal({
             open={open}
             onClose={onClose}
             breadcrumbs={[
-                "Tabular Reviews",
-                review.title || "Untitled Review",
-                "Details",
+                tr("tabular.tabularReviewDetailsModal.tabularReviews"),
+                review.title || tr("tabular.tabularReviewDetailsModal.untitledReview"),
+                tr("tabular.tabularReviewDetailsModal.details"),
             ]}
             footerStatus={
                 error ? (
                     <span className="text-sm text-red-600">{error}</span>
                 ) : saved ? (
-                    <span className="text-sm text-gray-400">Updated</span>
+                    <span className="text-sm text-gray-400">{tr("tabular.tabularReviewDetailsModal.updated")}</span>
                 ) : null
             }
             primaryAction={
                 canEdit
                     ? {
-                          label: saving ? "Saving..." : "Save",
+                          label: saving ? tr("tabular.tabularReviewDetailsModal.saving") : tr("tabular.tabularReviewDetailsModal.save"),
                           onClick: () => void handleSave(),
                           disabled:
                               saving ||
@@ -130,7 +131,7 @@ export function TabularReviewDetailsModal({
             <div className="space-y-6">
                 <div>
                     <FieldLabel htmlFor="tabular-review-details-title">
-                        Review name
+                        {tr("tabular.tabularReviewDetailsModal.reviewName")}
                     </FieldLabel>
                     <FormTextInput
                         id="tabular-review-details-title"
@@ -141,7 +142,7 @@ export function TabularReviewDetailsModal({
                             setSaved(false);
                             setError(null);
                         }}
-                        placeholder="Review name"
+                        placeholder={tr("tabular.tabularReviewDetailsModal.reviewName")}
                         variant="minimal"
                         className="placeholder:text-gray-400"
                         disabled={!canEdit || saving}
@@ -151,7 +152,7 @@ export function TabularReviewDetailsModal({
 
                 {!lockProject && (
                     <div className="space-y-3">
-                        <FieldLabel as="p">Project</FieldLabel>
+                        <FieldLabel as="p">{tr("tabular.tabularReviewDetailsModal.project")}</FieldLabel>
                         <ToggleSwitchUI
                             checked={underProject}
                             disabled={!canEdit || saving}
@@ -162,7 +163,7 @@ export function TabularReviewDetailsModal({
                                 setError(null);
                             }}
                         >
-                            Move under a project
+                            {tr("tabular.tabularReviewDetailsModal.moveUnderProject")}
                         </ToggleSwitchUI>
 
                         {underProject && (
@@ -175,7 +176,7 @@ export function TabularReviewDetailsModal({
                                     setSaved(false);
                                     setError(null);
                                 }}
-                                placeholder="Select project..."
+                                placeholder={tr("tabular.tabularReviewDetailsModal.selectProject")}
                                 disabled={
                                     !canEdit || saving || projects.length === 0
                                 }

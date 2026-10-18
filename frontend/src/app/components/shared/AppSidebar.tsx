@@ -70,6 +70,7 @@ import {
 } from "@/app/components/ui/liquid-surface";
 import { useT } from "@/shared/i18n/I18nContext";
 import type { MessageKey } from "@/shared/i18n/translate";
+import { tr } from "@/shared/i18n/runtime";
 
 /** Where a workspace opens: the page the logo leads to. */
 const WORKSPACE_HOME = "/assistant";
@@ -273,7 +274,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
             workspaceId !== PERSONAL_WORKSPACE &&
             organizations === null
           ? null
-          : "Mike";
+          : tr("shared.appSidebar.mike");
     const [recentProjects, setRecentProjects] = useState<Project[] | null>(
         null,
     );
@@ -336,7 +337,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                 // An empty Projects section reads as "you have no projects",
                 // which is the one thing this failure does not mean.
                 notifyError(error, {
-                    action: "load your recent projects",
+                    action: tr("shared.appSidebar.loadRecentProjects"),
                     dedupeKey: "sidebar-recent-projects",
                     onRetry: () =>
                         setRecentProjectsAttempt((attempt) => attempt + 1),
@@ -399,7 +400,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
             // The current page survives; the user is told the next one did
             // not arrive instead of scrolling at a list that stopped growing.
             notifyError(error, {
-                action: "load more projects",
+                action: tr("shared.appSidebar.loadMoreProjects"),
                 dedupeKey: "sidebar-recent-projects-more",
                 onRetry: () => retryLoadMoreRecentProjectsRef.current?.(),
             });
@@ -446,7 +447,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
             .then(() => router.push("/"))
             .catch((error) => {
                 notifyError(error, {
-                    action: "sign out",
+                    action: tr("shared.appSidebar.signOut"),
                     dedupeKey: "sign-out",
                     onRetry: handleSignOut,
                 });

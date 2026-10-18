@@ -16,6 +16,7 @@ import type {
 import { listOrgs, type Org } from "@/app/lib/mikeApi";
 import { userFacingApiError } from "@/app/lib/userFacingError";
 import { ProjectPracticeField } from "./ProjectPracticeField";
+import { tr } from "@/shared/i18n/runtime";
 
 const PERSONAL_WORKSPACE = "__personal__";
 
@@ -109,7 +110,7 @@ export function ProjectDetailsModal({
     // UUID. The row already carries the name — use it.
     const orgOptions = useMemo(() => {
         const options = [
-            { value: PERSONAL_WORKSPACE, label: "No organization" },
+            { value: PERSONAL_WORKSPACE, label: tr("projects.projectDetailsModal.noOrganization") },
             ...orgs.map((org) => ({ value: org.id, label: org.name })),
         ];
         if (
@@ -118,7 +119,7 @@ export function ProjectDetailsModal({
         ) {
             options.push({
                 value: project.org_id,
-                label: project.organization_name ?? "Organisation",
+                label: project.organization_name ?? tr("projects.projectDetailsModal.organisation"),
             });
         }
         return options;
@@ -149,7 +150,7 @@ export function ProjectDetailsModal({
             // An intentional 4xx (a name conflict, a refusal) says something
             // the generic line cannot; anything else still falls back to it.
             setError(
-                userFacingApiError(err, "Could not update project details."),
+                userFacingApiError(err, tr("projects.projectDetailsModal.couldNotUpdateProjectDetails")),
             );
         } finally {
             setSaving(false);
@@ -160,11 +161,11 @@ export function ProjectDetailsModal({
         <Modal
             open={open}
             onClose={onClose}
-            breadcrumbs={["Projects", project.name, "Details"]}
+            breadcrumbs={[tr("projects.projectDetailsModal.projects"), project.name, tr("projects.projectDetailsModal.details")]}
             secondaryAction={
                 onShareProject
                     ? {
-                          label: "Share",
+                          label: tr("projects.projectDetailsModal.share"),
                           icon: <Users className="h-4 w-4" />,
                           onClick: onShareProject,
                       }
@@ -174,13 +175,13 @@ export function ProjectDetailsModal({
                 error ? (
                     <span className="text-sm text-red-600">{error}</span>
                 ) : saved ? (
-                    <span className="text-sm text-gray-400">Updated</span>
+                    <span className="text-sm text-gray-400">{tr("projects.projectDetailsModal.updated")}</span>
                 ) : null
             }
             primaryAction={
                 canEdit
                     ? {
-                          label: saving ? "Updating..." : "Update",
+                          label: saving ? tr("projects.projectDetailsModal.updating") : tr("projects.projectDetailsModal.update"),
                           onClick: () => void handleSave(),
                           disabled: saving || !hasChanges || !trimmedName,
                       }
@@ -191,7 +192,7 @@ export function ProjectDetailsModal({
             <div className="flex min-h-0 flex-1 flex-col gap-6 py-1">
                 <div>
                     <FieldLabel htmlFor="project-details-name">
-                        Project name
+                        {tr("projects.projectDetailsModal.projectName")}
                     </FieldLabel>
                     <FormTextInput
                         id="project-details-name"
@@ -202,14 +203,14 @@ export function ProjectDetailsModal({
                             setError(null);
                         }}
                         disabled={!canEdit || saving}
-                        placeholder="Add project name"
+                        placeholder={tr("projects.projectDetailsModal.addProjectName")}
                         variant="minimal"
                     />
                 </div>
 
                 <div>
                     <FieldLabel htmlFor="project-details-cm">
-                        CM number
+                        {tr("projects.projectDetailsModal.cmNumber")}
                     </FieldLabel>
                     <FormTextInput
                         id="project-details-cm"
@@ -220,7 +221,7 @@ export function ProjectDetailsModal({
                             setError(null);
                         }}
                         disabled={!canEdit || saving}
-                        placeholder="Add a CM number..."
+                        placeholder={tr("projects.projectDetailsModal.addCmNumber")}
                         variant="minimal"
                         className="text-xl text-gray-600"
                     />
@@ -228,7 +229,7 @@ export function ProjectDetailsModal({
 
                 <div>
                     <FieldLabel htmlFor="project-details-practice">
-                        Practice
+                        {tr("projects.projectDetailsModal.practice")}
                     </FieldLabel>
                     <ProjectPracticeField
                         id="project-details-practice"
@@ -244,7 +245,7 @@ export function ProjectDetailsModal({
 
                 <div>
                     <FieldLabel htmlFor="project-details-org">
-                        Organisation
+                        {tr("projects.projectDetailsModal.organisation")}
                     </FieldLabel>
                     <ModalSelect
                         id="project-details-org"

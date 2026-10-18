@@ -17,6 +17,7 @@ import {
     type UserFacingError,
 } from "@/app/lib/userFacingError";
 import { LINK_SPENT_MESSAGE, authMessages } from "@/app/lib/authMessages";
+import { tr } from "@/shared/i18n/runtime";
 
 /** The shared auth table with this screen's deltas: on the callback route
  *  every spent one-time code is the same spent confirmation link. */
@@ -57,7 +58,7 @@ function AuthCallbackContent() {
         process.env.NODE_ENV !== "production" &&
         searchParams.get("preview") === "confirmation-error";
     const displayedMessage = isErrorPreview
-        ? "This confirmation link is invalid or has expired."
+        ? tr("app.auth.callback.page.confirmationLinkInvalidHasExpired")
         : (error?.message ?? null);
 
     useEffect(() => {
@@ -77,7 +78,7 @@ function AuthCallbackContent() {
                         new UserVisibleError(providerError, {
                             kind: "validation",
                         }),
-                        { action: "confirm your request" },
+                        { action: tr("app.auth.callback.page.confirmRequest") },
                     ),
                 );
                 return;
@@ -110,7 +111,7 @@ function AuthCallbackContent() {
                             new UserVisibleError(LINK_SPENT_MESSAGE, {
                                 kind: "validation",
                             }),
-                            { action: "confirm your request" },
+                            { action: tr("app.auth.callback.page.confirmRequest") },
                         ),
                     );
                     return;
@@ -138,7 +139,7 @@ function AuthCallbackContent() {
                     {displayedMessage ? (
                         <>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Unable to confirm
+                                {tr("app.auth.callback.page.unableConfirm")}
                             </h1>
                             <p
                                 role="alert"
@@ -155,7 +156,7 @@ function AuthCallbackContent() {
                                         )}
                                         className="font-medium underline underline-offset-2"
                                     >
-                                        Contact support
+                                        {tr("app.auth.callback.page.contactSupport")}
                                     </a>
                                 </p>
                             )}
@@ -167,17 +168,17 @@ function AuthCallbackContent() {
                                     className: "mt-6",
                                 })}
                             >
-                                Return to login
+                                {tr("app.auth.callback.page.returnLogin")}
                             </Link>
                         </>
                     ) : (
                         <>
                             <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
                             <h1 className="mt-4 text-2xl font-medium font-serif text-gray-950">
-                                Confirming your request
+                                {tr("app.auth.callback.page.confirmingRequest")}
                             </h1>
                             <p className="mt-2 text-sm text-gray-500">
-                                This should only take a moment.
+                                {tr("app.auth.callback.page.shouldOnlyTakeMoment")}
                             </p>
                         </>
                     )}

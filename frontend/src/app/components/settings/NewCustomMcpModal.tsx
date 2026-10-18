@@ -7,6 +7,7 @@ import {
     type McpConnectorFormDraft,
 } from "@/app/components/settings/McpConnectorForm";
 import type { McpConnectorSummary } from "@/app/lib/mikeApi";
+import { tr } from "@/shared/i18n/runtime";
 
 export type NewCustomMcpDraft = McpConnectorFormDraft;
 
@@ -49,21 +50,21 @@ export function NewCustomMcpModal({
         <Modal
             open={open}
             onClose={onClose}
-            breadcrumbs={["Connectors", "New Custom Connector"]}
+            breadcrumbs={[tr("settings.newCustomMcpModal.connectors"), tr("settings.newCustomMcpModal.newCustomConnector")]}
             size="lg"
             primaryAction={
                 step === "success" && result
                     ? {
-                          label: "View connector",
+                          label: tr("settings.newCustomMcpModal.viewConnector"),
                           onClick: () => onOpenConnector(result.id),
                       }
                     : {
                           label:
                               step === "working"
-                                  ? "Connecting..."
+                                  ? tr("settings.newCustomMcpModal.connecting")
                                   : step === "auth"
-                                    ? "Authorizing..."
-                                    : "Connect",
+                                    ? tr("settings.newCustomMcpModal.authorizing")
+                                    : tr("settings.newCustomMcpModal.connect"),
                           icon:
                               step === "working" || step === "auth" ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -81,7 +82,7 @@ export function NewCustomMcpModal({
                 step === "working"
                     ? false
                     : {
-                          label: step === "success" ? "Done" : "Cancel",
+                          label: step === "success" ? tr("settings.newCustomMcpModal.done") : tr("settings.newCustomMcpModal.cancel"),
                           onClick: onClose,
                       }
             }
@@ -92,7 +93,7 @@ export function NewCustomMcpModal({
                 <NewCustomMcpAuth
                     message={
                         authMessage ??
-                        "Complete authorization in the popup to finish connecting this MCP server."
+                        tr("settings.newCustomMcpModal.completeAuthorizationPopupFinishConnecti")
                     }
                 />
             ) : (
@@ -123,9 +124,9 @@ function NewCustomMcpSuccess({
             <div className="flex items-start gap-3 rounded-xl border border-green-100/80 bg-green-50/80 px-3 py-3 text-green-800 shadow-[0_3px_9px_rgba(15,23,42,0.03),inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-4px_9px_rgba(255,255,255,0.05)]">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                 <p className="min-w-0 truncate text-sm font-medium">
-                    {connector.name} is connected.{" "}
+                    {tr("settings.newCustomMcpModal.connected", { name: connector.name })}{" "}
                     <span className="font-normal text-green-700">
-                        {connector.tools.length} tools discovered.
+                        {tr("settings.newCustomMcpModal.toolsDiscovered", { toolsCount: connector.tools.length })}
                     </span>
                 </p>
             </div>
@@ -147,7 +148,7 @@ function NewCustomMcpSuccess({
                                 )}
                             </div>
                             <span className="text-xs text-gray-400">
-                                {tool.enabled ? "Enabled" : "Disabled"}
+                                {tool.enabled ? tr("settings.newCustomMcpModal.enabled") : tr("settings.newCustomMcpModal.disabled")}
                             </span>
                         </div>
                     ))}
@@ -165,7 +166,7 @@ function NewCustomMcpAuth({ message }: { message: string }) {
             </div>
             <div className="max-w-sm space-y-1">
                 <h3 className="text-sm font-medium text-gray-700">
-                    Authentication required
+                    {tr("settings.newCustomMcpModal.authenticationRequired")}
                 </h3>
                 <p className="text-sm text-gray-500">{message}</p>
             </div>

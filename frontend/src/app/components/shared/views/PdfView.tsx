@@ -16,6 +16,7 @@ import {
 import { orderTextItemLines, type TextItemGeometry } from "./pdfTextOrder";
 import { LIQUID_GLASS_TRANSLUCENT_CLASS } from "@/shared/ui/LiquidGlassUI";
 import { viewRoundingClass, type ViewRounding } from "./viewRounding";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     doc: { document_id: string; version_id?: string | null } | null;
@@ -157,7 +158,7 @@ async function collectTextItemGeometry(
         // fall back to drawing order. Rejecting instead would surface as an
         // unhandled rejection, because a stale render returns before the
         // caller ever awaits this promise.
-        console.warn("PDF text geometry read did not complete", error);
+        console.warn(tr("shared.views.pdfView.pdfTextGeometryReadDid"), error);
     } finally {
         reader.releaseLock();
     }
@@ -178,7 +179,7 @@ export function computeReadingOrder(
 ): number[] | undefined {
     if (collected.length !== textDivs.length) {
         console.warn(
-            `PDF text items (${collected.length}) are not aligned with text layer spans (${textDivs.length}); matching citations in drawing order.`,
+            tr("shared.views.pdfView.pdfTextItemsNotAligned", { collectedCount: collected.length, textDivsCount: textDivs.length }),
         );
         return undefined;
     }
@@ -325,7 +326,7 @@ export function PdfView({
                 // Fall back to scanning all pages for this quote
                 if (hitPage === null) {
                     console.warn(
-                        `Quote not found on hinted page, scanning all pages: "${entry.quote.slice(0, 60)}..."`,
+                        tr("shared.views.pdfView.quoteNotFoundHintedPage", { slice: entry.quote.slice(0, 60) }),
                     );
                     for (let i = 0; i < renderedPagesRef.current.length; i++) {
                         const p = renderedPagesRef.current[i];
@@ -711,7 +712,7 @@ export function PdfView({
             await renderPDF(pdfDoc, list);
         })().catch(() => {
             if (!cancelled)
-                setPdfLoadError({ result, message: "Failed to load document." });
+                setPdfLoadError({ result, message: tr("shared.views.pdfView.failedLoadDocument") });
         });
         return () => {
             cancelled = true;

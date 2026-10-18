@@ -12,6 +12,7 @@ import {
     supportMailtoFor,
     type UserFacingError,
 } from "@/app/lib/userFacingError";
+import { tr } from "@/shared/i18n/runtime";
 
 type FeedbackType = "bug" | "feature" | "question" | "other";
 
@@ -39,23 +40,23 @@ export default function SupportPage() {
     }[] = [
         {
             value: "bug",
-            label: "Bug Report",
-            description: "Report something that isn't working",
+            label: tr("app.support.page.bugReport"),
+            description: tr("app.support.page.reportSomethingIsnTWorking"),
         },
         {
             value: "feature",
-            label: "Feature Request",
-            description: "Suggest a new feature or improvement",
+            label: tr("app.support.page.featureRequest"),
+            description: tr("app.support.page.suggestNewFeatureImprovement"),
         },
         {
             value: "question",
-            label: "Question",
-            description: "Ask a question about using Mike",
+            label: tr("app.support.page.question"),
+            description: tr("app.support.page.askQuestionAboutUsingMike"),
         },
         {
             value: "other",
-            label: "Other",
-            description: "General feedback or other inquiries",
+            label: tr("app.support.page.other"),
+            description: tr("app.support.page.generalFeedbackOtherInquiries"),
         },
     ];
 
@@ -104,9 +105,9 @@ export default function SupportPage() {
             console.error("Error submitting feedback:", err);
             setError(
                 describeError(err, {
-                    action: "send your message",
+                    action: tr("app.support.page.sendMessage"),
                     fallback:
-                        "Mike couldn't send your message. Try again, or email us directly.",
+                        tr("app.support.page.mikeCouldnTSendMessage"),
                 }),
             );
         } finally {
@@ -124,16 +125,16 @@ export default function SupportPage() {
                         </div>
                     </div>
                     <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                        Thank you for helping us improve.
+                        {tr("app.support.page.thankHelpingUsImprove")}
                     </h2>
                     <p className="text-gray-600 mb-6">
-                        We will get in touch with you soon via email.
+                        {tr("app.support.page.weWillGetTouchSoon")}
                     </p>
                     <button
                         onClick={() => router.push("/")}
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
                     >
-                        Back to Home
+                        {tr("app.support.page.backHome")}
                     </button>
                 </div>
             </div>
@@ -147,7 +148,7 @@ export default function SupportPage() {
                 <div className="flex-shrink-0 pt-6 md:pt-10 pb-0">
                     <div className="mb-5">
                         <h1 className="text-4xl font-medium font-eb-garamond text-gray-900 mb-3">
-                            Support
+                            {tr("app.support.page.support")}
                         </h1>
                     </div>
                 </div>
@@ -159,7 +160,7 @@ export default function SupportPage() {
                             {/* Feedback Type Selection */}
                             <div>
                                 <FieldLabel as="p">
-                                    What can we help you with?
+                                    {tr("app.support.page.whatCanWeHelp")}
                                 </FieldLabel>
                                 <div className="grid grid-cols-2 gap-3">
                                     {feedbackTypes.map((type) => (
@@ -196,7 +197,7 @@ export default function SupportPage() {
                             {feedbackType === "bug" && (
                                 <div>
                                     <FieldLabel htmlFor="link">
-                                        Link to issue (optional)
+                                        {tr("app.support.page.linkIssueOptional")}
                                     </FieldLabel>
                                     <input
                                         type="url"
@@ -209,10 +210,7 @@ export default function SupportPage() {
                                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                                     />
                                     <p className="text-xs text-gray-500 mt-1">
-                                        If the bug is in a chat, mouseover the
-                                        chat in the sidebar, click the dots,
-                                        then click share and paste the link
-                                        here.
+                                        {tr("app.support.page.ifBugChatMouseoverChat")}
                                     </p>
                                 </div>
                             )}
@@ -220,7 +218,7 @@ export default function SupportPage() {
                             {/* Subject */}
                             <div>
                                 <FieldLabel htmlFor="subject">
-                                    Subject
+                                    {tr("app.support.page.subject")}
                                 </FieldLabel>
                                 <input
                                     type="text"
@@ -235,13 +233,13 @@ export default function SupportPage() {
                             {/* Message */}
                             <div>
                                 <FieldLabel htmlFor="message">
-                                    Message
+                                    {tr("app.support.page.message")}
                                 </FieldLabel>
                                 <textarea
                                     id="message"
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
-                                    placeholder="Please describe your question, issue, or suggestion in detail..."
+                                    placeholder={tr("app.support.page.pleaseDescribeQuestionIssueSuggestion")}
                                     rows={5}
                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
                                     required
@@ -251,7 +249,7 @@ export default function SupportPage() {
                             {/* Email Display (if logged in) */}
                             {user?.email && (
                                 <div className="text-sm text-gray-500">
-                                    We&apos;ll respond to:{" "}
+                                    {tr("app.support.page.weLlRespond")}{" "}
                                     <span className="font-medium">
                                         {user.email}
                                     </span>
@@ -275,7 +273,7 @@ export default function SupportPage() {
                                             className: "ml-2 px-0",
                                         })}
                                     >
-                                        Email support directly
+                                        {tr("app.support.page.emailSupportDirectly")}
                                     </a>
                                 </div>
                             )}
@@ -293,12 +291,12 @@ export default function SupportPage() {
                                 {isSubmitting ? (
                                     <>
                                         <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        <span>Sending...</span>
+                                        <span>{tr("app.support.page.sending")}</span>
                                     </>
                                 ) : (
                                     <>
                                         <Send className="h-4 w-4" />
-                                        <span>Submit</span>
+                                        <span>{tr("app.support.page.submit")}</span>
                                     </>
                                 )}
                             </button>

@@ -18,6 +18,7 @@ import {
 } from "@/app/lib/cloudProviderSettings";
 import type { ApiKeyProvider, ApiKeySettings } from "@/app/lib/mikeApi";
 import { isRouterSlug } from "@/shared/lib/modelCatalog";
+import { tr } from "@/shared/i18n/runtime";
 
 export type ByokProvider = {
   provider: ApiKeyProvider;
@@ -44,52 +45,52 @@ function keySetting(
 ): ApiKeyFieldSetting {
   if (provider === "bedrock") {
     return {
-      label: "AWS region",
+      label: tr("settings.byokProviderModal.awsRegion"),
       placeholder: "us-east-1",
       savedValue: settings?.bedrock?.region ?? null,
       normalize: normalizeAwsRegion,
       invalidMessage:
-        "Enter the AWS region the key was created in, for example us-east-1.",
+        tr("settings.byokProviderModal.enterAwsRegionKeyWas"),
     };
   }
   if (provider === "azure-foundry") {
     return {
-      label: "Azure AI Foundry resource name or endpoint",
+      label: tr("settings.byokProviderModal.azureAiFoundryResourceName"),
       placeholder:
-        "contoso-foundry or https://contoso-foundry.services.ai.azure.com",
+        tr("settings.byokProviderModal.contosoFoundryHttpsContosoFoundry"),
       savedValue: settings?.["azure-foundry"]?.endpoint ?? null,
       normalize: normalizeAzureFoundryEndpoint,
       invalidMessage:
-        "Enter a resource name, or an https endpoint on services.ai.azure.com, cognitiveservices.azure.com or openai.azure.com.",
+        tr("settings.byokProviderModal.enterResourceNameHttpsEndpoint"),
     };
   }
   if (provider === "vertex") {
     return {
-      label: "Vertex AI location",
-      placeholder: "us-central1 or global",
+      label: tr("settings.byokProviderModal.vertexAiLocation"),
+      placeholder: tr("settings.byokProviderModal.usCentral1Global"),
       savedValue: settings?.vertex?.location ?? null,
       normalize: normalizeVertexLocation,
       invalidMessage:
-        "Enter the Vertex AI location to call, for example us-central1, europe-west4 or global.",
+        tr("settings.byokProviderModal.enterVertexAiLocationCall"),
     };
   }
   if (provider === "custom") {
     return {
-      label: "Base URL",
+      label: tr("settings.byokProviderModal.baseUrl"),
       placeholder: "https://llm.example.com/v1",
       savedValue: settings?.custom?.baseUrl ?? null,
       normalize: normalizeCustomBaseUrl,
       invalidMessage:
-        "Enter the endpoint's public https base URL, for example https://llm.example.com/v1.",
+        tr("settings.byokProviderModal.enterEndpointSPublicHttps"),
     };
   }
   return {
-    label: "Azure OpenAI resource name or endpoint",
-    placeholder: "contoso-openai or https://contoso-openai.openai.azure.com",
+    label: tr("settings.byokProviderModal.azureOpenaiResourceNameEndpoint"),
+    placeholder: tr("settings.byokProviderModal.contosoOpenaiHttpsContosoOpenai"),
     savedValue: settings?.azure?.endpoint ?? null,
     normalize: normalizeAzureEndpoint,
     invalidMessage:
-      "Enter a resource name, or an https endpoint on openai.azure.com, cognitiveservices.azure.com or services.ai.azure.com.",
+      tr("settings.byokProviderModal.enterResourceNameHttpsEndpoint2"),
   };
 }
 
@@ -106,7 +107,7 @@ function settingsFor(
 function validateVertexKey(value: string): string | null {
   return isVertexServiceAccountKey(value)
     ? null
-    : "Paste the full contents of a Google Cloud service-account key file (JSON).";
+    : tr("settings.byokProviderModal.pasteFullContentsGoogleCloud");
 }
 
 /**
@@ -182,18 +183,18 @@ export function ByokProviderModal({ provider, enabledToggle, store, onClose }: {
         <Modal
           open
           onClose={onClose}
-          breadcrumbs={[store?.breadcrumb ?? "Model Providers", provider.name]}
+          breadcrumbs={[store?.breadcrumb ?? tr("settings.byokProviderModal.modelProviders"), provider.name]}
           // Sized for the model list from the start, so the dialog does not
           // grow the moment a key is saved.
           size={routerSlug && (!store || store.routerModels) ? "md" : "sm"}
           className="h-auto max-h-[calc(100vh-2rem)]"
           primaryAction={{ ...saveAction, variant: "blue" }}
-          secondaryAction={removeAction ? { ...removeAction, label: "Clear", variant: "danger" } : undefined}
+          secondaryAction={removeAction ? { ...removeAction, label: tr("settings.byokProviderModal.clear"), variant: "danger" } : undefined}
         >
           <div data-modal-scroll="vertical" className="min-h-0 min-w-0 space-y-6 overflow-y-auto pb-4">
             {enabledToggle && (
               <div className="flex items-center justify-between gap-3">
-                <p className="min-w-0 text-sm font-medium text-gray-700">Enabled</p>
+                <p className="min-w-0 text-sm font-medium text-gray-700">{tr("settings.byokProviderModal.enabled")}</p>
                 <div className="shrink-0">{enabledToggle}</div>
               </div>
             )}

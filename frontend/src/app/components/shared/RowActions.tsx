@@ -30,6 +30,7 @@ import {
 } from "@/shared/ui/dropdown";
 import { notifyError } from "@/app/lib/userFacingError";
 import { LIQUID_GLASS_HOVER_CLASS } from "@/app/components/ui/liquid-surface";
+import { tr } from "@/shared/i18n/runtime";
 
 export { CLOSE_ROW_ACTIONS_EVENT, closeRowActionMenus };
 
@@ -142,7 +143,7 @@ export function RowActionMenuItems({
             {onDeselect && (
                 <DropdownItem onSelect={run(onDeselect)}>
                     <X className="h-3.5 w-3.5" />
-                    Deselect rows
+                    {tr("shared.rowActions.deselectRows")}
                 </DropdownItem>
             )}
             {onView && (
@@ -198,19 +199,19 @@ export function RowActionMenuItems({
             {onUpdateCmNumber && (
                 <DropdownItem onSelect={run(onUpdateCmNumber)}>
                     <Hash className="h-3.5 w-3.5" />
-                    Edit CM No.
+                    {tr("shared.rowActions.editCmNo")}
                 </DropdownItem>
             )}
             {onDownload && (
                 <DropdownItem onSelect={run(onDownload)}>
                     <Download className="h-3.5 w-3.5" />
-                    Download
+                    {tr("shared.rowActions.download")}
                 </DropdownItem>
             )}
             {onShowAllVersions && (
                 <DropdownItem onSelect={run(onShowAllVersions)}>
                     <History className="h-3.5 w-3.5" />
-                    Show all versions
+                    {tr("shared.rowActions.showAllVersions")}
                 </DropdownItem>
             )}
             {onUploadNewVersion && (
@@ -222,25 +223,25 @@ export function RowActionMenuItems({
             {onRemoveFromFolder && (
                 <DropdownItem onSelect={run(onRemoveFromFolder)}>
                     <FolderMinus className="h-3.5 w-3.5" />
-                    Remove from subfolder
+                    {tr("shared.rowActions.removeFromSubfolder")}
                 </DropdownItem>
             )}
             {onClearResults && (
                 <DropdownItem disabled={clearResultsDisabled} onSelect={run(onClearResults)}>
                     <Eraser className="h-3.5 w-3.5" />
-                    Clear results
+                    {tr("shared.rowActions.clearResults")}
                 </DropdownItem>
             )}
             {onUnhide && (
                 <DropdownItem onSelect={run(onUnhide)}>
                     <Eye className="h-3.5 w-3.5" />
-                    Activate
+                    {tr("shared.rowActions.activate")}
                 </DropdownItem>
             )}
             {onHide && (
                 <DropdownItem onSelect={run(onHide)}>
                     <EyeOff className="h-3.5 w-3.5" />
-                    Deactivate
+                    {tr("shared.rowActions.deactivate")}
                 </DropdownItem>
             )}
             {onDelete && (

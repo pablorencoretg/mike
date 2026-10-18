@@ -6,6 +6,7 @@ import { isPanelDocument } from "@/app/components/shared/types";
 import type { AssistantEvent, Citation } from "@/app/components/shared/types";
 import type { AssistantTurnHandle } from "@/app/lib/assistantTurns";
 import type { ConnectorApprovalItem } from "@mike/contracts";
+import { tr } from "@/shared/i18n/runtime";
 
 /**
  * Reading an assistant turn's SSE stream into its turn record.
@@ -100,7 +101,7 @@ function readableStreamError(value: unknown, safeToDisplay: boolean): string {
   if (safeToDisplay && typeof value === "string" && value.trim()) {
     return value.trim();
   }
-  return "Sorry, something went wrong.";
+  return tr("app.lib.assistantTurnStream.sorrySomethingWentWrong");
 }
 
 function isConnectorApprovalItem(
@@ -260,7 +261,7 @@ export function createTurnEventSink(
     cancelled = true;
     eventsRef.current = [
       ...cancelStreamingEvents(eventsRef.current),
-      { type: "content" as const, text: "Cancelled by user." },
+      { type: "content" as const, text: tr("app.lib.assistantTurnStream.cancelledByUser") },
     ];
     publish();
   };
@@ -963,14 +964,14 @@ export async function consumeAssistantTurnStream(
                   typeof row.question === "string"
                     ? row.question
                     : row.kind === "multi_choice"
-                      ? "Please choose one or more options."
-                      : "Please choose an option.",
+                      ? tr("app.lib.assistantTurnStream.pleaseChooseOneMoreOptions")
+                      : tr("app.lib.assistantTurnStream.pleaseChooseOption"),
                 options,
                 allow_other: row.allow_other !== false,
                 other_label:
                   typeof row.other_label === "string"
                     ? row.other_label
-                    : "Other",
+                    : tr("app.lib.assistantTurnStream.other"),
                 response_prefix:
                   typeof row.response_prefix === "string"
                     ? row.response_prefix
@@ -985,7 +986,7 @@ export async function consumeAssistantTurnStream(
                 question:
                   typeof row.question === "string"
                     ? row.question
-                    : "Please provide the requested information.",
+                    : tr("app.lib.assistantTurnStream.pleaseProvideRequestedInformation"),
                 response_prefix:
                   typeof row.response_prefix === "string"
                     ? row.response_prefix
@@ -1302,7 +1303,7 @@ export async function consumeAssistantTurnStream(
           continue;
         }
     } catch (e) {
-      console.warn("[useAssistantChat] failed to handle SSE event:", data, e);
+      console.warn(tr("app.lib.assistantTurnStream.useassistantchatFailedHandleSseEvent"), data, e);
     }
   }
 

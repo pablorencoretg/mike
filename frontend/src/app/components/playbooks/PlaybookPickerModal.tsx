@@ -13,6 +13,7 @@ import { useDocumentWorkspace } from "@/app/contexts/WorkspaceContext";
 import { useWorkspaceIdentity } from "@/app/hooks/useWorkspaceIdentity";
 import { listPlaybooks, type Playbook } from "@/app/lib/mikeApi";
 import { LIQUID_GLASS_SUBTLE_CLASS } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 type Props = {
   open: boolean;
@@ -106,7 +107,7 @@ function PlaybookPickerModalForWorkspace({
       size={selected ? "xl" : "lg"}
       breadcrumbs={breadcrumbs}
       primaryAction={{
-        label: "Use",
+        label: tr("playbooks.playbookPickerModal.use"),
         disabled: !selected,
         onClick: () => {
           if (!selected) return;
@@ -124,7 +125,7 @@ function PlaybookPickerModalForWorkspace({
           <SearchBar
             value={search}
             onValueChange={setSearch}
-            placeholder="Search playbooks..."
+            placeholder={tr("playbooks.playbookPickerModal.searchPlaybooks")}
           />
           <div
             data-modal-scroll="vertical"
@@ -146,7 +147,7 @@ function PlaybookPickerModalForWorkspace({
               </div>
             ) : filtered.length === 0 ? (
               <p className="py-8 text-center text-sm text-gray-400">
-                {query ? "No matches found" : "No playbooks found"}
+                {query ? tr("playbooks.playbookPickerModal.noMatchesFound") : tr("playbooks.playbookPickerModal.noPlaybooksFound")}
               </p>
             ) : (
               <div className="space-y-px">
@@ -170,7 +171,7 @@ function PlaybookPickerModalForWorkspace({
                           isSelected ? "font-medium text-gray-900" : "text-gray-700"
                         }`}
                       >
-                        {playbook.name || "Untitled playbook"}
+                        {playbook.name || tr("playbooks.playbookPickerModal.untitledPlaybook")}
                       </span>
                       {!selected && playbook.content.documentTypes.length > 0 && (
                         <span className="shrink-0 truncate text-xs text-gray-400">
@@ -204,9 +205,9 @@ function PlaybookPreview({
 }) {
   const rules = ruleNames(playbook);
   const facts = [
-    { label: "Represented", value: playbook.content.representedParty },
-    { label: "Type", value: playbook.content.documentTypes.join(", ") },
-    { label: "Jurisdiction", value: playbook.content.jurisdictions.join(", ") },
+    { label: tr("playbooks.playbookPickerModal.represented"), value: playbook.content.representedParty },
+    { label: tr("playbooks.playbookPickerModal.type"), value: playbook.content.documentTypes.join(", ") },
+    { label: tr("playbooks.playbookPickerModal.jurisdiction"), value: playbook.content.jurisdictions.join(", ") },
   ].filter((fact) => fact.value);
   return (
     <section
@@ -218,11 +219,11 @@ function PlaybookPreview({
       >
         <div className="flex h-9 shrink-0 items-center justify-between px-3">
           <p className="min-w-0 flex-1 truncate text-xs font-medium text-gray-700">
-            {playbook.name || "Untitled playbook"}
+            {playbook.name || tr("playbooks.playbookPickerModal.untitledPlaybook")}
           </p>
           <button
             type="button"
-            aria-label="Clear selection"
+            aria-label={tr("playbooks.playbookPickerModal.clearSelection")}
             onClick={onClear}
             className={`rounded-md p-1 text-gray-400 transition-colors hover:text-gray-600 ${LIQUID_GLASS_HOVER_CLASS}`}
           >

@@ -24,6 +24,7 @@ import {
 } from "@/app/contexts/WorkspaceContext";
 import { useOllamaModels } from "@/app/hooks/useOllamaModels";
 import { useConfiguredModels } from "@/app/hooks/useConfiguredModels";
+import { tr } from "@/shared/i18n/runtime";
 
 export type { ReasoningLevel };
 
@@ -114,9 +115,9 @@ export function ModelToggle({
     }
   }, [normalizedReasoningLevel, onReasoningChange, reasoningLevel]);
   const selectedLabel = apiKeysLoading
-    ? (models.find((model) => model.id === value)?.label ?? "Select model")
+    ? (models.find((model) => model.id === value)?.label ?? tr("assistant.modelToggle.selectModel"))
     : (selected?.label ??
-      (availableModels.length > 0 ? "Select model" : "No Models"));
+      (availableModels.length > 0 ? tr("assistant.modelToggle.selectModel") : tr("assistant.modelToggle.noModels")));
   // In an organization workspace the keys and model lists are its admins'
   // to set, so an empty picker says who can fix it.
   const { workspaceId, orgApiKeys } = useWorkspace();
@@ -138,7 +139,7 @@ export function ModelToggle({
       modalInput={modalInput}
       toolbar={toolbar}
       triggerClassName={triggerClassName}
-      emptyLabel="No Models"
+      emptyLabel={tr("assistant.modelToggle.noModels")}
       onEmptyClick={
         onNoModelsClick ? () => onNoModelsClick(emptyReason) : undefined
       }

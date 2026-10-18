@@ -13,6 +13,7 @@ import {
 import { can, roleFrom } from "@/app/lib/permissions";
 import { notifyError, userFacingApiError } from "@/app/lib/userFacingError";
 import type { Chat } from "@/app/components/shared/types";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     open: boolean;
@@ -46,7 +47,7 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
             setAccessError(
                 userFacingApiError(
                     error,
-                    "Sharing details could not be loaded, so access cannot be changed here.",
+                    tr("assistant.chatAccessModal.sharingDetailsCouldNotLoaded"),
                 ),
             );
             notifyError(error, {
@@ -119,9 +120,9 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
             // the owner able to aim Remove at themselves.
             currentUserId={user?.id ?? null}
             breadcrumb={[
-                "Assistant",
-                chat.title?.trim() || "Untitled chat",
-                "Access",
+                tr("assistant.chatAccessModal.assistant"),
+                chat.title?.trim() || tr("assistant.chatAccessModal.untitledChat"),
+                tr("assistant.chatAccessModal.access"),
             ]}
             access={{
                 grants: access?.grants ?? [],
@@ -130,7 +131,7 @@ export function ChatAccessModal({ open, chat, onClose }: Props) {
                     access?.inherited_from_project_id ??
                     chat.project_id ??
                     null,
-                ownerLabel: "Owners",
+                ownerLabel: tr("assistant.chatAccessModal.owners"),
                 resourceNoun: "chat",
                 // Role-derived, so the Share Access label and input are there
                 // the moment the modal opens: the roster below carries its own

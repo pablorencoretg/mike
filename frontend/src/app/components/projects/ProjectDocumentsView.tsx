@@ -33,6 +33,7 @@ import {
 } from "@/app/components/documents/DocTable";
 import { TabPillButtonUI } from "@/shared/ui/TabPillButtonUI";
 import { ProjectSectionToolbar, useProjectWorkspace } from "./ProjectWorkspace";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     projectId: string;
@@ -301,7 +302,7 @@ export function ProjectDocumentsView({ projectId, folderId = null }: Props) {
                     }
                 >
                     <Plus className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">Folder</span>
+                    <span className="hidden sm:inline">{tr("projects.projectDocumentsView.folder")}</span>
                 </TabPillButtonUI>
             )}
         </div>
@@ -310,7 +311,7 @@ export function ProjectDocumentsView({ projectId, folderId = null }: Props) {
     if (!projectLoading && !project) {
         return (
             <div className="flex h-full items-center justify-center">
-                <p className="text-gray-400">Project not found</p>
+                <p className="text-gray-400">{tr("projects.projectDocumentsView.projectNotFound")}</p>
             </div>
         );
     }
@@ -379,12 +380,12 @@ export function ProjectDocumentsView({ projectId, folderId = null }: Props) {
                             onClose={onClose}
                             onSelect={onSelect}
                             breadcrumb={[
-                                "Projects",
+                                tr("projects.projectDocumentsView.projects"),
                                 project.name +
                                     (project.cm_number
                                         ? ` (${project.cm_number})`
                                         : ""),
-                                "Add Documents",
+                                tr("projects.projectDocumentsView.addDocuments"),
                             ]}
                             projectId={projectId}
                         />

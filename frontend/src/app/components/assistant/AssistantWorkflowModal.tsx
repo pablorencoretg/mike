@@ -2,6 +2,7 @@
 
 import type { Workflow } from "../shared/types";
 import { WorkflowPickerModal } from "../workflows/WorkflowPickerModal";
+import { tr } from "@/shared/i18n/runtime";
 
 interface Props {
     open: boolean;
@@ -36,7 +37,7 @@ export function AssistantWorkflowModal({
             onSelect={onSelect}
             workflowType="assistant"
             breadcrumbs={breadcrumbs}
-            primaryLabel="Use"
+            primaryLabel={tr("assistant.assistantWorkflowModal.use")}
             initialWorkflowId={initialWorkflowId}
         />
     );

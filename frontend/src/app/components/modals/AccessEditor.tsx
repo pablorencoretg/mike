@@ -26,6 +26,7 @@ import {
     LIQUID_GLASS_HOVER_CLASS,
     LIQUID_GLASS_MODAL_ROW_HOVER_CLASS,
 } from "@/shared/ui/LiquidGlassUI";
+import { tr } from "@/shared/i18n/runtime";
 
 export type AccessScope = "direct" | "project";
 
@@ -45,7 +46,7 @@ const INPUT_GROUP_ROLE_TRIGGER_CLASS =
     "flex h-10 shrink-0 items-center gap-1.5 px-3 text-xs shadow-none transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500/40 data-[state=open]:opacity-80 [&[data-state=open]>svg]:rotate-180 disabled:cursor-not-allowed disabled:opacity-50";
 
 export function accessRoleLabel(role: AccessAssignmentRole): string {
-    return role === "deny" ? "Deny" : PROJECT_ROLE_LABELS[role];
+    return role === "deny" ? tr("modals.accessEditor.deny") : PROJECT_ROLE_LABELS[role];
 }
 
 function accessRoleTone(role: AccessAssignmentRole): string {
@@ -105,7 +106,7 @@ function AccessRolePill({
             <DropdownTrigger asChild>
                 <button
                     type="button"
-                    aria-label={`Role for ${label}`}
+                    aria-label={tr("modals.accessEditor.role", { label })}
                     disabled={disabled}
                     className={`${className} transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:cursor-wait disabled:opacity-50`}
                 >
@@ -153,7 +154,7 @@ function RemoveActionDropdown({
             <DropdownTrigger asChild>
                 <button
                     type="button"
-                    aria-label={`Actions for ${label}`}
+                    aria-label={tr("modals.accessEditor.actions", { label })}
                     disabled={disabled}
                     className="flex h-6 w-6 items-center justify-center rounded-full text-xs text-gray-500 hover:bg-gray-200/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 disabled:opacity-50"
                 >
@@ -168,7 +169,7 @@ function RemoveActionDropdown({
                     onSelect={onRemove}
                     className="text-red-500 hover:!bg-red-500/10 focus:!bg-red-500/10 data-[highlighted]:!bg-red-500/10"
                 >
-                    Remove
+                    {tr("modals.accessEditor.remove")}
                 </DropdownItem>
             </DropdownContent>
         </Dropdown>
@@ -257,7 +258,7 @@ function OrganizationMemberPicker({
                         </label>
                     }
                     tooltipId={`${id}-description`}
-                    infoLabel={`About ${label}`}
+                    infoLabel={tr("modals.accessEditor.about", { label })}
                 >
                     {description}
                 </InfoLabelTooltip>
@@ -319,7 +320,7 @@ function OrganizationMemberPicker({
                         })
                     ) : (
                         <p className="px-3 py-2 text-xs text-gray-400">
-                            No matching organization members.
+                            {tr("modals.accessEditor.noMatchingOrganizationMembers")}
                         </p>
                     )}
                 </div>
@@ -370,7 +371,7 @@ function OrganizationAssignmentList({
             {loading ? (
                 <div className="flex min-h-26 items-center justify-center gap-2 text-xs text-gray-400">
                     <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    Loading organization members…
+                    {tr("modals.accessEditor.loadingOrganizationMembers")}
                 </div>
             ) : assignments.length === 0 ? (
                 <div className="flex min-h-26 items-center justify-center text-xs text-gray-400">
@@ -593,14 +594,14 @@ export function OrganizationAccessEditor({
         (ownerLabel.toLowerCase().startsWith("workflow")
             ? "workflow"
             : "project");
-    const organizationLabel = organizationName || "the organisation";
+    const organizationLabel = organizationName || tr("modals.accessEditor.organisation");
     const peopleDescription = isPublic
-        ? `Everyone in ${organizationLabel} can already open and run this ${resourceNoun}. Add members who should edit or own it; they are added as Editors, and you can change a person's role in the list below.`
-        : `Share this ${resourceNoun} with members of ${organizationLabel}. They are added as Editors; change a person's role in the list below. It cannot be shared outside the organisation.`;
+        ? tr("modals.accessEditor.everyoneCanAlreadyOpenRun", { organizationLabel, resourceNoun })
+        : tr("modals.accessEditor.shareMembersTheyAddedAs", { resourceNoun, organizationLabel });
     // Everyone can already open and edit a public item, so the only standing
     // left to hand out is ownership of it.
-    const ownerDescription = `Add ${organizationLabel} members as owners with rights to manage access, settings and delete the ${resourceNoun}. Everyone in ${organizationLabel} can already open and edit it.`;
-    const denyDescription = `Deny ${organizationLabel} members from accessing this ${resourceNoun}, although it is open to everyone else.`;
+    const ownerDescription = tr("modals.accessEditor.addMembersAsOwnersRights", { organizationLabel, resourceNoun, organizationLabel2: organizationLabel });
+    const denyDescription = tr("modals.accessEditor.denyMembersFromAccessingAlthough", { organizationLabel, resourceNoun });
     // A wall only means something on a public item; on a private one, not
     // being added is the wall. An existing list is still shown, so that
     // making the item public again is not a surprise.
@@ -616,7 +617,7 @@ export function OrganizationAccessEditor({
                     <OrganizationMemberPicker
                         id="organization-owner-picker"
                         label={ownerLabel}
-                        placeholder="Search members…"
+                        placeholder={tr("modals.accessEditor.searchMembers")}
                         description={ownerDescription}
                         members={availableMembers}
                         disabled={disabled || loading}
@@ -628,8 +629,8 @@ export function OrganizationAccessEditor({
                     // be seen beside the person it belongs to.
                     <OrganizationMemberPicker
                         id="organization-people-picker"
-                        label="People"
-                        placeholder="Search members…"
+                        label={tr("modals.accessEditor.people")}
+                        placeholder={tr("modals.accessEditor.searchMembers")}
                         description={peopleDescription}
                         members={availableMembers}
                         disabled={disabled || loading}
@@ -638,15 +639,15 @@ export function OrganizationAccessEditor({
                 )}
                 <OrganizationAssignmentList
                     label={
-                        pickOwners ? `${ownerLabel} list` : "People with access"
+                        pickOwners ? `${ownerLabel} list` : tr("modals.accessEditor.peopleAccess")
                     }
                     assignments={sharedAssignments}
                     emptyMessage={
                         pickOwners
-                            ? "No additional Owners added."
+                            ? tr("modals.accessEditor.noAdditionalOwnersAdded")
                             : isPublic
-                              ? "Nobody has been given more than view access."
-                              : "Not shared with anyone yet."
+                              ? tr("modals.accessEditor.nobodyHasBeenGivenMore")
+                              : tr("modals.accessEditor.notSharedAnyoneYet")
                     }
                     loading={loading}
                     disabled={disabled}
@@ -678,8 +679,8 @@ export function OrganizationAccessEditor({
                             >
                                 <span>
                                     {denyCount > 0
-                                        ? `Deny list (${denyCount})`
-                                        : "Deny list"}
+                                        ? tr("modals.accessEditor.denyList", { denyCount })
+                                        : tr("modals.accessEditor.denyList2")}
                                 </span>
                                 <ChevronDown
                                     aria-hidden="true"
@@ -699,17 +700,17 @@ export function OrganizationAccessEditor({
                         >
                             <OrganizationMemberPicker
                                 id="organization-deny-picker"
-                                label="Deny list"
+                                label={tr("modals.accessEditor.denyList2")}
                                 showLabel={false}
-                                placeholder="Search members…"
+                                placeholder={tr("modals.accessEditor.searchMembers")}
                                 members={availableMembers}
                                 disabled={disabled || loading}
                                 onSelect={(member) => onAssign(member, "deny")}
                             />
                             <OrganizationAssignmentList
-                                label="Deny list entries"
+                                label={tr("modals.accessEditor.denyListEntries")}
                                 assignments={deniedAssignments}
-                                emptyMessage="No members denied."
+                                emptyMessage={tr("modals.accessEditor.noMembersDenied")}
                                 loading={loading}
                                 disabled={disabled}
                                 onRemove={onRemove}
@@ -775,7 +776,7 @@ export function AccessEditor({
                     <InfoLabelTooltip
                         label={
                             <h2 className="text-sm font-medium text-gray-700">
-                                Share Access
+                                {tr("modals.accessEditor.shareAccess")}
                             </h2>
                         }
                         tooltipId="access-role-rights"
@@ -783,7 +784,7 @@ export function AccessEditor({
                     >
                         <div>
                             <p className="mb-2 text-xs font-medium text-gray-700">
-                                Roles and rights
+                                {tr("modals.accessEditor.rolesRights")}
                             </p>
                             <dl className="space-y-2">
                                 {PROJECT_ROLES.map((role) => (
@@ -808,16 +809,16 @@ export function AccessEditor({
                         onAdd={onAdd}
                         validateEmail={validateEmail}
                         busy={busy}
-                        placeholder="Add by email..."
+                        placeholder={tr("modals.accessEditor.addByEmail")}
                         autoFocus
-                        submitLabel="Add"
+                        submitLabel={tr("modals.accessEditor.add")}
                         submitVariant="attached"
                         inputEndControl={
                             <Dropdown>
                                 <DropdownTrigger asChild>
                                     <button
                                         type="button"
-                                        aria-label={`Role for the new recipient: ${accessRoleLabel(newRole)}`}
+                                        aria-label={tr("modals.accessEditor.roleNewRecipient", { accessRoleLabel: accessRoleLabel(newRole) })}
                                         disabled={busy}
                                         className={`${INPUT_GROUP_ROLE_TRIGGER_CLASS} bg-transparent ${accessRoleTextTone(newRole)}`}
                                     >
@@ -862,18 +863,17 @@ export function AccessEditor({
             <section className="flex min-h-0 flex-1 flex-col">
                 {scope === "project" ? (
                     <p className="mb-3 text-xs text-gray-500">
-                        Access is inherited from the project and must be changed
-                        from the project&apos;s Access panel.
+                        {tr("modals.accessEditor.accessInheritedFromProjectMust")}
                     </p>
                 ) : null}
 
                 <div className="mb-1 hidden sm:grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_5rem_1.5rem] gap-3 px-2 text-xs font-medium text-gray-500">
                     <div className="flex items-center gap-2">
-                        <span>Name</span>
+                        <span>{tr("modals.accessEditor.name")}</span>
                         {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
                     </div>
-                    <span className="justify-self-start text-left">Email</span>
-                    <span className="justify-self-start text-left">Role</span>
+                    <span className="justify-self-start text-left">{tr("modals.accessEditor.email")}</span>
+                    <span className="justify-self-start text-left">{tr("modals.accessEditor.role2")}</span>
                     <span aria-hidden="true" />
                 </div>
 
@@ -900,7 +900,7 @@ export function AccessEditor({
                     // underneath it reads as a contradiction.
                     scope === "project" ? null : (
                         <div className="flex min-h-0 flex-1 items-center justify-center text-sm text-gray-400">
-                            No one has access yet.
+                            {tr("modals.accessEditor.noOneHasAccessYet")}
                         </div>
                     )
                 ) : (
