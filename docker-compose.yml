@@ -374,6 +374,9 @@ services:
         GIT_SHA: ${GIT_SHA:-}
     environment:
       - API_BASE_URL=${API_BASE_URL:-http://backend:3001}
+      # Interface language when a viewer has not picked one (en, es). Unset:
+      # the browser's language, else English. See docs/i18n.md.
+      - MIKE_DEFAULT_LOCALE=${MIKE_DEFAULT_LOCALE:-}
       # Next server side (the /api gateway); same project as the browser.
       - SENTRY_DISABLED=${SENTRY_DISABLED:-}
       - SENTRY_INSTALL=${SENTRY_INSTALL:-}

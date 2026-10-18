@@ -1,7 +1,9 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AppearancePage from "./page";
+import { I18nContext } from "@/shared/i18n/I18nContext";
+import { createTranslator } from "@/shared/i18n/translate";
 
 const { updateDarkMode, profile } = vi.hoisted(() => ({
     updateDarkMode: vi.fn(),
@@ -30,7 +32,10 @@ describe("AppearancePage", () => {
             screen.getByRole("heading", { name: "Appearance" }),
         ).toBeVisible();
         expect(screen.getByText("Dark mode")).toBeVisible();
-        expect(container.querySelector("svg")).toBeNull();
+        // The only icon is the language picker's chevron, not card decoration.
+        expect(
+            container.querySelectorAll("svg:not(.lucide-chevron-down)"),
+        ).toHaveLength(0);
 
         const toggle = screen.getByRole("switch", { name: "Dark mode" });
         expect(toggle).toHaveAttribute("aria-checked", "false");
@@ -51,6 +56,47 @@ describe("AppearancePage", () => {
             ),
         );
         expect(screen.queryByText(/connection refused/i)).not.toBeInTheDocument();
+    });
+
+    it("switches the interface language from the picker", async () => {
+        const setLocale = vi.fn();
+        render(
+            <I18nContext.Provider
+                value={{ locale: "en", t: createTranslator("en"), setLocale }}
+            >
+                <AppearancePage />
+            </I18nContext.Provider>,
+        );
+
+        const picker = screen.getByRole("button", { name: "Language" });
+        expect(picker).toHaveTextContent("English");
+        // Radix opens on pointerdown, not click.
+        fireEvent.pointerDown(
+            picker,
+            new MouseEvent("pointerdown", { bubbles: true, cancelable: true }),
+        );
+        fireEvent.click(
+            await screen.findByRole("menuitemradio", { name: "Español" }),
+        );
+        expect(setLocale).toHaveBeenCalledWith("es");
+    });
+
+    it("renders in Spanish when that is the interface language", () => {
+        render(
+            <I18nContext.Provider
+                value={{ locale: "es", t: createTranslator("es"), setLocale: vi.fn() }}
+            >
+                <AppearancePage />
+            </I18nContext.Provider>,
+        );
+
+        expect(
+            screen.getByRole("heading", { name: "Apariencia" }),
+        ).toBeVisible();
+        expect(screen.getByRole("switch", { name: "Modo oscuro" })).toBeVisible();
+        expect(screen.getByRole("button", { name: "Idioma" })).toHaveTextContent(
+            "Español",
+        );
     });
 
 });

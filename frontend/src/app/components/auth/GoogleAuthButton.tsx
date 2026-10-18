@@ -8,6 +8,7 @@ import {
     describeError,
     type UserFacingError,
 } from "@/app/lib/userFacingError";
+import { useT } from "@/shared/i18n/I18nContext";
 
 const GOOGLE_ERROR_MESSAGES = {
     provider_disabled:
@@ -29,6 +30,7 @@ export function GoogleAuthButton({
     disabled = false,
     onLoadingChange,
 }: GoogleAuthButtonProps) {
+    const t = useT();
     const [loading, setLoading] = useState(false);
 
     const handleGoogleAuth = async () => {
@@ -66,7 +68,7 @@ export function GoogleAuthButton({
             onClick={() => void handleGoogleAuth()}
         >
             <GoogleIconUI className="h-4 w-4" />
-            {loading ? "Continuing…" : "Continue with Google"}
+            {loading ? t("auth.google.continuing") : t("auth.google.continue")}
         </PillButtonUI>
     );
 }

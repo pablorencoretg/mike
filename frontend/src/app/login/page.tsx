@@ -30,6 +30,7 @@ import {
     TOO_MANY_ATTEMPTS_MESSAGE,
     authMessages,
 } from "@/app/lib/authMessages";
+import { useT } from "@/shared/i18n/I18nContext";
 
 /**
  * The shared auth table (`@/app/lib/authMessages`) with this screen's
@@ -48,9 +49,6 @@ const LOGIN_ERROR_MESSAGES = authMessages({
     invalid_request: "Enter your email address and password.",
     request_timeout: "The login request timed out. Try again.",
 });
-
-/** The title `notifyError` gives the same warning away from this page. */
-const SESSION_WARNING_TITLE = "Couldn't check your session";
 
 /** Classify a login failure into text a person can act on. */
 function describeLoginError(error: unknown): UserFacingError {
@@ -80,6 +78,7 @@ declare global {
 }
 
 export default function LoginPage() {
+    const t = useT();
     const router = useRouter();
     const {
         isAuthenticated,
@@ -228,7 +227,7 @@ export default function LoginPage() {
     const retryAction = error
         ? error.retryable && loginMode
             ? {
-                  label: "Retry",
+                  label: t("common.retry"),
                   onClick: () =>
                       void (loginMode === "guest"
                           ? handleGuestLogin()
@@ -238,7 +237,9 @@ export default function LoginPage() {
             : undefined
         : sessionWarningOpen
           ? {
-                label: retryingSession ? "Retrying..." : "Retry",
+                label: retryingSession
+                    ? t("common.retrying")
+                    : t("common.retry"),
                 onClick: () => void handleRetrySession(),
                 disabled: retryingSession,
             }
@@ -253,14 +254,12 @@ export default function LoginPage() {
                 {/* Login Form */}
                 <div className={cn(authGlassCardUIClassName, "mb-4")}>
                     <h2 className="mb-6 text-left text-2xl font-medium font-serif text-gray-950">
-                        {guest ? "Your workspace on this Mac" : "Log In"}
+                        {guest ? t("auth.login.guestTitle") : t("auth.login.title")}
                     </h2>
                     {guest && (
                         <div className="mb-6 space-y-3">
                             <p className="text-sm text-muted-foreground">
-                                Start without an account. Your work is saved on
-                                this Mac. You can add your practice details
-                                later in Settings.
+                                {t("auth.login.guestIntro")}
                             </p>
                             <PillButtonUI
                                 type="button"
@@ -271,8 +270,8 @@ export default function LoginPage() {
                                 disabled={loading}
                             >
                                 {loading
-                                    ? "Opening workspace…"
-                                    : "Continue on this Mac"}
+                                    ? t("auth.login.guestOpening")
+                                    : t("auth.login.guestContinue")}
                             </PillButtonUI>
                         </div>
                     )}
@@ -281,11 +280,13 @@ export default function LoginPage() {
                             hidden={!guest}
                             className="mb-4 cursor-pointer text-sm text-muted-foreground focus-visible:outline-2 focus-visible:outline-ring"
                         >
-                            Use a separate local account
+                            {t("auth.login.separateAccount")}
                         </summary>
                         <form onSubmit={handleLogin} className="space-y-4">
                             <div>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
+                                <FieldLabel htmlFor="email">
+                                    {t("auth.login.email")}
+                                </FieldLabel>
                                 <InputUI
                                     id="email"
                                     type="email"
@@ -299,13 +300,13 @@ export default function LoginPage() {
                             <div>
                                 <div className="flex items-start justify-between gap-3">
                                     <FieldLabel htmlFor="password">
-                                        Password
+                                        {t("auth.login.password")}
                                     </FieldLabel>
                                     <Link
                                         href="/forgot-password"
                                         className="text-xs font-medium text-gray-500 transition-colors hover:text-gray-950"
                                     >
-                                        Forgot password?
+                                        {t("auth.login.forgotPassword")}
                                     </Link>
                                 </div>
                                 <InputUI
@@ -328,12 +329,14 @@ export default function LoginPage() {
                                     disabled={loading}
                                     className="w-full"
                                 >
-                                    {loading ? "Logging in..." : "Log in"}
+                                    {loading
+                                        ? t("auth.login.submitting")
+                                        : t("auth.login.submit")}
                                 </PillButtonUI>
                             </div>
                             {!guest && (
                                 <>
-                                    <AuthDividerUI />
+                                    <AuthDividerUI label={t("common.or")} />
                                     <GoogleAuthButton
                                         onError={(nextError) => {
                                             setLoginMode(null);
@@ -349,12 +352,12 @@ export default function LoginPage() {
                     </details>
                 </div>
                 <div className="text-center text-sm text-gray-500">
-                    Don&apos;t have an account?{" "}
+                    {t("auth.login.noAccount")}{" "}
                     <Link
                         href="/signup"
                         className="font-medium transition-colors hover:text-gray-950"
                     >
-                        Sign up
+                        {t("auth.login.signUp")}
                     </Link>
                 </div>
             </div>
@@ -364,7 +367,11 @@ export default function LoginPage() {
                     if (error) setError(null);
                     else setSessionWarningDismissed(true);
                 }}
-                title={shownError ? shownError.title : SESSION_WARNING_TITLE}
+                title={
+                    shownError
+                        ? shownError.title
+                        : t("auth.login.sessionWarningTitle")
+                }
                 message={shownError ? shownError.message : authError}
                 actions={
                     shownError?.supportable ? (
@@ -377,7 +384,7 @@ export default function LoginPage() {
                                 retryAction ? "secondary" : "primary",
                             )}
                         >
-                            Contact support
+                            {t("common.contactSupport")}
                         </a>
                     ) : undefined
                 }
