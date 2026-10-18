@@ -83,6 +83,8 @@ import { useConfiguredModels } from "@/app/hooks/useConfiguredModels";
 import {
     type NoModelsReason,
 } from "@/shared/lib/modelCatalog";
+import { useT } from "@/shared/i18n/I18nContext";
+import type { Translate } from "@/shared/i18n/translate";
 
 export interface ChatInputHandle {
     addDoc: (doc: Document) => void;
@@ -154,15 +156,19 @@ function placeholderFor({
     canSend,
     chatLoading,
     isLoading,
+    t,
 }: {
     canSend: boolean | null;
     chatLoading: boolean;
     isLoading: boolean;
+    t: Translate;
 }): string {
-    if (canSend === null) return "Loading…";
-    if (!canSend) return "Viewing only — sending needs edit access";
-    if (!chatLoading) return "How can I help?";
-    return isLoading ? "A response is still arriving…" : "Loading this chat…";
+    if (canSend === null) return t("common.loading");
+    if (!canSend) return t("chat.input.viewOnly");
+    if (!chatLoading) return t("chat.input.placeholder");
+    return isLoading
+        ? t("chat.input.responseArriving")
+        : t("chat.input.loadingChat");
 }
 
 function ChatInputForChatImpl(
@@ -187,6 +193,7 @@ function ChatInputForChatImpl(
     }: Props,
     ref: ForwardedRef<ChatInputHandle>,
 ) {
+    const t = useT();
     // A document attached to a chat outside a project belongs to the
     // workspace it is uploaded in.
     const workspace = useDocumentWorkspace();
@@ -396,7 +403,7 @@ function ChatInputForChatImpl(
             if (!composerOpen) {
                 if (canSend === false) {
                     setUploadWarning(
-                        "Only someone with edit access can add documents.",
+                        t("chat.input.editAccessToAddDocs"),
                     );
                 }
                 return;
@@ -476,7 +483,7 @@ function ChatInputForChatImpl(
                         ? failedUploadMessage(error.outcomes)
                         : userFacingApiError(
                               error,
-                              "Documents could not be uploaded. Please try again.",
+                              t("chat.input.uploadFailed"),
                           ),
                 );
             } finally {
@@ -753,7 +760,9 @@ function ChatInputForChatImpl(
                                             );
                                             setWorkflowModalOpen(true);
                                         }}
-                                        aria-label={`Open workflow ${selectedWorkflow.title}`}
+                                        aria-label={t("chat.input.openWorkflow", {
+                                            title: selectedWorkflow.title,
+                                        })}
                                         className="inline-flex min-w-0 items-center gap-1 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                     >
                                         <Waypoints className="h-2.5 w-2.5 shrink-0" />
@@ -782,7 +791,9 @@ function ChatInputForChatImpl(
                                             );
                                             setPlaybookModalOpen(true);
                                         }}
-                                        aria-label={`Open playbook ${selectedPlaybook.title}`}
+                                        aria-label={t("chat.input.openPlaybook", {
+                                            title: selectedPlaybook.title,
+                                        })}
                                         className="inline-flex min-w-0 items-center gap-1 rounded-full transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                     >
                                         <ClipboardCheck className="h-2.5 w-2.5 shrink-0" />
@@ -792,7 +803,9 @@ function ChatInputForChatImpl(
                                     </button>
                                     <button
                                         type="button"
-                                        aria-label={`Remove playbook ${selectedPlaybook.title}`}
+                                        aria-label={t("chat.input.removePlaybook", {
+                                            title: selectedPlaybook.title,
+                                        })}
                                         onClick={() => setSelectedPlaybook(null)}
                                         className="rounded-full p-0.5 ml-0.5 text-white/60 hover:text-white hover:bg-white/20 transition-colors"
                                     >
@@ -823,7 +836,9 @@ function ChatInputForChatImpl(
                                                 onClick={() =>
                                                     onDocumentClick(doc)
                                                 }
-                                                aria-label={`Open ${doc.filename}`}
+                                                aria-label={t("common.openItem", {
+                                                    name: doc.filename,
+                                                })}
                                                 className="inline-flex min-w-0 items-center gap-1 py-0.5 pl-2 transition-colors hover:text-gray-950"
                                             >
                                                 {documentLabel}
@@ -842,7 +857,9 @@ function ChatInputForChatImpl(
                                                     ),
                                                 )
                                             }
-                                            aria-label={`Remove ${doc.filename}`}
+                                            aria-label={t("common.removeItem", {
+                                                name: doc.filename,
+                                            })}
                                             className="mx-1 rounded-full p-0.5 text-gray-400 transition-colors hover:bg-gray-900/5 hover:text-gray-700"
                                         >
                                             <X className="h-2.5 w-2.5" />
@@ -891,6 +908,7 @@ function ChatInputForChatImpl(
                                 canSend,
                                 chatLoading,
                                 isLoading,
+                                t,
                             })}
                             value={value}
                             onChange={(event) => updateInput(event.target)}
@@ -974,7 +992,9 @@ function ChatInputForChatImpl(
                             <button
                                 type="button"
                                 aria-label={
-                                    isLoading ? "Stop response" : "Send message"
+                                    isLoading
+                                        ? t("chat.input.stop")
+                                        : t("chat.input.send")
                                 }
                                 className={cn(
                                     COMPOSER_SEND_BUTTON_CLASS,
@@ -1010,7 +1030,7 @@ function ChatInputForChatImpl(
                 accept={SUPPORTED_DOCUMENT_ACCEPT}
                 multiple
                 hidden
-                aria-label="Upload Documents"
+                aria-label={t("chat.input.uploadDocuments")}
                 disabled={!composerOpen || uploadingFiles.length > 0}
                 onChange={(event) => {
                     const files = Array.from(event.currentTarget.files ?? []);
@@ -1034,8 +1054,12 @@ function ChatInputForChatImpl(
                 uploadStateId={`assistant-chat:${projectId ?? "standalone"}`}
                 breadcrumb={
                     selectedWorkflow
-                        ? ["Assistant", selectedWorkflow.title, "Add Documents"]
-                        : ["Assistant", "Add Documents"]
+                        ? [
+                              t("nav.assistant"),
+                              selectedWorkflow.title,
+                              t("chat.input.addDocuments"),
+                          ]
+                        : [t("nav.assistant"), t("chat.input.addDocuments")]
                 }
             />
             <AssistantWorkflowModal
@@ -1058,13 +1082,18 @@ function ChatInputForChatImpl(
                 onSelect={(playbook) =>
                     setSelectedPlaybook({
                         id: playbook.id,
-                        title: playbook.name || "Untitled playbook",
+                        title: playbook.name || t("common.untitledPlaybook"),
                     })
                 }
                 breadcrumbs={
                     projectName
-                        ? ["Projects", projectName, "Assistant", "Add playbook"]
-                        : ["Assistant", "Add playbook"]
+                        ? [
+                              t("nav.projects"),
+                              projectName,
+                              t("nav.assistant"),
+                              t("chat.input.addPlaybook"),
+                          ]
+                        : [t("nav.assistant"), t("chat.input.addPlaybook")]
                 }
                 initialPlaybookId={playbookModalInitialId}
             />
@@ -1079,8 +1108,8 @@ function ChatInputForChatImpl(
             <WarningPopup
                 open={modelRequiredWarning}
                 onClose={() => setModelRequiredWarning(false)}
-                title="Select a model"
-                message="Choose a model before sending your message."
+                title={t("chat.input.selectModelTitle")}
+                message={t("chat.input.selectModelMessage")}
             />
             <UploadOverlay
                 open={isDraggingFiles}

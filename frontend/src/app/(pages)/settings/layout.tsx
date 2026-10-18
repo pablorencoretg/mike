@@ -9,41 +9,63 @@ import {
     SettingsShell,
     type SettingsShellTab,
 } from "@/app/components/settings/SettingsShell";
+import { useT } from "@/shared/i18n/I18nContext";
+import type { MessageKey } from "@/shared/i18n/translate";
 
-const TABS: SettingsShellTab[] = [
-    { id: "account", label: "Account", href: "/settings" },
+type SettingsTabDefinition = Omit<SettingsShellTab, "label"> & {
+    labelKey: MessageKey;
+};
+
+const TABS: SettingsTabDefinition[] = [
+    { id: "account", labelKey: "settings.tabs.account", href: "/settings" },
     {
         id: "personalisation",
-        label: "Personalisation",
+        labelKey: "settings.tabs.personalisation",
         href: "/settings/personalisation",
     },
-    { id: "memory", label: "Memory", href: "/settings/memory" },
-    { id: "appearance", label: "Appearance", href: "/settings/appearance" },
-    { id: "features", label: "Features", href: "/settings/features" },
+    { id: "memory", labelKey: "settings.tabs.memory", href: "/settings/memory" },
+    {
+        id: "appearance",
+        labelKey: "settings.tabs.appearance",
+        href: "/settings/appearance",
+    },
+    {
+        id: "features",
+        labelKey: "settings.tabs.features",
+        href: "/settings/features",
+    },
     {
         id: "privacy-data",
-        label: "Privacy & Data",
+        labelKey: "settings.tabs.privacyData",
         href: "/settings/privacy-data",
     },
     {
         id: "my-activity",
-        label: "My Activity",
+        labelKey: "settings.tabs.myActivity",
         href: "/settings/my-activity",
     },
-    { id: "security", label: "Security", href: "/settings/security" },
-    { id: "models", label: "Model Preferences", href: "/settings/models" },
+    {
+        id: "security",
+        labelKey: "settings.tabs.security",
+        href: "/settings/security",
+    },
+    { id: "models", labelKey: "settings.tabs.models", href: "/settings/models" },
     {
         id: "byok",
-        label: "Bring Your Own Keys",
+        labelKey: "settings.tabs.byok",
         href: "/settings/byok",
     },
-    { id: "connectors", label: "Connectors", href: "/settings/connectors" },
+    {
+        id: "connectors",
+        labelKey: "settings.tabs.connectors",
+        href: "/settings/connectors",
+    },
     // The organizations the person belongs to, and their invitations. Each
     // organization's own settings are a separate area, opened from here or
     // from the account menu.
     {
         id: "organizations",
-        label: "Organizations",
+        labelKey: "settings.tabs.organizations",
         href: "/settings/organizations",
     },
 ];
@@ -53,6 +75,7 @@ export default function SettingsLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const t = useT();
     const router = useRouter();
     const pathname = usePathname();
     const { user, isAuthenticated, authLoading } = useAuth();
@@ -85,10 +108,11 @@ export default function SettingsLayout({
 
     return (
         <SettingsShell
-            title="Settings"
-            navLabel="Settings"
-            tabs={TABS.map((tab) =>
-                tab.id === "organizations" && invitationCount > 0
+            title={t("settings.title")}
+            navLabel={t("settings.title")}
+            tabs={TABS.map(({ labelKey, ...rest }) => {
+                const tab: SettingsShellTab = { ...rest, label: t(labelKey) };
+                return tab.id === "organizations" && invitationCount > 0
                     ? {
                           ...tab,
                           badge: (
@@ -96,14 +120,14 @@ export default function SettingsLayout({
                                   {invitationCount}{" "}
                                   <span className="sr-only">
                                       {invitationCount === 1
-                                          ? "pending invitation"
-                                          : "pending invitations"}
+                                          ? t("settings.pendingInvitation")
+                                          : t("settings.pendingInvitations")}
                                   </span>
                               </span>
                           ),
                       }
-                    : tab,
-            )}
+                    : tab;
+            })}
             rootHref="/settings"
         >
             {children}

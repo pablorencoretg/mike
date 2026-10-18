@@ -68,22 +68,28 @@ import {
     LIQUID_GLASS_SELECTED_CLASS,
     LIQUID_GLASS_HOVER_CLASS,
 } from "@/app/components/ui/liquid-surface";
+import { useT } from "@/shared/i18n/I18nContext";
+import type { MessageKey } from "@/shared/i18n/translate";
 
 /** Where a workspace opens: the page the logo leads to. */
 const WORKSPACE_HOME = "/assistant";
 
-const NAV_ITEMS = [
-    { href: "/assistant", label: "Assistant", icon: ChatSkeuoIcon },
-    { href: "/ide", label: "IDE", icon: IdeSkeuoIcon },
-    { href: "/projects", label: "Projects", icon: FolderSkeuoIcon },
-    { href: "/library", label: "Library", icon: LibrarySkeuoIcon },
+const NAV_ITEMS: {
+    href: string;
+    labelKey: MessageKey;
+    icon: typeof ChatSkeuoIcon;
+}[] = [
+    { href: "/assistant", labelKey: "nav.assistant", icon: ChatSkeuoIcon },
+    { href: "/ide", labelKey: "nav.ide", icon: IdeSkeuoIcon },
+    { href: "/projects", labelKey: "nav.projects", icon: FolderSkeuoIcon },
+    { href: "/library", labelKey: "nav.library", icon: LibrarySkeuoIcon },
     {
         href: "/tabular-reviews",
-        label: "Tabular Review",
+        labelKey: "nav.tabularReview",
         icon: TabularReviewSkeuoIcon,
     },
-    { href: "/workflows", label: "Workflows", icon: WorkflowSkeuoIcon },
-    { href: "/playbooks", label: "Playbooks", icon: PlaybookSkeuoIcon },
+    { href: "/workflows", labelKey: "nav.workflows", icon: WorkflowSkeuoIcon },
+    { href: "/playbooks", labelKey: "nav.playbooks", icon: PlaybookSkeuoIcon },
 ];
 
 const RECENT_PROJECT_PAGE_SIZE = 10;
@@ -108,6 +114,7 @@ interface AppSidebarProps {
 
 /** Renders workspace navigation, recent content, and the current account menu with its photo or monogram. */
 export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
+    const t = useT();
     const { user, signOut } = useAuth();
     const { profile } = useUserProfile();
     const {
@@ -510,7 +517,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                     <span
                                         data-slot="sidebar-heading-loading"
                                         role="status"
-                                        aria-label="Loading workspace"
+                                        aria-label={t("sidebar.loadingWorkspace")}
                                         className={cn("h-5 w-28 rounded bg-gray-200", shouldAnimate ? "sidebar-heading-enter" : "animate-pulse")}
                                     />
                                 ) : (
@@ -534,13 +541,13 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                         }}
                         onPointerEnter={() => setToggleHoverSuppressed(false)}
                         onPointerLeave={() => setToggleHoverSuppressed(false)}
-                        aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+                        aria-label={isOpen ? t("sidebar.close") : t("sidebar.open")}
                         className={cn(
                             "group flex h-8 w-8 shrink-0 items-center justify-center transition-[border-radius] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500/40",
                             isOpen ? "rounded-md" : "rounded-[16px]",
                             !toggleHoverSuppressed && LIQUID_GLASS_HOVER_CLASS,
                         )}
-                        title={isOpen ? "Close sidebar" : "Open sidebar"}
+                        title={isOpen ? t("sidebar.close") : t("sidebar.open")}
                     >
                         {isOpen ? (
                             <PanelLeft aria-hidden="true" className="h-4 w-4 shrink-0" />
@@ -563,7 +570,8 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                 <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden">
                     {/* Nav items */}
                     <div className="pt-1.5">
-                        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+                        {NAV_ITEMS.map(({ href, labelKey, icon: Icon }) => {
+                            const label = t(labelKey);
                             const isActive =
                                 href === "/assistant"
                                     ? pathname === href
@@ -618,7 +626,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                         shouldAnimate ? "sidebar-fade-in" : ""
                                     }`}
                                 >
-                                    <span>Recent Projects</span>
+                                    <span>{t("sidebar.recentProjects")}</span>
                                     <ChevronDown
                                         className={`h-3.5 w-3.5 transition-transform ${
                                             projectsCollapsed ? "-rotate-90" : ""
@@ -662,7 +670,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                                         : ""
                                                 }`}
                                             >
-                                                No projects yet
+                                                {t("sidebar.noProjects")}
                                             </div>
                                         ) : (
                                             <div
@@ -724,7 +732,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                         shouldAnimate ? "sidebar-fade-in" : ""
                                     }`}
                                 >
-                                    <span>History</span>
+                                    <span>{t("sidebar.history")}</span>
                                     <ChevronDown
                                         className={`h-3.5 w-3.5 transition-transform ${
                                             historyCollapsed ? "-rotate-90" : ""
@@ -734,7 +742,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                 <div
                                     id="sidebar-history"
                                     role="region"
-                                    aria-label="History"
+                                    aria-label={t("sidebar.history")}
                                     className={cn(
                                         "min-h-0 flex-1 overflow-y-auto",
                                         historyCollapsed && "hidden",
@@ -766,7 +774,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                                     : ""
                                             }`}
                                         >
-                                            {!history.error && "No history yet"}
+                                            {!history.error && t("sidebar.noHistory")}
                                         </div>
                                     ) : (
                                         <>
@@ -780,7 +788,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                                 {history.items.map((entry) => {
                                                     if (entry.kind === "review") {
                                                         const review = entry.item;
-                                                        const title = review.title?.trim() || "Untitled review";
+                                                        const title = review.title?.trim() || t("sidebar.untitledReview");
                                                         const projectName = review.project_name?.trim();
                                                         const fullTitle = projectName ? `${projectName}: ${title}` : title;
                                                         const href = review.project_id
@@ -793,7 +801,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                                                 key={`review:${review.id}`}
                                                                 href={href}
                                                                 title={fullTitle}
-                                                                aria-label={`Tabular review: ${fullTitle}${status === "loading" ? " (Running)" : status === "complete" ? " (Complete)" : ""}`}
+                                                                aria-label={t(status === "loading" ? "sidebar.reviewLabelRunning" : status === "complete" ? "sidebar.reviewLabelComplete" : "sidebar.reviewLabel", { title: fullTitle })}
                                                                 onClick={() => reviewStatuses.clearStatus(review.id)}
                                                                 aria-current={active ? "page" : undefined}
                                                                 className={cn(
@@ -805,7 +813,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                                             >
                                                                 <span className="flex h-4 w-4 shrink-0 items-center justify-center">
                                                                     {status === "loading" ? (
-                                                                        <Loader2 role="status" aria-label={`${title} review running`} className="h-3.5 w-3.5 animate-spin text-blue-600 motion-reduce:animate-none" />
+                                                                        <Loader2 role="status" aria-label={t("sidebar.reviewRunning", { title })} className="h-3.5 w-3.5 animate-spin text-blue-600 motion-reduce:animate-none" />
                                                                     ) : status === "complete" ? (
                                                                         <TabularReviewCompleteIcon className="h-3.5 w-3.5" />
                                                                     ) : (
@@ -880,7 +888,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                             onClick={() => void history.retry()}
                                             className="mx-3.5 my-2 rounded text-left text-xs text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
                                         >
-                                            Reviews could not be loaded. Try again
+                                            {t("sidebar.reviewsLoadFailed")}
                                         </button>
                                     )}
                                 </div>
@@ -899,7 +907,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                           <DropdownTrigger asChild>
                             <button
                                 type="button"
-                                aria-label="Account menu"
+                                aria-label={t("sidebar.accountMenu")}
                                 className={cn(
                                     "flex h-9 w-full shrink-0 items-center px-[7px] outline-none [transition:border-radius_300ms_cubic-bezier(0.4,0,0.2,1),background-color_150ms,color_150ms] focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2",
                                     isOpen ? "rounded-xl" : "rounded-[18px]",
@@ -946,10 +954,10 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                           and weight of the sidebar's own
                                           section headings. */}
                                       <DropdownLabel className="px-2 text-xs font-semibold normal-case tracking-normal">
-                                          Workspace
+                                          {t("sidebar.workspace")}
                                       </DropdownLabel>
                                       <DropdownRadioGroup
-                                          aria-label="Workspace"
+                                          aria-label={t("sidebar.workspace")}
                                           value={
                                               workspaceId ?? PERSONAL_WORKSPACE
                                           }
@@ -982,7 +990,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                   className="h-8 gap-2 rounded-md px-2 py-2 text-sm font-medium text-gray-700 hover:text-gray-700 focus:text-gray-700 data-[selected=true]:text-gray-900 data-[selected=true]:hover:text-gray-900 data-[selected=true]:focus:text-gray-900"
                               >
                                   <SettingsSkeuoIcon className="h-4 w-4 text-black" />
-                                  Settings
+                                  {t("sidebar.settings")}
                               </DropdownItem>
                               {/* The active organization's own settings.
                                   In the personal workspace there is none:
@@ -998,7 +1006,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                       className="h-8 gap-2 rounded-md px-2 py-2 text-sm font-medium text-gray-700 hover:text-gray-700 focus:text-gray-700 data-[selected=true]:text-gray-900 data-[selected=true]:hover:text-gray-900 data-[selected=true]:focus:text-gray-900"
                                   >
                                       <OrganizationSkeuoIcon className="h-4 w-4 text-black" />
-                                      Organization
+                                      {t("sidebar.organization")}
                                   </DropdownItem>
                               ) : null}
                               <DropdownItem
@@ -1008,7 +1016,7 @@ export function AppSidebar({ isOpen, onToggle }: AppSidebarProps) {
                                   className="h-8 gap-2 rounded-md px-2 py-2 text-sm font-medium text-gray-700 hover:text-gray-700 focus:text-gray-700 data-[selected=true]:text-gray-900 data-[selected=true]:hover:text-gray-900 data-[selected=true]:focus:text-gray-900"
                               >
                                   <SignOutSkeuoIcon className="h-4 w-4 text-black" />
-                                  Sign out
+                                  {t("sidebar.signOut")}
                               </DropdownItem>
                           </DropdownContent>
                         </Dropdown>
