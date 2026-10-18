@@ -29,6 +29,7 @@ import {
     supportMailtoFor,
     type UserFacingError,
 } from "@/app/lib/userFacingError";
+import { useT } from "@/shared/i18n/I18nContext";
 
 /** The shared auth table with this screen's deltas: here every session-
  *  shaped failure is really "your reset link is no longer usable". */
@@ -45,6 +46,7 @@ const RESET_ERROR_MESSAGES = authMessages({
 });
 
 function ResetPasswordContent() {
+    const t = useT();
     const searchParams = useSearchParams();
     const [ready, setReady] = useState(false);
     const [password, setPassword] = useState("");
@@ -118,7 +120,7 @@ function ResetPasswordContent() {
             return;
         }
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("auth.reset.mismatch"));
             return;
         }
 
@@ -156,20 +158,19 @@ function ResetPasswordContent() {
                         <div>
                             <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
                             <h1 className="mt-4 font-serif text-2xl font-medium text-gray-950">
-                                Verifying your reset link...
+                                {t("auth.reset.verifying")}
                             </h1>
                             <p className="mt-2 text-sm text-gray-500">
-                                This should only take a moment.
+                                {t("auth.reset.verifyingHint")}
                             </p>
                         </div>
                     ) : success ? (
                         <div>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Password updated
+                                {t("auth.reset.doneTitle")}
                             </h1>
                             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                                Your password has been changed. Log in again
-                                with your new password.
+                                {t("auth.reset.doneBody")}
                             </p>
                             <Link
                                 href="/login"
@@ -179,13 +180,13 @@ function ResetPasswordContent() {
                                     className: "mt-6",
                                 })}
                             >
-                                Log in
+                                {t("auth.signup.logIn")}
                             </Link>
                         </div>
                     ) : resetUnavailable ? (
                         <div>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Reset link unavailable
+                                {t("auth.reset.unavailableTitle")}
                             </h1>
                             <p className="mt-3 text-sm leading-relaxed text-gray-600">
                                 {displayedError}
@@ -198,16 +199,18 @@ function ResetPasswordContent() {
                                     className: "mt-6",
                                 })}
                             >
-                                Request another link
+                                {t("auth.reset.requestAnother")}
                             </Link>
                         </div>
                     ) : (
                         <>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Choose a new password
+                                {t("auth.reset.title")}
                             </h1>
                             <p className="mt-2 text-sm text-gray-500">
-                                Use at least {MIN_PASSWORD_LENGTH} characters.
+                                {t("auth.reset.minLength", {
+                                    count: MIN_PASSWORD_LENGTH,
+                                })}
                             </p>
                             <form
                                 onSubmit={handleSubmit}
@@ -215,7 +218,7 @@ function ResetPasswordContent() {
                             >
                                 <div>
                                     <FieldLabel htmlFor="password">
-                                        New password
+                                        {t("auth.reset.newPassword")}
                                     </FieldLabel>
                                     <InputUI
                                         id="password"
@@ -231,7 +234,7 @@ function ResetPasswordContent() {
                                 </div>
                                 <div>
                                     <FieldLabel htmlFor="confirmPassword">
-                                        Confirm new password
+                                        {t("auth.reset.confirmNewPassword")}
                                     </FieldLabel>
                                     <InputUI
                                         id="confirmPassword"
@@ -261,7 +264,7 @@ function ResetPasswordContent() {
                                                 )}
                                                 className="ml-2 underline underline-offset-2"
                                             >
-                                                Contact support
+                                                {t("common.contactSupport")}
                                             </a>
                                         )}
                                     </div>
@@ -276,8 +279,8 @@ function ResetPasswordContent() {
                                     className="w-full"
                                 >
                                     {loading
-                                        ? "Updating password..."
-                                        : "Update password"}
+                                        ? t("auth.reset.submitting")
+                                        : t("auth.reset.submit")}
                                 </PillButtonUI>
                             </form>
                         </>

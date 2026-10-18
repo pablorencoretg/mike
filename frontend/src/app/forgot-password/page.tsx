@@ -18,6 +18,7 @@ import {
     type UserErrorKind,
     type UserFacingError,
 } from "@/app/lib/userFacingError";
+import { useT } from "@/shared/i18n/I18nContext";
 
 /**
  * Failures that mean the request never reached Mike. Telling the user to
@@ -38,6 +39,7 @@ const DELIVERY_FAILURE_KINDS: ReadonlySet<UserErrorKind> = new Set([
 ]);
 
 export default function ForgotPasswordPage() {
+    const t = useT();
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
@@ -89,12 +91,12 @@ export default function ForgotPasswordPage() {
                     {submitted ? (
                         <div>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Check your email
+                                {t("auth.forgot.sentTitle")}
                             </h1>
                             <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                                If an account exists for {email.trim()}, we sent
-                                a password-reset link. The link expires and can
-                                only be used once.
+                                {t("auth.forgot.sentBody", {
+                                    email: email.trim(),
+                                })}
                             </p>
                             <Link
                                 href="/login"
@@ -104,17 +106,16 @@ export default function ForgotPasswordPage() {
                                     className: "mt-6",
                                 })}
                             >
-                                Return to login
+                                {t("auth.forgot.backToLogin")}
                             </Link>
                         </div>
                     ) : (
                         <>
                             <h1 className="text-2xl font-medium font-serif text-gray-950">
-                                Reset your password
+                                {t("auth.forgot.title")}
                             </h1>
                             <p className="mt-2 text-sm leading-relaxed text-gray-500">
-                                Enter your account email and we will send you a
-                                secure reset link.
+                                {t("auth.forgot.intro")}
                             </p>
                             <form
                                 onSubmit={handleSubmit}
@@ -122,7 +123,7 @@ export default function ForgotPasswordPage() {
                             >
                                 <div>
                                     <FieldLabel htmlFor="email">
-                                        Email
+                                        {t("auth.login.email")}
                                     </FieldLabel>
                                     <InputUI
                                         id="email"
@@ -151,7 +152,7 @@ export default function ForgotPasswordPage() {
                                                 disabled={loading}
                                                 className="ml-2 underline underline-offset-2 disabled:no-underline disabled:opacity-60"
                                             >
-                                                Retry
+                                                {t("common.retry")}
                                             </button>
                                         )}
                                         {error.supportable && (
@@ -162,7 +163,7 @@ export default function ForgotPasswordPage() {
                                                 )}
                                                 className="ml-2 underline underline-offset-2"
                                             >
-                                                Contact support
+                                                {t("common.contactSupport")}
                                             </a>
                                         )}
                                     </div>
@@ -175,8 +176,8 @@ export default function ForgotPasswordPage() {
                                     className="w-full"
                                 >
                                     {loading
-                                        ? "Sending reset link..."
-                                        : "Send reset link"}
+                                        ? t("auth.forgot.submitting")
+                                        : t("auth.forgot.submit")}
                                 </PillButtonUI>
                             </form>
                             <div className="mt-5 text-center">
@@ -184,7 +185,7 @@ export default function ForgotPasswordPage() {
                                     href="/login"
                                     className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-950"
                                 >
-                                    Return to login
+                                    {t("auth.forgot.backToLogin")}
                                 </Link>
                             </div>
                         </>
